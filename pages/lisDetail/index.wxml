@@ -1,0 +1,82 @@
+<!-- pages/addCustodian/addCustodian.wxml -->
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
+  <view slot="backText"></view>
+  <view slot="content">箱码详情</view>
+</cu-custom>
+<view class="child-section">
+    <view class="main" wx:if="{{isShowSuccess}}">
+      <view class="dis_setting">
+        <view class="dis_setting_1">
+          <view class="dis_setting_1_1">箱码：{{boxnum}}<image wx:if="{{instrumentList.length <=0}}" bind:tap="clickDelete" class="icon_delete" src="../../img/icon_img_05.png" alt=""/>
+          </view>
+          <view class="dis_setting_1_2">开箱时间：{{boxnumTime}}</view>
+        </view>
+        <view class="dis_setting_2">{{instrumentList.length}}/{{boxnumMax}}</view>
+      </view>
+
+      <view class="search-list-role" bind:tap="scanQRCodeClick">
+        <view class="search-list-role-1">
+          <view class="s_center_t_item"><image src="../../img/icon_detail_add.png" class='detail_right_img' /> 添加试管</view>
+        </view>
+      </view>
+
+      <view class="search-list-role" wx:if="{{instrumentList.length > 0}}">
+        <view
+          wx:for="{{instrumentList}}"
+          wx:key="index"
+          bind:tap="clickItem"
+        >
+          
+            <view class="search-result-view">
+              <view class="dis_setting" style="padding: 0px 0px 0px 0px">
+                <view class="s_center_t_item" style="display: flex">
+                  <view class="search-result-view-1">{{(instrumentList.length - index)}}.</view>
+                  <view class="search-result-view-2">{{ item.sample_id }}</view>
+                </view>
+                <view class="search-result-view-3" style="display: flex">{{ item.create_time }}</view>
+              </view>
+            </view>
+           
+        </view>
+      </view>
+
+      <view class="empty_view"></view>
+
+      <view class="view_bottom">
+        <!-- <view class="view_bottom_left" @click="onClickLeft1">
+          <van-icon name="arrow-left" size="20" />返回
+        </view> -->
+        <view class="view_bottom_right" bind:tap="clickDown">封箱（{{instrumentList.length}}/{{boxnumMax}}）</view>
+      </view>
+    </view>
+    <view class="main" wx:else>
+      <image class="icon_success" src="../../img/icon_img_06.png" alt="" />
+      <view class="view_success_1">封箱成功</view>
+      <view class="view_success_3">箱码</view>
+      <view class="view_success_2">{{successboxnum}}</view>
+      <view class="view_success_3">试管数量</view>
+      <view class="view_success_2">{{successnum}}</view>
+      <view class="empty_view_1"></view>
+
+      <view class="view_bottom_1">
+        <view class="view_bottom_left_1" bind:tap="clickNewScan">扫描新箱码</view>
+        <view class="view_bottom_left_2" bind:tap="onClickLeft">返回首页</view>
+      </view>
+    </view>
+    
+  </view>
+
+<!-- 立即封箱弹框 -->
+<dialog-cus showDialog='{{isMaxBox}}' datas="{{maxBoxData}}" catch:dialogCancel="maxBoxCancel" catch:dialogSure="maxBoxSure"/>
+
+<!-- 封箱弹框 -->
+<dialog-cus showDialog='{{isShowBox}}' datas="{{boxData}}" catch:dialogCancel="boxCancel" catch:dialogSure="boxSure"/>
+
+<!-- 立即封箱 确认 弹框 -->
+<dialog-cus showDialog='{{isSure}}' datas="{{sureData}}" catch:dialogCancel="sureCancel" catch:dialogSure="sureSure"/>
+
+<!-- 返回 弹框 -->
+<dialog-cus showDialog='{{isBack}}' datas="{{backData}}" catch:dialogCancel="backCancel" catch:dialogSure="backSure"/>
+
+<!-- 删除箱码 弹框 -->
+<dialog-cus showDialog='{{isDelete}}' datas="{{deleteData}}" catch:dialogCancel="deleteCancel" catch:dialogSure="deleteSure"/>

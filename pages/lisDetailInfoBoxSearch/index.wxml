@@ -1,0 +1,41 @@
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
+  <view slot="backText"></view>
+  <view slot="content">搜索</view>
+</cu-custom>
+<view class="child-section">
+    <view class="main">
+      <view class="dis_setting_view">
+        <view class='search'>
+          <input id="search_checked" type='text' placeholder='请输入试管条码' confirm-type='search' value="{{value}}" bindinput='onSearch' ></input>
+          <view class="weui-icon-clear" wx:if="{{value}}" bindtap="clearSearchHandle">
+            <icon type="clear" size="20" />
+          </view>
+        </view>
+        <view class="s_center_t_empty" style="padding: 0rpx;width: 15%;padding-left: 20rpx;" catch:tap="backPage">取消</view>
+      </view>
+
+      <view class="search-list-role" wx:if="{{instrumentList.length>0}}">
+        <view
+            wx:for="{{instrumentList}}"
+            wx:key="index">
+            <view class="search-result-view">
+              <view class="dis_setting" style="padding: 0px 0px 0px 0px;">
+                <view class="s_center_t_item" style="display:flex;">
+                  <view class="search-result-view-1">{{index+1}}.</view>
+                  <view class="search-result-view-2">{{item.sample_id}}</view>
+                </view>
+                <view class="search-result-view-3" style="display:flex;">
+                  <image class="icon_arrow" src="../../img/icon_arrow_gray.png" alt="" />
+                </view>
+              </view>
+            </view>
+          </view>
+      </view>
+      <view class="search-list-role" wx:else>
+        <view class="s_center_t_empty">没有搜索到相关试管条码</view>
+      </view>
+
+      <view class="empty_view"></view>
+    </view>
+
+  </view>

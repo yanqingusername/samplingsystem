@@ -1,0 +1,162 @@
+/* pages/chooseSN/chooseSN.wxss */
+ /* 搜索框样式 */
+ .manage_search{
+  width: 100%;
+  margin-top: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search{
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items: center;
+  width: 670rpx;
+  height: 80rpx;
+  background: #F5F5F5;
+  border-radius: 12rpx;
+  position: relative;
+}
+
+.search_view{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* width: 100%; */
+}
+
+/* 搜索框提示文字样式 */
+.search .search_view input
+{
+  font-size:27rpx;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* padding-left:30rpx;  */
+}
+.weui-icon-clear{
+  position: absolute;
+  right: 30rpx;
+  display: flex;
+}
+
+#search_checked{
+  width: 70%;
+  /* width:340rpx; */
+  /* text-align: center; */
+}
+
+.container {
+  padding: 10px 20px;
+  align-content: center;
+}
+
+.text-content {
+  padding: 10px;
+  align-content: center;
+  border-bottom: 1rpx solid #F5F5F5;
+  background-color: #FFFFFF
+}
+
+/*全选checkbox*/
+.bottom_1 {
+  background-color: #FFFFFF;
+  /* position: fixed;
+  bottom: 55rpx;
+  left: 40rpx; */
+}
+/*全选文字*/
+.bottom_view_1 {
+  /* position: fixed;
+  bottom: 59rpx;
+  left: 100rpx; */
+  padding-left: 20rpx;
+}
+/*添加仪器按钮*/
+.button-bottom_1 {
+  /*background-color: #FFFFFF;
+  color: #1673EC;
+  position: fixed;
+  bottom: 40rpx;
+  left: 215rpx; 
+  width: 35% !important;
+  border: 1rpx solid #1673EC;*/
+  background-color: #FFFFFF;
+    color: #1673EC;
+    width: 220rpx !important;
+    border: 1rpx solid #1673EC;
+    padding: 0rpx;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20rpx !important;
+}
+
+/*完成按钮*/
+.button-bottom_2 {
+  /* background-color: #1673EC;
+  color: #FFFFFF;
+  position: fixed;
+  bottom: 40rpx;
+  left: 510rpx;
+  width: 30% !important;
+  border: 1rpx solid #1673EC; */
+  background-color: #FFFFFF;
+    color: #1673EC;
+    width: 220rpx !important;
+    border: 1rpx solid #1673EC;
+    padding: 0rpx;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20rpx !important;
+}
+
+.search_close {
+  position: absolute;
+  margin-left: 530rpx;
+}
+
+/* checkbox 选项框大小 
+checkbox .wx-checkbox-input{
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+} 
+checkbox选中后背景样式  
+ checkbox .wx-checkbox-input-checked{
+  background: #0394F0;
+} 
+checkbox选中后对勾样式  
+ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before{
+  width: 28rpx;
+  height: 28rpx;
+  line-height: 28rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: #fff;
+  background: transparent;
+  transform: translate(-50%, -50%) scale(1);
+  -webkit-transform: translate(-50%, -50%) scale(1);
+} */
+.tip_style {
+  text-align: center;
+  font-size: 35rpx;
+  margin-top: 50rpx;
+}
+
+.choose_view{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  position: fixed;
+  bottom: 0rpx;
+  left: 0rpx;
+  z-index: 99;
+  height: 120rpx;
+  width: 100%;
+  padding: 0rpx 40rpx;
+}

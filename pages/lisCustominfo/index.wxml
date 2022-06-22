@@ -1,0 +1,92 @@
+<!-- pages/addCustodian/addCustodian.wxml -->
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
+  <view slot="backText"></view>
+  <view slot="content">采样点人员信息登记</view>
+</cu-custom>
+
+  <view class="child-section">
+    
+    <view class="main">
+
+      <view class="search-list-role">
+        <view class="dis_setting_item">
+          <view class="dis_setting_item_1">{{channel_name}}</view>
+          <view class="dis_setting_item_2">不登记信息将无法进入使用系统</view>
+        </view>
+      </view>
+
+      <view class="search-list-role-from">
+        <view class="search-list-role-from-a">
+          <view class="search-list-role-from-c">
+            <view class="s_center_t_item" style="width: 30%">采样人姓名</view>
+            <view class="select-item input-item">
+              <input
+                value="{{sampling_member_name}}"
+                type="text"
+                name="sampling_member_name"
+                placeholder="请输入采样人真实姓名"
+                maxlength="30"
+                bindinput="codeInput1"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c">
+            <view class="s_center_t_item" style="width: 30%">采样点电话</view>
+            <view class="select-item input-item">
+              <input
+                value="{{sampling_member_phone}}"
+                type="number"
+                name="sampling_member_phone"
+                placeholder="请输入采样人有效联系方式"
+                maxlength="11"
+                bindinput="codeInput2"
+              />
+              <!-- <view class="clear_1" bind:tap="clearPhone" wx:if="sampling_member_phone">
+                <img class="icon_clear" src="../assets/images/deleteTest.png" />
+              </view> -->
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c">
+            <view class="s_center_t_item" style="width: 30%">登记人姓名</view>
+            <view class="select-item input-item">
+              <input
+                value="{{registrant_member_name}}"
+                type="text"
+                name="registrant_member_name"
+                placeholder="请输入登记人真实姓名"
+                maxlength="30"
+                bindinput="codeInput3"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c" style="border-bottom:none;">
+            <view class="s_center_t_item" style="width: 30%">登记人电话</view>
+            <view class="select-item input-item">
+              <input
+                value="{{registrant_member_phone}}"
+                type="number"
+                name="registrant_member_phone"
+                placeholder="请输入登记人有效联系方式"
+                maxlength="11"
+                bindinput="codeInput4"
+              />
+              <!-- <view class="clear_1" bind:tap="clearAccountPhone" wx:if="registrant_member_phone">
+                <img class="icon_clear" src="../assets/images/deleteTest.png" />
+              </view> -->
+            </view>
+          </view>
+          
+        </view>
+      </view>
+
+      <view class="empty_view"></view>
+
+      <view class="view_bottom">
+        <view class="view_bottom_left" bind:tap="clickSubmit">确认并进入</view>
+      </view>
+    </view>
+
+</view>

@@ -1,0 +1,504 @@
+const box = require('../../utils/box.js')
+const request = require('../../utils/request.js')
+const utils = require('../../utils/utils.js')
+const app = getApp()
+
+
+Page({
+  data: {
+    isShowBox: false,
+    boxData:{
+      title: "温馨提示",
+      titles: "存在未封箱的箱码，请先封箱，否则无法使用新箱码",
+      cancel: "取消",
+      sure: "去封箱"
+    },
+      isBack: false,
+      backData:{
+        title: "箱码还未封箱，确认返回吗？",
+        titles: "返回后数据会自动保存",
+        cancel: "直接返回",
+        sure: "立即封箱"
+      },
+      isSure: false,
+      sureData:{
+        title: "确认封箱吗？",
+        titles: "封管后将结束该试管绑定任务",
+        cancel: "取消",
+        sure: "确认"
+      },
+      isMaxBox: false,
+      maxBoxData:{
+        title: "温馨提示",
+        titles: "已达最大封箱数量，请先封箱",
+        cancel: "取消",
+        sure: "立即封箱"
+      },
+      isDelete: false,
+      deleteData:{
+        title: "确认删除该箱码吗？",
+        titles: "删除后可再次扫码使用",
+        cancel: "取消",
+        sure: "确认"
+      },
+      isShowSuccess: true,
+      id: "",
+      boxnum:"",
+      boxnumTime:"",
+      boxnumMax: 0,
+      channel_id: '',
+      instrumentList: [],
+      successboxnum: 0,
+      successnum:0
+  },
+  onLoad: function (options) {
+    let boxnum = options.boxnum;
+
+    this.setData({
+      id: app.globalData.userInfo.id,
+      boxnum: boxnum
+    });
+  },
+  onShow(){
+    this.getSampleBoxInfo();
+  },
+  getSampleBoxInfo() {
+    let that = this;
+    let params = {
+      box_num: that.data.boxnum,
+      id: that.data.id
+    }
+    request.request_get('/eastbox/getSampleBoxInfo.hn', params, function (res) {
+      if (res) {
+        if (res.success) {
+          if(res.result && res.result.length > 0){
+            let item = res.result[0];
+            that.setData({
+              boxnum: item.box_num,
+              boxnumTime: item.create_time,
+              boxnumMax: item.max_sum,
+              channel_id: item.channel,
+            });
+          }
+          that.setData({
+            instrumentList: res.listData
+          });
+        } else {
+          box.showToast(res.msg);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  // 扫描
+  scanQRCodeClick() {
+    this.getScanQRCodeClick();
+    // this.checkSampleTube('111111111111119');
+  },
+  getScanQRCodeClick() {
+    // 点击的时候调起扫一扫功能呢
+    let that = this;
+    wx.scanCode({
+      scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+      success(res) {
+        console.log('---->:',res.result)
+        let boxCodeNumber = res.result;
+        if (boxCodeNumber) {
+          that.checkSampleTube(boxCodeNumber);
+        }
+      },
+      fail(res) {
+        console.log("err", res);
+      },
+    });
+  },
+  /**
+   *
+   */
+  checkSampleTube(boxCodeNumber) {
+    let that = this;
+    let params = {
+      sample_id: boxCodeNumber
+    }
+    request.request_get('/eastbox/checkSampleTube.hn', params, function (res) {
+      if (res) {
+        if (res.success) {
+          that.addSampleTubeInfo(boxCodeNumber);
+        } else {
+          box.showToast(res.msg);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  addSampleTubeInfo(sample_id) {
+    let that = this;
+    let params = {
+      box_num: that.data.boxnum,
+      id: that.data.id,
+      sample_id: sample_id,
+      channel_id: that.data.channel_id
+    }
+    request.request_get('/eastbox/addSampleTubeInfo.hn', params, function (res) {
+      if (res) {
+        if (res.success) {
+          if(res.can_add == 0){
+            that.getSampleBoxInfo();
+          }else{
+            that.setData({
+              isMaxBox: true
+            });
+          }
+        } else {
+          box.showToast(res.msg);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  onClickLeft() {
+    wx.navigateBack({
+      delta: 1
+    });
+  },
+  clickDown() {
+    if(this.data.instrumentList.length > 0){
+      this.setData({
+        isSure: true
+      });
+    }else{
+      this.closeSetSampleBox();
+    }
+  },
+  closeSetSampleBox(){
+    let that = this;
+    let params = {
+      box_num: that.data.boxnum,
+      id: that.data.id
+    }
+    request.request_get('/eastbox/closeSampleBox.hn', params, function (res) {
+      if (res) {
+        if (res.success) {
+          that.setData({
+            isShowSuccess: false
+          });
+          if(res.result && res.result.length > 0){
+            let item = res.result[0];
+            that.setData({
+              successboxnum: item.box_num,
+              successnum: item.sample_num,
+            });
+          }
+        } else {
+          box.showToast(res.msg);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  clickNewScan() {
+    this.checkSampleBoxStatusIsClose();
+  },
+  checkSampleBoxStatusIsClose() {
+    let that = this;
+    let params = {
+      id: that.data.id
+    }
+    request.request_get('/eastbox/checkSampleBoxStatusIsClose.hn', params, function (res) {
+      if (res) {
+        if (res.success) {
+          if (res.is_exist == 0) {
+            that.setData({
+              isShowBox: true,
+              boxnum: res.box_num,
+            });
+          } else {
+            that.getScanQRCodeClick2();
+            // that.checkSampleBoxStatus('456789');
+          }
+        } else {
+          box.showToast(res.msg);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  getScanQRCodeClick2() {
+    // 点击的时候调起扫一扫功能呢
+    let that = this;
+    wx.scanCode({
+      scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+      success(res) {
+        console.log('---->:',res.result)
+        let boxCodeNumber = res.result;
+        if (boxCodeNumber) {
+          that.checkSampleBoxStatus(boxCodeNumber);
+        }
+      },
+      fail(res) {
+        console.log("err", res);
+      },
+    });
+  },
+  checkSampleBoxStatus(boxCodeNumber) {
+    let that = this;
+    let params = {
+      box_num: boxCodeNumber,
+    }
+    request.request_get('/eastbox/checkSampleBoxStatus.hn', params, function (res) {
+      if (res) {
+        if (res.success) {
+          let can_use = res.can_use || false;
+          that.startScanSampleBox(boxCodeNumber,can_use);
+        } else {
+          box.showToast(res.msg);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  startScanSampleBox(boxCodeNumber,can_use) {
+    let that = this;
+    let params = {
+      box_num: boxCodeNumber,
+      // max_sum:max_sum,
+      id: that.data.id,
+      channel_id: that.data.channel_id,
+      can_use: can_use
+    }
+    request.request_get('/eastbox/startScanSampleBox.hn', params, function (res) {
+      if (res) {
+        if (res.success) {
+          that.setData({
+            isShowSuccess: true,
+            boxnum: boxCodeNumber,
+            id: that.data.id
+          });
+          that.getSampleBoxInfo();
+        } else {
+          box.showToast(res.msg);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  /**
+   * 封箱弹框
+   */
+  boxCancel(){
+    this.setData({
+      isShowBox: false
+    });
+  },
+  boxSure(){
+    this.setData({
+      isShowBox: false,
+      isShowSuccess: true,
+      id: this.data.id,
+      boxnum: this.data.boxnum
+    });
+
+    this.getSampleBoxInfo();
+  },
+  clickItem() {
+    
+  },
+  /**
+   * 立即封箱弹框
+   */
+  maxBoxCancel(){
+    this.setData({
+      isMaxBox: false
+    });
+  },
+  maxBoxSure(){
+    let that = this;
+    let params = {
+      box_num: that.data.boxnum,
+      id: that.data.id
+    }
+    request.request_get('/eastbox/closeSampleBox.hn', params, function (res) {
+      if (res) {
+        if (res.success) {
+          box.showToast(res.msg)
+          that.setData({
+            isMaxBox: false,
+            isShowSuccess: false
+          });
+
+          if(res.result && res.result.length > 0){
+            let item = res.result[0];
+            that.setData({
+              successboxnum: item.box_num,
+              successnum: item.sample_num,
+            });
+          }
+        } else {
+          box.showToast(res.msg);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  /**
+   * 立即封箱 确认
+   */
+   sureCancel(){
+    this.setData({
+      isSure: false
+    });
+  },
+  sureSure(){
+    let that = this;
+    let params = {
+      box_num: that.data.boxnum,
+      id: that.data.id
+    }
+    request.request_get('/eastbox/closeSampleBox.hn', params, function (res) {
+      if (res) {
+        if (res.success) {
+          box.showToast(res.msg)
+          that.setData({
+            isSure: false,
+            isShowSuccess: false
+          });
+
+          if(res.result && res.result.length > 0){
+            let item = res.result[0];
+            that.setData({
+              successboxnum: item.box_num,
+              successnum: item.sample_num,
+            });
+          }
+        } else {
+          box.showToast(res.msg);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  /**
+   * 返回
+   */
+   backPage(){
+     if(this.data.isShowSuccess){
+      this.setData({
+        isBack: true
+      });
+     }else{
+      this.onClickLeft();
+     }
+  },
+  backCancel(){
+    this.setData({
+      isBack: false
+     });
+  },
+  backSure(){
+    let that = this;
+    let params = {
+      box_num: that.data.boxnum,
+      id: that.data.id
+    }
+    request.request_get('/eastbox/closeSampleBox.hn', params, function (res) {
+      if (res) {
+        if (res.success) {
+          box.showToast(res.msg)
+          that.setData({
+            isBack: false,
+            isShowSuccess: false
+          });
+
+          if(res.result && res.result.length > 0){
+            let item = res.result[0];
+            that.setData({
+              successboxnum: item.box_num,
+              successnum: item.sample_num,
+            });
+          }
+        } else {
+          box.showToast(res.msg);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  /**
+   * 删除箱码
+   */
+  clickDelete() {
+    this.setData({
+      isDelete: true
+    });
+  },
+  deleteCancel(){
+    this.setData({
+      isDelete: false
+     });
+  },
+  deleteSure(){
+    let that = this;
+    let params = {
+      box_num: that.data.boxnum
+    }
+    request.request_get('/eastbox/deleteSampleBoxInfo.hn', params, function (res) {
+      if (res) {
+        if (res.success) {
+          box.showToast(res.msg)
+          that.setData({
+            isDelete: false,
+            isShowSuccess: false
+          });
+
+          that.onClickLeft();
+        } else {
+          box.showToast(res.msg);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  beforeDeleteClose({ name, position, instance }) {
+    let that = this;
+    switch (position) {
+      case "left":
+      case "cell":
+      case "outside":
+        instance.close();
+        break;
+      case "right":
+        Dialog.confirm({
+          message: "确认删除该试管吗？",
+          confirmButtonColor: "#307FF5",
+        }).then(() => {
+            deleteSampleTubeInfo({
+              box_num: that.boxnum,
+              sample_id: name,
+              id: that.id
+            }).then((res) => {
+              if (res.data.success) {
+                Toast(res.data.msg)
+                that.getSampleBoxInfo();
+              } else {
+                Toast(res.data.msg)
+              }
+            });
+            instance.close();
+          }).catch(() => {
+            instance.close();
+          });
+        break;
+    }
+  },
+})

@@ -1,0 +1,64 @@
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
+  <view slot="backText"></view>
+  <view slot="content">已采集信息</view>
+</cu-custom>
+<view class="child-section">
+    <view class="main">
+      <view class="dis_setting_view" style="background:#FFFFFF;">
+        <view class="dis_setting_1" bind:tap="clickSearch">
+          <view class="dis_setting_1_1">请输入箱码</view>
+          <view class="dis_setting_1_2" catch:tap="scanQRCodeClick">
+            <image class="icon_delete" src="../../img/icon_scan.png" alt="" />
+          </view>
+        </view>
+      </view>
+
+      <view class="dis_item_center">
+        <view class="dis_item_center_1">
+          <picker mode="date" value="{{currentDate}}" end="{{maxDate}}" bindchange="bindDateChange">
+            <view class="dis_item_center_2">{{currentDate}}</view>
+          </picker>
+          <image class="icon_down" src="../../img/xialajiantou.png" alt="" />
+        </view>
+        <view class="dis_item_center_3">
+          <view class="dis_setting_1_1">箱数 {{box_sum}} 管数 {{sample_sum}}</view>
+        </view>
+      </view>
+
+      <view class="dis_setting_view_tab">
+          <view class="dis_setting_view_tab_1" style="{{tabIndex == 0 ? 'color: #307FF5;':'color: #999999;'}}" catch:tap="clickTabIndex" data-tabstring="0">全部</view>
+          <view class="dis_setting_view_tab_1" style="{{tabIndex == 3 ? 'color: #307FF5;':'color: #999999;'}}" catch:tap="clickTabIndex" data-tabstring="3">待转运({{stay_transport_sum}})</view>
+          <view class="dis_setting_view_tab_1" style="{{tabIndex == 4 ? 'color: #307FF5;':'color: #999999;'}}" catch:tap="clickTabIndex" data-tabstring="4">转运中({{transporting_sum}})</view>
+          <view class="dis_setting_view_tab_1" style="{{tabIndex == 5 ? 'color: #307FF5;':'color: #999999;'}}" catch:tap="clickTabIndex" data-tabstring="5">已接收</view>
+      </view>
+
+      <view class="search-list-role" wx:if="{{instrumentList.length>0}}">
+        <view
+            wx:for="{{instrumentList}}"
+            wx:key="index" bind:tap="clickItem" data-boxnum="{{item.box_num}}" data-statusstring="{{item.status}}">
+            <view class="search-result-view">
+              <view class="dis_setting" style="padding: 0px 0px 0px 0px;">
+                <view class="s_center_t_item" style="display:flex;">
+                  <view class="search-result-view-1">{{(instrumentList.length - index)}}.</view>
+                  <view class="search-result-view-2">{{item.box_num}}</view>
+                </view>
+                <view class="search-result-view-3" style="display:flex;">
+                  <view class="search-result-view-1">{{item.sample_num}}</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 1}}" style="color: #307FF5;">未封箱</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 2}}" style="color: #999999;">已封箱</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 3}}" style="color: #999999;">待转运</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 4}}" style="color: #999999;">转运中</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 5}}" style="color: #999999;">已接收</view>
+                  <image class="icon_arrow" src="../../img/icon_arrow_gray.png" alt="" />
+                </view>
+              </view>
+            </view>
+          </view>
+      </view>
+      <view wx:else style="padding: 30rpx;">
+        <view class="dis_setting_1_1" style="padding: 0rpx;">暂无数据</view>
+      </view>
+      <view class="empty_view"></view>
+    </view>
+
+  </view>
