@@ -15,6 +15,10 @@
           <view class="s_center_t_item">今日采样数据</view>
           <view class="dis_setting_i">
             <view class="dis_setting_i_left">
+              <view class="dis_setting_i_left_1">{{ perple_count }}</view>
+              <view class="dis_setting_i_left_2">录入总人数</view>
+            </view>
+            <view class="dis_setting_i_left">
               <view class="dis_setting_i_left_1">{{ tube_count }}</view>
               <view class="dis_setting_i_left_2">录入总管数</view>
             </view>

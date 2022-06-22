@@ -9,6 +9,11 @@
     "pages/lisDetailInfoBox/index",
     "pages/lisDetailInfoBoxSearch/index",
     "pages/lisDetailInfoSearch/index",
+    "pages/lisAccountApplication/index",
+    "pages/lisChannelName/index",
+    "pages/lisSelectMain/index",
+    "pages/lisCoyoteMain/index",
+    
     "pages/statistics/statistics",
     "pages/createOrder/createOrder",
     "pages/orderDetail/orderDetail",

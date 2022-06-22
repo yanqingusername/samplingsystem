@@ -110,5 +110,10 @@ Page({
                     }
                 })
             }
+    },
+    bindAccountApplication(){
+        wx.navigateTo({
+            url: '/pages/lisAccountApplication/index'
+        });
     }
 })

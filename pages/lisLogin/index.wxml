@@ -42,5 +42,6 @@
          <view class="submit_view" bind:tap="commit">登录</view>
       </view>
     </view>
+    <view class="account_application" bind:tap="bindAccountApplication">账号申请</view>
   </view>
 </view>

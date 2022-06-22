@@ -118,7 +118,7 @@ Page({
       if (res) {
         if (res.success) {
           wx.navigateTo({
-            url: '/pages/lisMain/index',
+            url: '/pages/lisSelectMain/index',
           });
         } else {
           box.showToast(res.msg);

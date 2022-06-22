@@ -23,6 +23,7 @@ Page({
       id: "",
       channel_name: "",
       channel_id: "",
+      perple_count: 0,
       box_count: 0,
       tube_count: 0,
       isInputBoxnum: false,
