@@ -49,7 +49,10 @@ Page({
       channel_id: '',
       instrumentList: [],
       successboxnum: 0,
-      successnum:0
+      successnum:0,
+      // 设置开始的位置
+      startX: 0,
+      startY: 0,
   },
   onLoad: function (options) {
     let boxnum = options.boxnum;
@@ -80,9 +83,17 @@ Page({
               channel_id: item.channel,
             });
           }
+
           that.setData({
             instrumentList: res.listData
           });
+
+          if(that.data.instrumentList.length > 0){
+            for(let i = 0; i < that.data.instrumentList.length; i++){
+              that.data.instrumentList[i].isTouchMove = false;
+            }
+          }
+          
         } else {
           box.showToast(res.msg);
         }
@@ -93,8 +104,8 @@ Page({
   },
   // 扫描
   scanQRCodeClick() {
-    this.getScanQRCodeClick();
-    // this.checkSampleTube('111111111111119');
+    // this.getScanQRCodeClick();
+    this.checkSampleTube('22222222222227');
   },
   getScanQRCodeClick() {
     // 点击的时候调起扫一扫功能呢
@@ -402,6 +413,7 @@ Page({
     this.setData({
       isBack: false
      });
+     this.onClickLeft();
   },
   backSure(){
     let that = this;
@@ -469,36 +481,89 @@ Page({
       }
     });
   },
-  beforeDeleteClose({ name, position, instance }) {
+  touchStart: function(e) {
+    let instrumentList = [...this.data.instrumentList]
+    instrumentList.forEach(item => {
+      if (item.isTouchMove) {
+        item.isTouchMove = !item.isTouchMove;
+      }
+    });
+    this.setData({
+      instrumentList: instrumentList,
+      startX: e.touches[0].clientX,
+      startY: e.touches[0].clientY
+    })
+  },
+  touchMove: function(e) {
+    let moveX = e.changedTouches[0].clientX;
+    let moveY = e.changedTouches[0].clientY;
+    let indexs = e.currentTarget.dataset.index;
+    let instrumentList = [...this.data.instrumentList]
+
+    let angle = this.angle({
+      X: this.data.startX,
+      Y: this.data.startY
+    }, {
+      X: moveX,
+      Y: moveY
+    });
+
+    instrumentList.forEach((item, index) => {
+      item.isTouchMove = false;
+      // 如果滑动的角度大于30° 则直接return；
+      if (angle > 30) {
+        return
+      }
+
+      if (indexs === index) {
+        if (moveX > this.data.startX) { // 右滑
+          item.isTouchMove = false;
+        } else { // 左滑
+          item.isTouchMove = true;
+        }
+      }
+    });
+
+    this.setData({
+      instrumentList: instrumentList
+    });
+  },
+  //计算角度
+  angle: function(start, end) {
+    var _X = end.X - start.X,
+      _Y = end.Y - start.Y
+    //返回角度 /Math.atan()返回数字的反正切值
+    return 360 * Math.atan(_Y / _X) / (2 * Math.PI);
+  },
+
+  // 删除
+  delShop(e) {
     let that = this;
-    switch (position) {
-      case "left":
-      case "cell":
-      case "outside":
-        instance.close();
-        break;
-      case "right":
-        Dialog.confirm({
-          message: "确认删除该试管吗？",
-          confirmButtonColor: "#307FF5",
-        }).then(() => {
-            deleteSampleTubeInfo({
-              box_num: that.boxnum,
-              sample_id: name,
-              id: that.id
-            }).then((res) => {
-              if (res.data.success) {
-                Toast(res.data.msg)
+    wx.showModal({
+      title: '提示',
+      content: '确认删除该试管吗？',
+      success: function(res) {
+        if (res.confirm) {
+          let sampleid = e.currentTarget.dataset.sampleid;
+          let params = {
+            box_num: that.data.boxnum,
+            sample_id: sampleid,
+            id: that.data.id
+          }
+          request.request_get('/eastbox/deleteSampleTubeInfo.hn', params, function (res) {
+            if (res) {
+              if (res.success) {
+                box.showToast(res.msg)
                 that.getSampleBoxInfo();
               } else {
-                Toast(res.data.msg)
+                box.showToast(res.msg);
               }
-            });
-            instance.close();
-          }).catch(() => {
-            instance.close();
+            } else {
+              box.showToast("网络不稳定，请重试");
+            }
           });
-        break;
-    }
+        }
+      }
+    })
   },
 })

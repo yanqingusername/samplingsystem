@@ -279,7 +279,7 @@ Page({
               channel_id: that.data.channel_id,
               can_use: can_use
             }
-            request.request_get('/eastbox/startScanSampleBox.hn', data, function (res) {
+            request.request_get('/eastbox/startScanSampleBox.hn', data, function (res1) {
               if (res1) {
                 if (res1.success) {
                   that.setData({
