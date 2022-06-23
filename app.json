@@ -13,6 +13,18 @@
     "pages/lisChannelName/index",
     "pages/lisSelectMain/index",
     "pages/lisCoyoteMain/index",
+    "pages/lisCoyoteDetail/index",
+    "pages/lisCoyoteAddTube/index",
+    "pages/lisCoyoteSubjectInfo/index",
+    "pages/lisCoyoteUpdateSubInfo/index",
+    "pages/lisCoyoteGetInfoCode/index",
+    "pages/lisCoyoteDetailInfo/index",
+    "pages/lisCoyoteDetailInfoBox/index",
+    "pages/lisCoyoteCellDetails/index",
+    "pages/lisCoyoteMoreCellDetails/index",
+    "pages/lisCoyoteDetailInfoSearch/index",
+    "pages/lisCoyoteDetailInfoBoxSearch/index",
+    
     
     "pages/statistics/statistics",
     "pages/createOrder/createOrder",

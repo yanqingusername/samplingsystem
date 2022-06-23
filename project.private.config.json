@@ -12,7 +12,13 @@
     },
     "miniprogram": {
       "list": [
-        
+        {
+          "name": "lisCoyoteDetailInfoBox",
+          "pathName": "pages/lisCoyoteDetailInfoBox/index",
+          "query": "boxnum=22222222&st=3",
+          "scene": null,
+          "launchMode": "default"
+        }
       ]
     }
   }

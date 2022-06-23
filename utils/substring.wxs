@@ -22,10 +22,30 @@
     return time
   }
   
+  var centerPhoneTrim = function(params){
+    if (!params) {  // 18798799876
+    return ""
+    }
+    var param = params.replace(params.substring(3,params.length-3),'****')
+    var param1 = param.replace(getRegExp('(\d{3})(.*)(\d{4})','g'), '$1 $2 $3')
+      return param1
+  }
+
+  var centerIdCardTrim = function(params){
+    if (!params) {
+    return ""
+    }
+    
+    var param = params.replace(params.substring(3,params.length-3),'************')
+    var param1 = param.replace(getRegExp('(.{6})(.*)(.{4})','g'), '$1 $2 $3')
+      return param1
+  }
 
 
   module.exports = {
     subStringName: subStringName,
     monthString: monthString,
-    timeString: timeString
+    timeString: timeString,
+    centerPhoneTrim: centerPhoneTrim,
+    centerIdCardTrim: centerIdCardTrim
 }

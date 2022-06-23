@@ -104,7 +104,10 @@ Page({
   },
   // 扫描
   scanQRCodeClick() {
-    this.getScanQRCodeClick();
+    wx.navigateTo({
+      url: `/pages/lisCoyoteAddTube/index?boxnum=${this.data.boxnum}`
+    });
+    // this.getScanQRCodeClick();
     // this.checkSampleTube('22222222222227');
   },
   getScanQRCodeClick() {

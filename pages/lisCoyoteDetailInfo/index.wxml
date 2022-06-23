@@ -21,7 +21,7 @@
           <image class="icon_down" src="../../img/xialajiantou.png" alt="" />
         </view>
         <view class="dis_item_center_3">
-          <view class="dis_setting_1_1">箱数 {{box_sum}} 管数 {{sample_sum}}</view>
+          <view class="dis_setting_1_1">箱数 {{box_sum}} 人数 {{'300'}} 管数 {{sample_sum}}</view>
         </view>
       </view>
 

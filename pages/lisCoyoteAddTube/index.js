@@ -53,12 +53,42 @@ Page({
       // 设置开始的位置
       startX: 0,
       startY: 0,
+
+      dutytypeIndex: 0,
+    dutytype_name: '单采',
+    dutytypeList: [{
+        dutytype_id: "0",
+        dutytype_name: '单采'
+      },
+      {
+        dutytype_id: "1",
+        dutytype_name: '十混一'
+      },
+      {
+        dutytype_id: "2",
+        dutytype_name: '五混一'
+      }
+    ],
+
+    jobtypeIndex: 0,
+    jobtype_name: '咽拭子',
+    jobtypeList: [{
+        jobtype_id: "0",
+        jobtype_name: '咽拭子'
+      },
+      {
+        jobtype_id: "1",
+        jobtype_name: '鼻咽拭子'
+      }
+    ],
+
+    isInputBoxnum: false
   },
   onLoad: function (options) {
     let boxnum = options.boxnum;
 
     this.setData({
-      id: app.globalData.userInfo.id,
+      id: app.globalData.userInfo.id || 322,
       boxnum: boxnum
     });
   },
@@ -104,8 +134,8 @@ Page({
   },
   // 扫描
   scanQRCodeClick() {
-    this.getScanQRCodeClick();
-    // this.checkSampleTube('22222222222227');
+    // this.getScanQRCodeClick();
+    this.checkSampleTube('22222222222227');
   },
   getScanQRCodeClick() {
     // 点击的时候调起扫一扫功能呢
@@ -565,5 +595,42 @@ Page({
         }
       }
     })
+  },
+  /**
+   * 混采类型
+   */
+   bindSelectDutytype: function (e) {
+    var that = this;
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      dutytypeIndex: e.detail.value,
+      dutytype_name: that.data.dutytypeList[e.detail.value].dutytype_name
+    });
+  },
+  /**
+   * 标本类型
+   */
+   bindSelectJobtype: function (e) {
+    var that = this;
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      jobtypeIndex: e.detail.value,
+      jobtype_name: that.data.jobtypeList[e.detail.value].jobtype_name
+    });
+  },
+  bindInputBoxnum(){
+    this.setData({
+      isInputBoxnum: true
+    });
+  },
+  bindSubjectInfo(){
+    wx.navigateTo({
+      url: '/pages/lisCoyoteSubjectInfo/index'
+    });
+  },
+  bindGetInfoCode(){
+    wx.navigateTo({
+      url: '/pages/lisCoyoteGetInfoCode/index'
+    });
   },
 })

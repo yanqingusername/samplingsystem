@@ -1,0 +1,188 @@
+<wxs src="../../utils/substring.wxs" module="tools" />
+
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:tap="backPage">
+  <view slot="backText"></view>
+  <view slot="content">添加试管</view>
+</cu-custom>
+<view class="child-section">
+    <view class="main">
+      <view class="dis_setting">
+        <view class="dis_setting_1" style="align-items: center;justify-content: center;">
+          <view class="dis_setting_1_1" style="color:#E0694D;">{{boxnum}}</view>
+          <view class="dis_setting_1_1">箱码</view>
+        </view>
+        <view class="dis_setting_1" style="align-items: center;justify-content: center;">
+          <view class="dis_setting_1_1" style="color:#E0694D;">{{boxnumMax}}</view>
+          <view class="dis_setting_1_1">本箱剩余</view>
+        </view>
+        <view class="dis_setting_1" style="align-items: center;justify-content: center;">
+          <view class="dis_setting_1_1" style="color:#E0694D;">{{'1'}}</view>
+          <view class="dis_setting_1_1">本管剩余</view>
+        </view>
+      </view>
+
+      <view class="detail_center">
+        <view class="search-list-role-1" style="border-radius: 20rpx 0rpx 0rpx 20rpx;padding: 0rpx 20rpx;">
+           <view class="P5_1">混采类型</view>
+            <view class="detail_center P5_2" style="align-items: center;padding: 20rpx 0rpx 20rpx 0rpx;background-color: #FFFFFF;">
+             <picker bindchange="bindSelectDutytype" value="{{dutytypeIndex}}" range-key="{{'dutytype_name'}}" range="{{dutytypeList}}" style="width:100%;">
+                <view class="detail_center P5_2" style="align-items: center;width:100%;background-color: #FFFFFF;justify-content: flex-end;">
+                  <view class="picker" style="color:#333333;margin-right:10rpx;">{{dutytypeList[dutytypeIndex].dutytype_name}}</view>
+                  <image src="../../image/icon_arrow_gray.png" style="width:20rpx;height:26rpx;"/>
+                </view>
+              </picker>
+            </view>
+        </view>
+
+
+        <view class="search-list-role-1" style="border-radius: 0rpx 20rpx 20rpx 0rpx;padding: 0rpx 20rpx;">
+           <view class="P5_1">标本类型</view>
+            <view class="detail_center P5_2" style="align-items: center;padding: 20rpx 0rpx 20rpx 0rpx;background-color: #FFFFFF;">
+             <picker bindchange="bindSelectJobtype" value="{{jobtypeIndex}}" range-key="{{'jobtype_name'}}" range="{{jobtypeList}}" style="width:100%;">
+                <view class="detail_center P5_2" style="align-items: center;width:100%;background-color: #FFFFFF;justify-content: flex-end;">
+                  <view class="picker" style="color:#333333;margin-right:10rpx;">{{jobtypeList[jobtypeIndex].jobtype_name}}</view>
+                  <image src="../../image/icon_arrow_gray.png" style="width:20rpx;height:26rpx;"/>
+                </view>
+              </picker>
+            </view>
+        </view>
+        </view>
+
+      <view class="search-list-role" style="margin-top:30rpx;">
+        <view class="s_center_t_item" style="display: flex;align-items: center;color: #333333;">条码信息</view>
+      </view>
+
+      <view class="detail_center" style="margin-top: 20rpx;">
+        <view class="bind_main_item">
+          <view class="form-item">
+            <view class="select-item input-item">
+              <input
+                value="{{boxCodeNumber}}"
+                type="number"
+                name="boxCodeNumber"
+                placeholder="请输入/扫试管条码"
+                auto-focus="{{true}}"
+                focus="{{isFocus}}"
+                bindinput="bindinputBoxnum"
+              />
+              <view
+                class="clear_1"
+                catch:tap="clearboxCodeNumber"
+                wx:if="{{boxCodeNumber}}"
+              >
+                <image class="icon_clear" src="../../img/icon_img_04.png" />
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="search-list-role-1" style="margin-left:20rpx;height: 76rpx;padding:0rpx;border-radius:12rpx;border: 1px solid #E0694D;">
+          <view class="s_center_t_item" style="display: flex;align-items: center;color:#E0694D;"><image src="../../img/icon_img_07.png" class='detail_right_img' />扫试管码</view>
+        </view>
+      </view>
+
+      <view class="search-list-role" style="margin-top:30rpx;">
+        <view class="s_center_t_item" style="display: flex;align-items: center;color: #333333;">受检者信息</view>
+      </view>
+
+      <view class="detail_center" style="margin-top: 20rpx;">
+
+        <view class="search-list-role-1" style="margin-right:20rpx;height: 76rpx;padding:0rpx;border-radius:12rpx;border: 1px solid #333333;" bind:tap="bindGetInfoCode">
+          <view class="s_center_t_item" style="display: flex;align-items: center;color:#333333;">获取信息码</view>
+        </view>
+
+        <view class="search-list-role-1" style="margin-left:0rpx;height: 76rpx;padding:0rpx;border-radius:12rpx;border: 1px solid #333333;" bind:tap="bindInputBoxnum">
+          <view class="s_center_t_item" style="display: flex;align-items: center;color:#333333;">手录信息码</view>
+        </view>
+
+        <view class="search-list-role-1" style="margin-left:20rpx;height: 76rpx;padding:0rpx;border-radius:12rpx;border: 1px solid #307ff5;">
+          <view class="s_center_t_item" style="display: flex;align-items: center;color:#307ff5;"><image src="../../img/icon_scan.png" class='detail_right_img' />扫信息码</view>
+        </view>
+      </view>
+
+      <view class="search-list-role" wx:if="{{instrumentList.length > 0}}">
+        <view
+          wx:for="{{instrumentList}}"
+          wx:key="index"
+          class="shopBox"
+        >
+          <view class="shopCon {{item.isTouchMove?'shopCon-active':''}}" data-index="{{index}}" bindtouchstart="touchStart" bindtouchmove="touchMove">
+            <!-- <view class="search-result-view" catch:tap="clickItem"> -->
+              <view class="dis_setting" style="padding: 0px 0px 0px 0px" catch:tap="bindSubjectInfo">
+                <view class="s_center_t_item" style="display: flex">
+                  <view class="search-result-view-1" style="margin-right:20rpx;">{{(instrumentList.length - index)}}.</view>
+                  <!-- <view class="search-result-view-1">{{'姓名 ｜证件号码'}}</view> -->
+                  <view class="search-result-view-1">{{'张三'}} ｜{{tools.centerIdCardTrim('340123123456785622')}}</view>
+                </view>
+                <view class="search-result-view-3" style="display:flex;align-items: center;">
+                  <image class="icon_arrow" src="../../img/icon_arrow_gray.png" alt="" />
+                </view>
+              </view>
+            <!-- </view> -->
+          </view>
+
+          <view class="shopDel {{item.isTouchMove?'shopDel-active':''}}" data-sampleid="{{item.sample_id}}" bindtap="delShop">删除</view>
+        </view>
+      </view>
+
+      <view class="empty_view"></view>
+
+      <view class="view_bottom">
+        <!-- <view class="view_bottom_left" @click="onClickLeft1">
+          <van-icon name="arrow-left" size="20" />返回
+        </view> -->
+        <view class="view_bottom_right" bind:tap="clickDown">封管（{{instrumentList.length}}/{{boxnumMax}}）</view>
+      </view>
+    </view>
+    
+  </view>
+
+<!-- 立即封箱弹框 -->
+<dialog-cus showDialog='{{isMaxBox}}' datas="{{maxBoxData}}" catch:dialogCancel="maxBoxCancel" catch:dialogSure="maxBoxSure"/>
+
+<!-- 封箱弹框 -->
+<dialog-cus showDialog='{{isShowBox}}' datas="{{boxData}}" catch:dialogCancel="boxCancel" catch:dialogSure="boxSure"/>
+
+<!-- 立即封箱 确认 弹框 -->
+<dialog-cus showDialog='{{isSure}}' datas="{{sureData}}" catch:dialogCancel="sureCancel" catch:dialogSure="sureSure"/>
+
+<!-- 返回 弹框 -->
+<dialog-cus showDialog='{{isBack}}' datas="{{backData}}" catch:dialogCancel="backCancel" catch:dialogSure="backSure"/>
+
+<!-- 删除箱码 弹框 -->
+<dialog-cus showDialog='{{isDelete}}' datas="{{deleteData}}" catch:dialogCancel="deleteCancel" catch:dialogSure="deleteSure"/>
+
+<!-- 遮罩 -->
+  <view wx:if="{{isInputBoxnum}}" class='cover' bind:tap="">
+    <view class='concent'>
+      <view class="dialog_item">
+        <view class="dialog_item_title">手录信息码</view>
+        <view class="bind_main_item" style="margin-top: 20rpx;">
+          <view class="form-item">
+            <view class="select-item dialog-input-item">
+              <input
+                value="{{boxCodeNumber}}"
+                type="number"
+                name="boxCodeNumber"
+                placeholder="请输入信息码"
+                auto-focus="{{true}}"
+                focus="{{isFocus}}"
+                bindinput="bindinputBoxnum"
+              />
+              <view
+                class="clear_1"
+                catch:tap="clearboxCodeNumber"
+                wx:if="{{boxCodeNumber}}"
+              >
+                <image class="icon_clear" src="../../img/icon_img_04.png" />
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="details">
+        <view class="cancel" catchtap="dialogBoxnumCancel">{{"取消"}}</view>
+        <view class="sure" catchtap="dialogBoxnumSure">{{"确认"}}</view>
+      </view>
+    </view>
+    <!-- <view catchtap="hideCover" wx:if="{{isShow}}" class='bg'></view> -->
+  </view>

@@ -1,0 +1,65 @@
+<wxs src="../../utils/substring.wxs" module="tools" />
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:tap="backPage">
+  <view slot="backText"></view>
+  <view slot="content">{{sampleid}}试管详情</view>
+</cu-custom>
+
+  <view class="child-section">
+    
+    <view class="main">
+      <view class="search-list-role-from">
+        <view class="search-list-role-from-a">
+          <view class="search-list-role-from-c">
+            <view class="s_center_t_item" style="width: 26%">条形码</view>
+            <view class="select-item input-item">
+              <input
+                value="{{'1234 1234 1234'}}"
+                type="text"
+                name="real_name"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c" style="border-bottom: none;">
+            <view class="s_center_t_item" style="width: 26%">封管时间</view>
+            <view class="select-item input-item">
+              <input
+                value="{{'2022-06-22 12:12:00'}}"
+                type="text"
+                name="real_name"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="search-list-role">
+        <view
+          wx:for="{{10}}"
+          wx:key="index"
+        >
+            <view class="search-result-view" catch:tap="clickItem" data-sampleid="{{'121234434343'}}">
+              <view class="dis_setting" style="padding: 0px 0px 0px 0px">
+                <view class="s_center_t_item" style="display: flex">
+                  <view class="search-result-view-1" style="margin-right:20rpx;">{{(instrumentList.length - index)}}.</view>
+                  <!-- <view class="search-result-view-1">{{'姓名 ｜证件号码'}}</view> -->
+                  <view class="search-result-view-1" style="color:#333333;">{{'张三'}} ｜{{tools.centerIdCardTrim('340123123456785622')}}</view>
+                </view>
+                <view class="search-result-view-3" style="display:flex;align-items: center;">
+                  <image class="icon_arrow" src="../../img/icon_arrow_gray.png" alt="" />
+                </view>
+              </view>
+            </view>
+          </view>
+
+      </view>
+      
+
+      <view class="empty_view"></view>
+
+    </view>
+
+</view>
+

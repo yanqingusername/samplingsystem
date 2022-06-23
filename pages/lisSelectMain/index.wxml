@@ -1,4 +1,4 @@
-<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:tap="backPage">
   <view slot="backText"></view>
   <view slot="content">选择lis系统</view>
 </cu-custom>

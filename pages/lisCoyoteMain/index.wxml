@@ -1,7 +1,7 @@
 <!-- pages/addCustodian/addCustodian.wxml -->
-<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:tap="backPage">
   <view slot="backText"></view>
-  <view slot="content">核酸检测信息采集</view>
+  <view slot="content">卡尤迪信息采集</view>
 </cu-custom>
 <view class="child-section">
     <view class="main">

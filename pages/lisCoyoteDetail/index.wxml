@@ -33,7 +33,15 @@
                   <view class="search-result-view-1">{{(instrumentList.length - index)}}.</view>
                   <view class="search-result-view-2">{{ item.sample_id }}</view>
                 </view>
-                <view class="search-result-view-3" style="display: flex">{{ item.create_time }}</view>
+                <view class="search-result-view-3" style="display:flex;align-items: center;">
+                  <view class="search-result-view-1">{{'8/10'}}</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 1}}" style="color: #307FF5;margin-left:14rpx;">未封管</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 2}}" style="color: #999999;margin-left:14rpx;">已封管</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 3}}" style="color: #999999;margin-left:14rpx;">待转运</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 4}}" style="color: #999999;margin-left:14rpx;">转运中</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 5}}" style="color: #999999;margin-left:14rpx;">已接收</view>
+                  <image class="icon_arrow" src="../../img/icon_arrow_gray.png" alt="" />
+                </view>
               </view>
             <!-- </view> -->
           </view>

@@ -143,10 +143,10 @@ Page({
       if (res) {
         if (res.success) {
           wx.navigateTo({
-            url: `/pages/lisDetail/index?boxnum=${boxCodeNumber}`,
+            url: `/pages/lisCoyoteDetail/index?boxnum=${boxCodeNumber}`,
           });
           // that.$router.push({
-          //   path: "/lisDetail",
+          //   path: "/lisCoyoteDetail",
           //   query: { id: this.id, boxnum: boxCodeNumber },
           // });
         } else {
@@ -159,12 +159,8 @@ Page({
   },
   clickAlreadySmapleInfo(){
     wx.navigateTo({
-      url: '/pages/lisDetailInfo/index',
+      url: '/pages/lisCoyoteDetailInfo/index',
     });
-    // this.$router.push({
-    //   path: "/lisDetailInfo",
-    //   query:{id: this.id}
-    // });
   },
   /**
    * 封箱
@@ -179,10 +175,10 @@ Page({
       isShowBox: false
     });
     wx.navigateTo({
-      url: `/pages/lisDetail/index?boxnum=${this.data.box_num}`,
+      url: `/pages/lisCoyoteDetail/index?boxnum=${this.data.box_num}`,
     });
     // that.$router.push({
-    //   path: "/lisDetail",
+    //   path: "/lisCoyoteDetail",
     //   query: { id: that.id, boxnum: that.box_num },
     // });
   },
@@ -288,10 +284,10 @@ Page({
                     isFocus: false
                   });
                   wx.navigateTo({
-                    url: `/pages/lisDetail/index?boxnum=${that.data.boxCodeNumber}`,
+                    url: `/pages/lisCoyoteDetail/index?boxnum=${that.data.boxCodeNumber}`,
                   });
                   // that.$router.push({
-                  //   path: "/lisDetail",
+                  //   path: "/lisCoyoteDetail",
                   //   query: { id: this.id, boxnum: that.boxCodeNumber },
                   // });
                 } else {

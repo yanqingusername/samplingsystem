@@ -1,5 +1,5 @@
 <!-- pages/addCustodian/addCustodian.wxml -->
-<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:tap="backPage">
   <view slot="backText"></view>
   <view slot="content">账号申请</view>
 </cu-custom>
