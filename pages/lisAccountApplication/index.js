@@ -188,7 +188,7 @@ Page({
     //     box.showToast("网络不稳定，请重试");
     //   }
     // });
-  }, 3000),
+  }, 2000),
 
   codeInput1: function (e) {
     var that = this;

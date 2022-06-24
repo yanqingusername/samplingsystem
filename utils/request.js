@@ -1,5 +1,5 @@
 // 参数配置
-var apiurl = 'https://store.coyotebio-lab.com/lis_appointment'    //正式服务器
+var apiurl = 'https://store.coyotebio-lab.com/lis_appointment'    //东软信息采集  服务器
 
 // 常用request get封装
 function request_get(controller, data, cb) {
@@ -24,8 +24,10 @@ function request_get(controller, data, cb) {
     })
 }
 
-function request_new_test(controller, data, cb) {
-    var url = apiurl + controller;
+// 参数配置
+var apicoyote = 'https://store.coyotebio-lab.com/lis_appointment'    //卡尤迪信息采集  服务器
+function request_coyote(controller, data, cb) {
+    var url = apicoyote + controller;
     wx.request({
         url: url,
         data: data,
@@ -49,5 +51,5 @@ function request_new_test(controller, data, cb) {
 
 module.exports = {
     request_get: request_get,
-    request_new_test: request_new_test
+    request_coyote: request_coyote
 }

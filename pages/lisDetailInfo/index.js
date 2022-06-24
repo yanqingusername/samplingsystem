@@ -128,10 +128,15 @@ Page({
         let box_num = e.currentTarget.dataset.boxnum;
         let status = e.currentTarget.dataset.statusstring;
         if (box_num && status) {
-            wx.navigateTo({
-                url: `/pages/lisDetailInfoBox/index?boxnum=${box_num}&st=${status}`,
-            });
-
+            if(status == 1){
+                wx.navigateTo({
+                    url: `/pages/lisDetail/index?boxnum=${box_num}`,
+                });
+            }else{
+                wx.navigateTo({
+                    url: `/pages/lisDetailInfoBox/index?boxnum=${box_num}&st=${status}`,
+                });
+            }
             // this.$router.push({
             //     path: "/lisDetailInfoBox",
             //     query: {
