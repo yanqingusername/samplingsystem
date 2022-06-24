@@ -328,4 +328,9 @@ Page({
       isFocus: false
     });
   },
+  clickSelectMain(){
+    wx.redirectTo({
+      url: `/pages/lisMain/index`,
+    });
+  }
 })

@@ -331,4 +331,9 @@ Page({
       isFocus: false
     });
   },
+  clickSelectMain(){
+    wx.redirectTo({
+      url: `/pages/lisCoyoteMain/index`,
+    });
+  }
 })

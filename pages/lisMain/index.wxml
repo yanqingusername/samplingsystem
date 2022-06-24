@@ -10,7 +10,14 @@
         <view class="dis_setting_2" bind:tap="clickOut">退出登录</view>
       </view>
 
-      <view class="search-list-role">
+      <view class="dis_setting_select" >
+        <view bind:tap="clickSelectMain" style="display: flex;align-items: center;">
+          <view class="dis_setting_2" style="font-size:32rpx;">切换至</view>
+          <view class="dis_setting_1" style="color:#307ff5;">{{'卡尤迪信息采集'}}</view>
+        </view>
+      </view>
+
+      <view class="search-list-role" style="margin-top:30rpx;">
         <view class="search-list-role-1">
           <view class="s_center_t_item">今日采样数据</view>
           <view class="dis_setting_i">
