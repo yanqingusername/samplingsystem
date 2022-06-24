@@ -72,7 +72,7 @@
       <view class="search-list-role" wx:if="{{instrumentList.length>0}}">
         <view
             wx:for="{{instrumentList}}"
-            wx:key="index" bind:tap="clickLisCoyoteCellDetails" data-sampleid="{{item.sample_id}}" data-statusstring="0">
+            wx:key="index" bind:tap="clickLisCoyoteCellDetails" data-sampleid="{{item.sample_id}}" data-statusstring="{{index}}">
             <view class="search-result-view">
               <view class="dis_setting" style="padding: 0px 0px 0px 0px;">
                 <view class="s_center_t_item" style="display:flex;">

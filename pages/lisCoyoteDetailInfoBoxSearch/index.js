@@ -71,5 +71,12 @@ Page({
         });
         this.searchSampleTubeInfo(this.data.value);
       },
-    
+      clickItem(e){
+        let sampleid = e.currentTarget.dataset.sampleid;
+        if(sampleid){
+            wx.navigateTo({
+                url: `/pages/lisCoyoteCellDetails/index?sampleid=${sampleid}`,
+            });
+        }
+      }
 })

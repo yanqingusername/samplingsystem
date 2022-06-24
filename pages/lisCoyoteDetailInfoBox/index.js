@@ -151,8 +151,9 @@ Page({
     clickLisCoyoteCellDetails(e){
         let sampleid = e.currentTarget.dataset.sampleid;
         let statusstring = e.currentTarget.dataset.statusstring;
+        console.log(statusstring)
         if(sampleid && statusstring){
-            if(statusstring != 0){
+            if(statusstring == 1){
                 wx.navigateTo({
                     url: `/pages/lisCoyoteCellDetails/index?sampleid=${sampleid}`,
                 });
