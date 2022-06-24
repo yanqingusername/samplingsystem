@@ -24,36 +24,7 @@
     "pages/lisCoyoteMoreCellDetails/index",
     "pages/lisCoyoteDetailInfoSearch/index",
     "pages/lisCoyoteDetailInfoBoxSearch/index",
-    
-    
-    "pages/statistics/statistics",
-    "pages/createOrder/createOrder",
-    "pages/orderDetail/orderDetail",
-    "pages/addInstrument/addInstrument",
-    "pages/myInfo/myInfo",
-    "pages/myOrder/myOrder",
-    "pages/orderList/orderList",
-    "pages/logs/logs",
-    "pages/myInfo/add",
-    "pages/right-picker/right-picker",
-    "pages/chooseCustomer/chooseCustomer",
-    "pages/chooseCustodian/chooseCustodian",
-    "pages/addCustomer/addCustomer",
-    "pages/chooseSN/chooseSN",
-    "pages/addCustodian/addCustodian",
-    "pages/timePicker/timePicker",
-    "pages/exclusiveChooseSN/exclusiveChooseSN",
-    "pages/chooseInstrument/chooseInstrument",
-    "pages/problemDescription/problemDescription",
-    "pages/manageCustomer/index",
-    "pages/detailCustomer/index",
-    "pages/manageAddInstrument/index",
-    "pages/tagsLog/index",
-    "pages/recordInfoLog/index",
-    "pages/gpsChooseCustomer/index",
-    "pages/gpsManageInstrument/index",
-    "pages/gpsBind/index",
-    "pages/recordInfo/index"
+    "pages/timePicker/timePicker"
   ],
   "window": {
     "navigationBarTitleText": "Color UI",
@@ -62,31 +33,6 @@
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",
-  "tabBar": {
-    "color": "#BFBFBF",
-    "selectedColor": "#327FF6",
-    "backgroundColor": "#F2F2F2",
-    "list": [
-      {
-        "pagePath": "pages/orderList/orderList",
-        "iconPath": "/image/orderList.png",
-        "selectedIconPath": "/image/orderList_select.png",
-        "text": "工单列表"
-      },
-      {
-        "pagePath": "pages/myOrder/myOrder",
-        "iconPath": "/image/myOrder.png",
-        "selectedIconPath": "/image/myOrder_select.png",
-        "text": "我的工单"
-      },
-      {
-        "pagePath": "pages/myInfo/myInfo",
-        "iconPath": "/image/myInfo.png",
-        "selectedIconPath": "/image/myInfo_select.png",
-        "text": "个人信息"
-      }
-    ]
-  },
   "usingComponents": {
     "cu-custom": "/colorui/components/cu-custom"
   },
