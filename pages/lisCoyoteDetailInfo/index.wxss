@@ -262,6 +262,6 @@ color: #999999;
 
 .icon_arrow{
   width: 20rpx;
-  height: 36rpx;
+  height: 24rpx;
   margin-left: 6rpx;
 }
