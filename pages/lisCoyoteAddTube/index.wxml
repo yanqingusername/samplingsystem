@@ -75,7 +75,7 @@
             </view>
           </view>
         </view>
-        <view class="search-list-role-1" style="margin-left:20rpx;height: 76rpx;padding:0rpx;border-radius:12rpx;border: 1px solid #E0694D;">
+        <view class="search-list-role-1" style="margin-left:20rpx;height: 76rpx;padding:0rpx;border-radius:12rpx;border: 1px solid #E0694D;" bind:tap="clickNewScan">
           <view class="s_center_t_item" style="display: flex;align-items: center;color:#E0694D;"><image src="../../img/icon_img_07.png" class='detail_right_img' />扫试管码</view>
         </view>
       </view>
