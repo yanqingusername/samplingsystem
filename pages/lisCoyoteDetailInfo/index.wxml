@@ -27,6 +27,7 @@
 
       <view class="dis_setting_view_tab">
           <view class="dis_setting_view_tab_1" style="{{tabIndex == 0 ? 'color: #307FF5;':'color: #999999;'}}" catch:tap="clickTabIndex" data-tabstring="0">全部</view>
+          <view class="dis_setting_view_tab_1" style="{{tabIndex == 1 ? 'color: #307FF5;':'color: #999999;'}}" catch:tap="clickTabIndex" data-tabstring="1">未封箱</view>
           <view class="dis_setting_view_tab_1" style="{{tabIndex == 3 ? 'color: #307FF5;':'color: #999999;'}}" catch:tap="clickTabIndex" data-tabstring="3">待转运({{stay_transport_sum}})</view>
           <view class="dis_setting_view_tab_1" style="{{tabIndex == 4 ? 'color: #307FF5;':'color: #999999;'}}" catch:tap="clickTabIndex" data-tabstring="4">转运中({{transporting_sum}})</view>
           <view class="dis_setting_view_tab_1" style="{{tabIndex == 5 ? 'color: #307FF5;':'color: #999999;'}}" catch:tap="clickTabIndex" data-tabstring="5">已接收</view>
