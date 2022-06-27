@@ -62,7 +62,7 @@
             <view class="detail_center P5_2" style="align-items: center;padding: 20rpx 0rpx 20rpx 0rpx;" bind:tap="bindSelectChannel">
                 <view class="detail_center P5_2" style="align-items: center;width:100%;">
                   <view class="picker" style="color: {{channel_name ? '#333333' : '#999999'}}">{{channel_name ? channel_name : '请选择所属采样点'}}</view>
-                  <image src="../../image/icon_arrow_gray.png" style="width:20rpx;height:34rpx;"/>
+                  <image src="../../img/icon_arrow_gray.png" style="width:20rpx;height:34rpx;"/>
                 </view>
             </view>
           </view>
@@ -74,7 +74,7 @@
              <picker bindchange="bindSelectDutytype" value="{{dutytypeIndex}}" range-key="{{'dutytype_name'}}" range="{{dutytypeList}}" style="width:100%;">
                 <view class="detail_center P5_2" style="align-items: center;width:100%;">
                   <view class="picker" style="color: {{dutytypeIndex ==0 ? '#999999' : '#333333'}}">{{dutytypeList[dutytypeIndex].dutytype_name}}</view>
-                  <image src="../../image/icon_arrow_gray.png" style="width:20rpx;height:34rpx;"/>
+                  <image src="../../img/icon_arrow_gray.png" style="width:20rpx;height:34rpx;"/>
                 </view>
               </picker>
             </view>
@@ -86,7 +86,7 @@
              <picker bindchange="bindSelectJobtype" value="{{jobtypeIndex}}" range-key="{{'jobtype_name'}}" range="{{jobtypeList}}" style="width:100%;">
                 <view class="detail_center P5_2" style="align-items: center;width:100%;">
                   <view class="picker" style="color: {{jobtypeIndex ==0 ? '#999999' : '#333333'}}">{{jobtypeList[jobtypeIndex].jobtype_name}}</view>
-                  <image src="../../image/icon_arrow_gray.png" style="width:20rpx;height:34rpx;"/>
+                  <image src="../../img/icon_arrow_gray.png" style="width:20rpx;height:34rpx;"/>
                 </view>
               </picker> 
             </view>
