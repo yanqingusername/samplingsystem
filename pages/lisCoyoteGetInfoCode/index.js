@@ -48,6 +48,31 @@ Page({
       }
     ],
 
+    customIndex: 0,
+    custom_name: '',
+    customList: [
+      {
+        custom_id: "0",
+        custom_name: '线上'
+      },
+      {
+        custom_id: "1",
+        custom_name: '线下'
+      }
+    ],
+
+    paytypeIndex: 0,
+    paytype_name: '',
+    paytypeList: [{
+        paytype_id: "0",
+        paytype_name: '微信小程序'
+      },
+      {
+        paytype_id: "1",
+        paytype_name: '公众号'
+      }
+    ],
+
   },
   onLoad: function (options) {
     // this.setData({
@@ -207,7 +232,7 @@ Page({
     });
   },
   /**
-   * 职责类型
+   * 证件类型
    */
   bindSelectDutytype: function (e) {
     var that = this;
@@ -218,7 +243,7 @@ Page({
     });
   },
   /**
-   * 岗位类型
+   * 性别
    */
    bindSelectJobtype: function (e) {
     var that = this;
@@ -226,6 +251,28 @@ Page({
     this.setData({
       jobtypeIndex: e.detail.value,
       jobtype_name: that.data.jobtypeList[e.detail.value].jobtype_name
+    });
+  },
+  /**
+   * 客户来源
+   */
+   bindSelectCustom: function (e) {
+    var that = this;
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      customIndex: e.detail.value,
+      custom_name: that.data.customList[e.detail.value].custom_name
+    });
+  },
+  /**
+   * 付款方式
+   */
+   bindSelectPaytype: function (e) {
+    var that = this;
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      paytypeIndex: e.detail.value,
+      paytype_name: that.data.paytypeList[e.detail.value].paytype_name
     });
   },
 })

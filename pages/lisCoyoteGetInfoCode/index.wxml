@@ -106,9 +106,9 @@
           <view class="detail_center" style="padding: 10rpx 0rpx;border-bottom: 1px solid #dddddd;">
             <view class="P5_1" style="padding-left:0rpx;">客户来源</view>
             <view class="detail_center P5_2" style="align-items: center;padding: 20rpx 0rpx 20rpx 0rpx;">
-             <picker bindchange="bindSelectDutytype" value="{{dutytypeIndex}}" range-key="{{'dutytype_name'}}" range="{{dutytypeList}}" style="width:100%;">
+             <picker bindchange="bindSelectCustom" value="{{customIndex}}" range-key="{{'custom_name'}}" range="{{customList}}" style="width:100%;">
                 <view class="detail_center P5_2" style="align-items: center;width:100%;">
-                  <view class="picker" style="color:#333333;">{{dutytypeList[dutytypeIndex].dutytype_name}}</view>
+                  <view class="picker" style="color:#333333;">{{customList[customIndex].custom_name}}</view>
                   <image src="../../img/icon_arrow_gray.png" style="width:20rpx;height:34rpx;"/>
                 </view>
               </picker>
@@ -118,9 +118,9 @@
           <view class="detail_center" style="padding: 10rpx 0rpx;border-bottom: 1px solid #dddddd;">
             <view class="P5_1" style="padding-left:0rpx;">付款方式</view>
             <view class="detail_center P5_2" style="align-items: center;padding: 20rpx 0rpx 20rpx 0rpx;">
-             <picker bindchange="bindSelectJobtype" value="{{jobtypeIndex}}" range-key="{{'jobtype_name'}}" range="{{jobtypeList}}" style="width:100%;">
+             <picker bindchange="bindSelectPaytype" value="{{paytypeIndex}}" range-key="{{'paytype_name'}}" range="{{paytypeList}}" style="width:100%;">
                 <view class="detail_center P5_2" style="align-items: center;width:100%;">
-                  <view class="picker" style="color:#333333;">{{jobtypeList[jobtypeIndex].jobtype_name}}</view>
+                  <view class="picker" style="color:#333333;">{{paytypeList[paytypeIndex].paytype_name}}</view>
                   <image src="../../img/icon_arrow_gray.png" style="width:20rpx;height:34rpx;"/>
                 </view>
               </picker> 

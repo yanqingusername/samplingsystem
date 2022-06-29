@@ -631,3 +631,41 @@ page{
   border-top: 1px solid #E9E9E9;
   line-height: 88rpx;
 }
+
+/**
+*渠道 遮罩
+*/
+.scroll-view{
+  height: 620rpx;
+}
+
+.child-row {
+  display: flex;
+  align-items: center;
+  font-size: 30rpx;
+  color: rgba(3, 3, 3, 1);
+  padding: 20rpx 20rpx;
+  background: #DDDDDD;
+  margin: 20rpx 30rpx 0rpx 30rpx;
+    border-radius: 12rpx;
+    border: 1px solid #DDDDDD;
+}
+
+.child-row-active{
+  display: flex;
+  align-items: center;
+  font-size: 30rpx;
+  color: rgba(3, 3, 3, 1);
+  padding: 20rpx 20rpx;
+  background: #DDDDDD;
+  margin: 20rpx 30rpx 0rpx 30rpx;
+    border-radius: 12rpx;
+    border: 1px solid #ff6969;
+}
+
+.text_title{
+  font-family: PingFangSC-Regular, PingFang SC;
+font-weight: 400;
+  font-size: 28rpx;
+  color: #333333;
+}

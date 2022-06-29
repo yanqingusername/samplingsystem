@@ -6,6 +6,8 @@ const app = getApp()
 
 Page({
   data: {
+    isQudao: false,
+    qudaoIndex: -1,
     isShowBox: false,
     boxData:{
       title: "温馨提示",
@@ -632,5 +634,37 @@ Page({
     wx.navigateTo({
       url: '/pages/lisCoyoteGetInfoCode/index'
     });
+  },
+  dialogBoxnumCancel(){
+    this.setData({
+      isInputBoxnum: false
+    });
+  },
+  dialogBoxnumSure(){
+    this.setData({
+      isInputBoxnum: false,
+      isQudao: true
+    });
+  },
+  bindSelectQudao(e){
+    let qudaoIndex = e.currentTarget.dataset.index;
+    this.setData({
+      qudaoIndex: qudaoIndex
+    });
+  },
+  dialogQudaoCancel(){
+    this.setData({
+      isQudao: false,
+      qudaoIndex: -1
+    });
+  },
+  dialogQudaoSure(){
+    if(this.data.qudaoIndex != -1){
+      this.setData({
+        isQudao: false
+      });
+    }else{
+      box.showToast('请选择渠道');
+    }
   },
 })

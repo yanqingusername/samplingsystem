@@ -186,3 +186,25 @@
     </view>
     <!-- <view catchtap="hideCover" wx:if="{{isShow}}" class='bg'></view> -->
   </view>
+
+
+  <!-- 选择付款渠道 遮罩 -->
+  <view wx:if="{{isQudao}}" class='cover' bind:tap="">
+    <view class='concent'>
+      <view class="dialog_item" style="width: 100%;">
+        <view class="dialog_item_title">选择付款渠道</view>
+        <scroll-view scroll-y="{{true}}" class="scroll-view">
+          <block wx:for="{{10}}" wx:key="index">
+            <view class="{{ qudaoIndex == index ? 'child-row-active' : 'child-row'}}" catchtap="bindSelectQudao" data-index="{{index}}">
+              <view class="text_title">{{'北京西站'}}</view>
+            </view>
+          </block>
+        </scroll-view>
+      </view>
+      <view class="details">
+        <view class="cancel" catchtap="dialogQudaoCancel">{{"取消"}}</view>
+        <view class="sure" catchtap="dialogQudaoSure">{{"确认"}}</view>
+      </view>
+    </view>
+    <!-- <view catchtap="hideCover" wx:if="{{isShow}}" class='bg'></view> -->
+  </view>

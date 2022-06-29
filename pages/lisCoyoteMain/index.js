@@ -49,17 +49,18 @@ Page({
     let params = {
       id: that.data.id
     }
-    request.request_get('/eastbox/getEverydaySampleBoxInfo.hn', params, function (res) {
+    request.request_coyote('/info/getChannelInfo.hn', params, function (res) {
       if (res) {
-        if (res.success) {
+        if (res.code == 200) {
           that.setData({
-            channel_name: res.channel_name,
-            channel_id: res.channel_id,
-            box_count: res.box_count,
-            tube_count: res.tube_count,
+            channel_name: res.data.channelName,
+            channel_id: res.data.channelId,
+            box_count: res.data.boxcount,
+            tube_count: res.data.num,
+            perple_count: res.data.peoplecount
           });
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
@@ -71,20 +72,22 @@ Page({
     let params = {
       id: that.data.id
     }
-    request.request_get('/eastbox/checkSampleBoxStatusIsClose.hn', params, function (res) {
+    request.request_coyote('/info/checkbox.hn', params, function (res) {
       if (res) {
-        if (res.success) {
-          if (res.is_exist == 0) {
+        // if (res.code == 200) {
+          if (res.data.success == 1) {
             that.setData({
               isShowBox: true,
-              box_num: res.box_num
+              box_num: res.data.nums
             });
-          } else {
+          } else if (res.data.success == 0) {
             that.getScanQRCodeClick();
+          } else {
+            box.showToast(res.message);
           }
-        } else {
-          box.showToast(res.msg);
-        }
+        // } else {
+        //   box.showToast(res.message);
+        // }
       } else {
         box.showToast("网络不稳定，请重试");
       }
@@ -117,40 +120,32 @@ Page({
     let params = {
       box_num: boxCodeNumber,
     }
-    request.request_get('/eastbox/checkSampleBoxStatus.hn', params, function (res) {
+    request.request_coyote('/info/opencheckbox.hn', params, function (res) {
       if (res) {
-        if (res.success) {
-          let can_use = res.can_use || false;
-          that.startScanSampleBox(boxCodeNumber,can_use);
+        if (res.data.success == 0) {
+          that.startScanSampleBox(boxCodeNumber);
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
       }
     });
   },
-  startScanSampleBox(boxCodeNumber,can_use) {
+  startScanSampleBox(boxCodeNumber) {
     let that = this;
     let params = {
       box_num: boxCodeNumber,
-      // max_sum:max_sum,
-      id: that.data.id,
-      channel_id: that.data.channel_id,
-      can_use: can_use
+      id: that.data.id
     }
-    request.request_get('/eastbox/startScanSampleBox.hn', params, function (res) {
+    request.request_coyote('/info/openbox.hn', params, function (res) {
       if (res) {
-        if (res.success) {
+        if (res.data.success == 0) {
           wx.navigateTo({
             url: `/pages/lisCoyoteDetail/index?boxnum=${boxCodeNumber}`,
           });
-          // that.$router.push({
-          //   path: "/lisCoyoteDetail",
-          //   query: { id: this.id, boxnum: boxCodeNumber },
-          // });
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
@@ -177,10 +172,6 @@ Page({
     wx.navigateTo({
       url: `/pages/lisCoyoteDetail/index?boxnum=${this.data.box_num}`,
     });
-    // that.$router.push({
-    //   path: "/lisCoyoteDetail",
-    //   query: { id: that.id, boxnum: that.box_num },
-    // });
   },
   /**
    * 退出系统
@@ -229,23 +220,25 @@ Page({
     let params = {
       id: that.data.id,
     }
-    request.request_get('/eastbox/checkSampleBoxStatusIsClose.hn', params, function (res) {
+    request.request_coyote('/info/checkbox.hn', params, function (res) {
       if (res) {
-        if (res.success) {
-          if (res.is_exist == 0) {
+        // if (res.code == 200) {
+          if (res.data.success == 1) {
             that.setData({
               isShowBox: true,
-              box_num: res.box_num
+              box_num: res.data.nums
             });
-          } else {
+          } else if (res.data.success == 0) {
             that.setData({
               isInputBoxnum: true,
               isFocus: true
             });
+          } else {
+            box.showToast(res.message);
           }
-        } else {
-          box.showToast(res.msg);
-        }
+        // } else {
+        //   box.showToast(res.message);
+        // }
       } else {
         box.showToast("网络不稳定，请重试");
       }
@@ -263,21 +256,16 @@ Page({
       let params = {
         box_num: that.data.boxCodeNumber,
       }
-      request.request_get('/eastbox/checkSampleBoxStatus.hn', params, function (res) {
+      request.request_coyote('/info/opencheckbox.hn', params, function (res) {
         if (res) {
-          if (res.success) {
-            let can_use = res.can_use || false;
-
+          if (res.data.success == 0) {
             let data = {
               box_num: that.data.boxCodeNumber,
-              // max_sum:max_sum,
               id: that.data.id,
-              channel_id: that.data.channel_id,
-              can_use: can_use
             }
-            request.request_get('/eastbox/startScanSampleBox.hn', data, function (res1) {
+            request.request_coyote('/info/openbox.hn', data, function (res1) {
               if (res1) {
-                if (res1.success) {
+                if (res1.data.success == 0) {
                   that.setData({
                     boxCodeNumber: "",
                     isInputBoxnum: false,
@@ -286,20 +274,15 @@ Page({
                   wx.navigateTo({
                     url: `/pages/lisCoyoteDetail/index?boxnum=${that.data.boxCodeNumber}`,
                   });
-                  // that.$router.push({
-                  //   path: "/lisCoyoteDetail",
-                  //   query: { id: this.id, boxnum: that.boxCodeNumber },
-                  // });
                 } else {
-                  box.showToast(res1.msg);
+                  box.showToast(res1.message);
                 }
               } else {
                 box.showToast("网络不稳定，请重试");
               }
             });
-
           } else {
-            box.showToast(res.msg);
+            box.showToast(res.message);
           }
         } else {
           box.showToast("网络不稳定，请重试");
