@@ -1,3 +1,4 @@
+const { showToast } = require('../../utils/box.js')
 const box = require('../../utils/box.js')
 const request = require('../../utils/request.js')
 const utils = require('../../utils/utils.js')
@@ -7,384 +8,213 @@ const app = getApp()
 Page({
   data: {
     isQudao: false,
+    paychannel: '',
     qudaoIndex: -1,
-    isShowBox: false,
-    boxData:{
-      title: "温馨提示",
-      titles: "存在未封箱的箱码，请先封箱，否则无法使用新箱码",
-      cancel: "取消",
-      sure: "去封箱"
-    },
-      isBack: false,
-      backData:{
-        title: "箱码还未封箱，确认返回吗？",
-        titles: "返回后数据会自动保存",
-        cancel: "直接返回",
-        sure: "立即封箱"
-      },
-      isSure: false,
-      sureData:{
-        title: "确认封箱吗？",
-        titles: "封管后将结束该试管绑定任务",
-        cancel: "取消",
-        sure: "确认"
-      },
-      isMaxBox: false,
-      maxBoxData:{
-        title: "温馨提示",
-        titles: "已达最大封箱数量，请先封箱",
-        cancel: "取消",
-        sure: "立即封箱"
-      },
-      isDelete: false,
-      deleteData:{
-        title: "确认删除该箱码吗？",
-        titles: "删除后可再次扫码使用",
-        cancel: "取消",
-        sure: "确认"
-      },
-      isShowSuccess: true,
-      id: "",
-      boxnum:"",
-      boxnumTime:"",
-      boxnumMax: 0,
-      channel_id: '',
-      instrumentList: [],
-      successboxnum: 0,
-      successnum:0,
-      // 设置开始的位置
-      startX: 0,
-      startY: 0,
 
-      dutytypeIndex: 0,
-    dutytype_name: '单采',
-    dutytypeList: [{
-        dutytype_id: "0",
-        dutytype_name: '单采'
-      },
-      {
-        dutytype_id: "1",
-        dutytype_name: '十混一'
-      },
-      {
-        dutytype_id: "2",
-        dutytype_name: '五混一'
-      }
-    ],
+    isMaxBox: false,
+    maxBoxData: {
+      title: "温馨提示",
+      titles: "已达上限人数，请封管",
+      cancel: "取消",
+      sure: "立即封管"
+    },
+
+    isSure: false,
+    sureData: {
+      title: "确认封管吗？",
+      titles: "封管后将结束该试管绑定任务",
+      cancel: "取消",
+      sure: "确认"
+    },
+
+    isShowBox: false,
+    boxData: {
+      title: "温馨提示",
+      titles: "未添加任何人员信息，不允许封管",
+      cancel: "取消",
+      sure: "知道了"
+    },
+
+    isBack: false,
+    backData: {
+      title: "试管还未封管，确认返回吗？",
+      titles: "返回后数据会自动保存",
+      cancel: "直接返回",
+      sure: "立即封管"
+    },
+    
+    isShowSuccess: false,
+    id: "",
+    boxnum: "",
+    boxnumTime: "",
+    // boxnumMax: 0,
+    canuse: 0,
+    samplesum: 1,
+    instrumentList: [],
+    
+    // 设置开始的位置
+    startX: 0,
+    startY: 0,
+
+    dutytypeIndex: 0,
+    type: '单采',
+    testtype: '1',
+    dutytypeList: [],
 
     jobtypeIndex: 0,
-    jobtype_name: '咽拭子',
-    jobtypeList: [{
-        jobtype_id: "0",
-        jobtype_name: '咽拭子'
-      },
-      {
-        jobtype_id: "1",
-        jobtype_name: '鼻咽拭子'
-      }
-    ],
+    specimenType: '咽拭子',
+    jobtypeList: [],
 
-    isInputBoxnum: false
+    isInputBoxnum: false,
+    boxCodeNumber: '',
+
+    sampleId: '',
+    isFocus: false,
+    sourceInfoList: [],
+    sampleOldId: '',
+
+    isScanShow: 1, // 1--扫码  2--手录
+
   },
   onLoad: function (options) {
     let boxnum = options.boxnum;
+    let sampleId = options.sampleId;
 
     this.setData({
       id: app.globalData.userInfo.id || 322,
-      boxnum: boxnum
+      boxnum: boxnum,
+      sampleOldId: sampleId,
+      sampleId: sampleId
+    });
+
+    this.getSampleBoxInfo();
+    this.gettype();
+    this.getstype();
+
+    // if(this.data.sampleId){
+    //   this.getClosesample();
+    //   // this.getCustomInfo();
+    // }
+  },
+  onShow() {
+    // this.getSampleBoxInfo();
+    // this.gettype();
+    // this.getstype();
+    if(this.data.sampleId){
+      this.getClosesample();
+      // this.getCustomInfo();
+    }
+  },
+  /**
+   * 混采类型
+   */
+  gettype() {
+    let that = this;
+    let params = {
+
+    }
+    request.request_coyote('/info/gettype.hn', params, function (res) {
+      if (res) {
+        if (res.code == 200) {
+          that.setData({
+            dutytypeList: res.data
+          });
+          if(that.data.dutytypeList.length > 0){
+            that.setData({
+              dutytypeIndex: 0,
+              type: that.data.dutytypeList[0].type,
+              testtype: that.data.dutytypeList[0].id
+            });
+          }
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
     });
   },
-  onShow(){
-    this.getSampleBoxInfo();
+  /**
+   * 标本类型
+   */
+  getstype() {
+    let that = this;
+    let params = {
+
+    }
+    request.request_coyote('/info/getstype.hn', params, function (res) {
+      if (res) {
+        if (res.code == 200) {
+          that.setData({
+            jobtypeList: res.data
+          });
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
   },
+  /**
+   * 获取箱码信息
+   */
   getSampleBoxInfo() {
     let that = this;
     let params = {
       box_num: that.data.boxnum,
-      id: that.data.id
+      // id: that.data.id
     }
-    request.request_get('/eastbox/getSampleBoxInfo.hn', params, function (res) {
+    request.request_coyote('/info/getboxinfo.hn', params, function (res) {
       if (res) {
-        if (res.success) {
-          if(res.result && res.result.length > 0){
-            let item = res.result[0];
-            that.setData({
-              boxnum: item.box_num,
-              boxnumTime: item.create_time,
-              boxnumMax: item.max_sum,
-              channel_id: item.channel,
-            });
-          }
-
+        if (res.data.success == 0) {
           that.setData({
-            instrumentList: res.listData
+            boxnum: res.data.box_num,
+            // boxnumTime: res.data.date,
+            // boxnumMax: res.data.maxsum,
+            canuse: res.data.canuse,
           });
-
-          if(that.data.instrumentList.length > 0){
-            for(let i = 0; i < that.data.instrumentList.length; i++){
-              that.data.instrumentList[i].isTouchMove = false;
-            }
-          }
-          
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
       }
-    });
-  },
-  // 扫描
-  scanQRCodeClick() {
-    // this.getScanQRCodeClick();
-    this.checkSampleTube('22222222222227');
-  },
-  getScanQRCodeClick() {
-    // 点击的时候调起扫一扫功能呢
-    let that = this;
-    wx.scanCode({
-      scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-      success(res) {
-        console.log('---->:',res.result)
-        let boxCodeNumber = res.result;
-        if (boxCodeNumber) {
-          that.checkSampleTube(boxCodeNumber);
-        }
-      },
-      fail(res) {
-        console.log("err", res);
-      },
     });
   },
   /**
-   *
+   * 返回按钮
    */
-  checkSampleTube(boxCodeNumber) {
-    let that = this;
-    let params = {
-      sample_id: boxCodeNumber
-    }
-    request.request_get('/eastbox/checkSampleTube.hn', params, function (res) {
-      if (res) {
-        if (res.success) {
-          that.addSampleTubeInfo(boxCodeNumber);
-        } else {
-          box.showToast(res.msg);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
-    });
-  },
-  addSampleTubeInfo(sample_id) {
-    let that = this;
-    let params = {
-      box_num: that.data.boxnum,
-      id: that.data.id,
-      sample_id: sample_id,
-      channel_id: that.data.channel_id
-    }
-    request.request_get('/eastbox/addSampleTubeInfo.hn', params, function (res) {
-      if (res) {
-        if (res.success) {
-          if(res.can_add == 0){
-            that.getSampleBoxInfo();
-          }else{
-            that.setData({
-              isMaxBox: true
-            });
-          }
-        } else {
-          box.showToast(res.msg);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
-    });
-  },
   onClickLeft() {
     wx.navigateBack({
       delta: 1
     });
   },
+  /**
+   * 封管
+   */
   clickDown() {
-    if(this.data.instrumentList.length > 0){
-      this.setData({
-        isSure: true
-      });
-    }else{
-      this.closeSetSampleBox();
-    }
-  },
-  closeSetSampleBox(){
     let that = this;
     let params = {
-      box_num: that.data.boxnum,
-      id: that.data.id
+      sampleId: that.data.sampleId
     }
-    request.request_get('/eastbox/closeSampleBox.hn', params, function (res) {
+    request.request_coyote('/info/closechecksample.hn', params, function (res) {
       if (res) {
-        if (res.success) {
+        if (res.data.success == 0) {
+          //可以封管
           that.setData({
-            isShowSuccess: false
+            isSure: true
           });
-          if(res.result && res.result.length > 0){
-            let item = res.result[0];
-            that.setData({
-              successboxnum: item.box_num,
-              successnum: item.sample_num,
-            });
-          }
-        } else {
-          box.showToast(res.msg);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
-    });
-  },
-  clickNewScan() {
-    this.checkSampleBoxStatusIsClose();
-  },
-  checkSampleBoxStatusIsClose() {
-    let that = this;
-    let params = {
-      id: that.data.id
-    }
-    request.request_get('/eastbox/checkSampleBoxStatusIsClose.hn', params, function (res) {
-      if (res) {
-        if (res.success) {
-          if (res.is_exist == 0) {
-            that.setData({
-              isShowBox: true,
-              boxnum: res.box_num,
-            });
-          } else {
-            that.getScanQRCodeClick2();
-            // that.checkSampleBoxStatus('456789');
-          }
-        } else {
-          box.showToast(res.msg);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
-    });
-  },
-  getScanQRCodeClick2() {
-    // 点击的时候调起扫一扫功能呢
-    let that = this;
-    wx.scanCode({
-      scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-      success(res) {
-        console.log('---->:',res.result)
-        let boxCodeNumber = res.result;
-        if (boxCodeNumber) {
-          that.checkSampleBoxStatus(boxCodeNumber);
-        }
-      },
-      fail(res) {
-        console.log("err", res);
-      },
-    });
-  },
-  checkSampleBoxStatus(boxCodeNumber) {
-    let that = this;
-    let params = {
-      box_num: boxCodeNumber,
-    }
-    request.request_get('/eastbox/checkSampleBoxStatus.hn', params, function (res) {
-      if (res) {
-        if (res.success) {
-          let can_use = res.can_use || false;
-          that.startScanSampleBox(boxCodeNumber,can_use);
-        } else {
-          box.showToast(res.msg);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
-    });
-  },
-  startScanSampleBox(boxCodeNumber,can_use) {
-    let that = this;
-    let params = {
-      box_num: boxCodeNumber,
-      // max_sum:max_sum,
-      id: that.data.id,
-      channel_id: that.data.channel_id,
-      can_use: can_use
-    }
-    request.request_get('/eastbox/startScanSampleBox.hn', params, function (res) {
-      if (res) {
-        if (res.success) {
-          that.setData({
-            isShowSuccess: true,
-            boxnum: boxCodeNumber,
-            id: that.data.id
-          });
-          that.getSampleBoxInfo();
-        } else {
-          box.showToast(res.msg);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
-    });
-  },
-  /**
-   * 封箱弹框
-   */
-  boxCancel(){
-    this.setData({
-      isShowBox: false
-    });
-  },
-  boxSure(){
-    this.setData({
-      isShowBox: false,
-      isShowSuccess: true,
-      id: this.data.id,
-      boxnum: this.data.boxnum
-    });
-
-    this.getSampleBoxInfo();
-  },
-  clickItem() {
-    
-  },
-  /**
-   * 立即封箱弹框
-   */
-  maxBoxCancel(){
-    this.setData({
-      isMaxBox: false
-    });
-  },
-  maxBoxSure(){
-    let that = this;
-    let params = {
-      box_num: that.data.boxnum,
-      id: that.data.id
-    }
-    request.request_get('/eastbox/closeSampleBox.hn', params, function (res) {
-      if (res) {
-        if (res.success) {
-          box.showToast(res.msg)
+        } else if (res.data.success == 2) {
+          // 未添加任何人员不可以封管
           that.setData({
             isMaxBox: false,
-            isShowSuccess: false
+            isBack: false,
+            isSure: false,
+            isShowBox: true
           });
-
-          if(res.result && res.result.length > 0){
-            let item = res.result[0];
-            that.setData({
-              successboxnum: item.box_num,
-              successnum: item.sample_num,
-            });
-          }
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
@@ -394,126 +224,95 @@ Page({
   /**
    * 立即封箱 确认
    */
-   sureCancel(){
+   sureCancel() {
     this.setData({
       isSure: false
     });
   },
-  sureSure(){
+  sureSure() {
+    this.setHclosesample();
+  },
+  /**
+   * 扫试管码
+   */
+  clickNewScan() {
+    this.getScanQRCodeClick();
+  },
+  getScanQRCodeClick() {
+    // 点击的时候调起扫一扫功能呢
+    let that = this;
+    wx.scanCode({
+      scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+      success(res) {
+        console.log('---->:', res.result)
+        let sampleId = res.result;
+        if (sampleId) {
+          that.checkSampleStatus(sampleId);
+        }
+      },
+      fail(res) {
+        console.log("err", res);
+      },
+    });
+  },
+  checkSampleStatus(sampleId) {
     let that = this;
     let params = {
-      box_num: that.data.boxnum,
-      id: that.data.id
+      sampleId: sampleId
     }
-    request.request_get('/eastbox/closeSampleBox.hn', params, function (res) {
+    request.request_coyote('/info/checksample.hn', params, function (res) {
       if (res) {
-        if (res.success) {
-          box.showToast(res.msg)
+        if (res.data.success == 0) {
           that.setData({
-            isSure: false,
-            isShowSuccess: false
+            sampleId: sampleId
           });
-
-          if(res.result && res.result.length > 0){
-            let item = res.result[0];
-            that.setData({
-              successboxnum: item.box_num,
-              successnum: item.sample_num,
-            });
-          }
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
       }
+    });
+  },
+  /**
+   * 未添加任何人员信息，不允许封管  弹框
+   */
+  boxCancel() {
+    this.setData({
+      isShowBox: false
+    });
+  },
+  boxSure() {
+    this.setData({
+      isShowBox: false
     });
   },
   /**
    * 返回
    */
-   backPage(){
-     if(this.data.isShowSuccess){
+  backPage() {
+    //this.data.isShowSuccess || 
+    if (this.data.sampleId) {
       this.setData({
         isBack: true
       });
-     }else{
+    } else {
       this.onClickLeft();
-     }
+    }
   },
-  backCancel(){
+  backCancel() {
     this.setData({
       isBack: false
-     });
-     this.onClickLeft();
-  },
-  backSure(){
-    let that = this;
-    let params = {
-      box_num: that.data.boxnum,
-      id: that.data.id
-    }
-    request.request_get('/eastbox/closeSampleBox.hn', params, function (res) {
-      if (res) {
-        if (res.success) {
-          box.showToast(res.msg)
-          that.setData({
-            isBack: false,
-            isShowSuccess: false
-          });
-
-          if(res.result && res.result.length > 0){
-            let item = res.result[0];
-            that.setData({
-              successboxnum: item.box_num,
-              successnum: item.sample_num,
-            });
-          }
-        } else {
-          box.showToast(res.msg);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
     });
+    this.onClickLeft();
+  },
+  backSure() {
+    this.maxBoxSure();
   },
   /**
-   * 删除箱码
+   * 左滑删除 
    */
-  clickDelete() {
-    this.setData({
-      isDelete: true
-    });
-  },
-  deleteCancel(){
-    this.setData({
-      isDelete: false
-     });
-  },
-  deleteSure(){
-    let that = this;
-    let params = {
-      box_num: that.data.boxnum
-    }
-    request.request_get('/eastbox/deleteSampleBoxInfo.hn', params, function (res) {
-      if (res) {
-        if (res.success) {
-          box.showToast(res.msg)
-          that.setData({
-            isDelete: false,
-            isShowSuccess: false
-          });
-
-          that.onClickLeft();
-        } else {
-          box.showToast(res.msg);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
-    });
-  },
-  touchStart: function(e) {
+  touchStart: function (e) {
     let instrumentList = [...this.data.instrumentList]
     instrumentList.forEach(item => {
       if (item.isTouchMove) {
@@ -526,7 +325,7 @@ Page({
       startY: e.touches[0].clientY
     })
   },
-  touchMove: function(e) {
+  touchMove: function (e) {
     let moveX = e.changedTouches[0].clientX;
     let moveY = e.changedTouches[0].clientY;
     let indexs = e.currentTarget.dataset.index;
@@ -561,110 +360,557 @@ Page({
     });
   },
   //计算角度
-  angle: function(start, end) {
+  angle: function (start, end) {
     var _X = end.X - start.X,
       _Y = end.Y - start.Y
     //返回角度 /Math.atan()返回数字的反正切值
     return 360 * Math.atan(_Y / _X) / (2 * Math.PI);
   },
-
-  // 删除
-  delShop(e) {
+  /**
+   * 已达上限人数，请封管 弹框
+   */
+  maxBoxCancel() {
+    this.setData({
+      isMaxBox: false
+    });
+  },
+  maxBoxSure() {
     let that = this;
-    wx.showModal({
-      title: '提示',
-      content: '确认删除该试管吗？',
-      success: function(res) {
-        if (res.confirm) {
-          let sampleid = e.currentTarget.dataset.sampleid;
-          let params = {
-            box_num: that.data.boxnum,
-            sample_id: sampleid,
-            id: that.data.id
-          }
-          request.request_get('/eastbox/deleteSampleTubeInfo.hn', params, function (res) {
-            if (res) {
-              if (res.success) {
-                box.showToast(res.msg)
-                that.getSampleBoxInfo();
-              } else {
-                box.showToast(res.msg);
-              }
-            } else {
-              box.showToast("网络不稳定，请重试");
-            }
+    let params = {
+      sampleId: that.data.sampleId
+    }
+    request.request_coyote('/info/closechecksample.hn', params, function (res) {
+      if (res) {
+        if (res.data.success == 0) {
+          //可以封管
+          that.setData({
+            isMaxBox: false,
+            isBack: false
           });
+          that.setHclosesample();
+        } else if (res.data.success == 2) {
+          // 未添加任何人员不可以封管
+          that.setData({
+            isMaxBox: false,
+            isBack: false,
+            isShowBox: true
+          });
+        } else {
+          box.showToast(res.message);
         }
+      } else {
+        box.showToast("网络不稳定，请重试");
       }
-    })
+    });
   },
   /**
    * 混采类型
    */
-   bindSelectDutytype: function (e) {
-    var that = this;
+  bindSelectDutytype: function (e) {
+    if(this.data.testtypeOld == 1 && this.data.instrumentList.length > 0){
+      this.setData({
+        dutytypeIndex: 0,
+        type: '单采',
+        testtype: '1',
+      });
+      box.showToast('请先封管后再切换类型');
+      return
+    }
+
+    let that = this;
     console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
       dutytypeIndex: e.detail.value,
-      dutytype_name: that.data.dutytypeList[e.detail.value].dutytype_name
+      type: that.data.dutytypeList[e.detail.value].type,
+      testtype: that.data.dutytypeList[e.detail.value].id
     });
+
+    if(this.data.testtype == this.data.testtypeOld){
+      this.setData({
+        samplesum: this.data.testtype == 3 ? 10 : this.data.testtype == 2 ? 5 : 1
+      })
+      if(this.data.sampleOldId){
+
+        this.setData({
+          sampleId: this.data.sampleOldId
+        });
+
+        this.getClosesample();
+        this.getSampleBoxInfo();
+
+          // 清空试管和受检者信息
+          this.setData({
+            isQudao: false,
+            paychannel: '',
+            qudaoIndex: -1,
+            isMaxBox: false,
+            isSure: false,
+            isShowBox: false,
+            isBack: false,
+            isShowSuccess: false,
+            // canuse: 0,
+            // samplesum: 1,
+            instrumentList: [],
+            // dutytypeIndex: 0,
+            // type: '单采',
+            // testtype: '1',
+            // jobtypeIndex: 0,
+            // specimenType: '咽拭子',
+            isInputBoxnum: false,
+            boxCodeNumber: '',
+            // sampleId: '',
+            isFocus: false,
+            sourceInfoList: []
+          });
+      }
+    }else{
+      this.setData({
+        samplesum: this.data.testtype == 3 ? 10 : this.data.testtype == 2 ? 5 : 1
+      })
+      this.getSampleBoxInfo();
+      // 清空试管和受检者信息
+      this.setData({
+        isQudao: false,
+        paychannel: '',
+        qudaoIndex: -1,
+        isMaxBox: false,
+        isSure: false,
+        isShowBox: false,
+        isBack: false,
+        isShowSuccess: false,
+        // canuse: 0,
+        // samplesum: 1,
+        instrumentList: [],
+        // dutytypeIndex: 0,
+        // type: '单采',
+        // testtype: '1',
+        // jobtypeIndex: 0,
+        // specimenType: '咽拭子',
+        isInputBoxnum: false,
+        boxCodeNumber: '',
+        sampleId: '',
+        isFocus: false,
+        sourceInfoList: []
+      });
+    }
   },
   /**
    * 标本类型
    */
-   bindSelectJobtype: function (e) {
+  bindSelectJobtype: function (e) {
     var that = this;
     console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
       jobtypeIndex: e.detail.value,
-      jobtype_name: that.data.jobtypeList[e.detail.value].jobtype_name
+      specimenType: that.data.jobtypeList[e.detail.value].specimenType
     });
   },
-  bindInputBoxnum(){
+  /**
+   * 手录试管条码
+   */
+  bindinputSample(e) {
     this.setData({
-      isInputBoxnum: true
+      sampleId: e.detail.value
     });
   },
-  bindSubjectInfo(){
-    wx.navigateTo({
-      url: '/pages/lisCoyoteSubjectInfo/index'
+  // 输入完成事件
+  confirmListener (event) {
+    if (this.data.sampleId) {
+      this.checkSampleStatus(this.data.sampleId);
+    }
+  },
+  clearsampleCodeNumber() {
+    this.setData({
+      sampleId: '',
     });
   },
-  bindGetInfoCode(){
+  /**
+   * 获取信息码(暂时注释)
+   */
+  bindGetInfoCode() {
     wx.navigateTo({
       url: '/pages/lisCoyoteGetInfoCode/index'
     });
   },
-  dialogBoxnumCancel(){
+  /**
+   * 用户信息详情
+   */
+  bindSubjectInfo(e) {
+    let uid = e.currentTarget.dataset.id;
+    let sampleId = e.currentTarget.dataset.sampleid;
+    if(uid && sampleId){
+      wx.navigateTo({
+        url: `/pages/lisCoyoteSubjectInfo/index?uid=${uid}&sampleId=${sampleId}`
+      });
+    }
+  },
+  /**
+   *  扫信息码
+   */
+  scanQRCodeInfo() {
     this.setData({
-      isInputBoxnum: false
+      isScanShow: 1
+    });
+    this.getScanQRCodeInfo();
+  },
+  getScanQRCodeInfo() {
+    // 点击的时候调起扫一扫功能呢
+    let that = this;
+    wx.scanCode({
+      scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+      success(res) {
+        console.log('---->:', res.result)
+        let codeinfo = res.result;
+        if (codeinfo) {
+          that.setCheckinfo(codeinfo);
+        }
+      },
+      fail(res) {
+        console.log("err", res);
+      },
     });
   },
-  dialogBoxnumSure(){
+  /**
+   * 判断单采扫描信息码调用接口
+   */
+  setCheckinfo(codeinfo) {
+    let that = this;
+    let params = {
+      codeinfo: codeinfo,
+      sampleId: that.data.sampleId,
+      testtype: that.data.testtype,
+      sampletype: that.data.specimenType,
+    }
+    request.request_coyote('/info/checkinfo.hn', params, function (res) {
+      if (res) {
+        if (res.data.success == 0) {
+          //调用bindinfo（有订单信息的接口
+          that.getBindinfo();
+        } else if (res.data.success == 2) {
+          //调用bindsecondinfo（调用无订单信息接口，需要绑定渠道）
+          that.getChannelList();
+        } else if (res.data.success == 4) {
+          // 已达上限人数，请封管
+          that.setData({
+            isInputBoxnum: false,
+            isMaxBox: true
+          });
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  /**
+   * 手录信息码
+   */
+  bindInputBoxnum() {
+    this.setData({
+      isScanShow: 2,
+      isInputBoxnum: true,
+      isFocus: true
+    });
+  },
+  inputBoxnum(e) {
+    this.setData({
+      boxCodeNumber: e.detail.value
+    });
+  },
+  clearboxCodeNumber() {
+    this.setData({
+      boxCodeNumber: '',
+      isFocus: true
+    });
+  },
+  dialogBoxnumCancel() {
     this.setData({
       isInputBoxnum: false,
-      isQudao: true
+      isFocus: false,
+      boxCodeNumber: ''
     });
   },
-  bindSelectQudao(e){
+  /**
+   * 判断单采扫描信息码调用接口
+   */
+  dialogBoxnumSure() {
+    let that = this;
+    if (that.data.boxCodeNumber) {
+      let params = {
+        codeinfo: that.data.boxCodeNumber,
+        sampleId: that.data.sampleId,
+        testtype: that.data.testtype,
+        sampletype: that.data.specimenType,
+      }
+      request.request_coyote('/info/checkinfo.hn', params, function (res) {
+        if (res) {
+          if (res.data.success == 0) {
+            //调用bindinfo（有订单信息的接口
+            that.getBindinfo();
+          } else if (res.data.success == 2) {
+            //调用bindsecondinfo（调用无订单信息接口，需要绑定渠道）
+            that.getChannelList();
+          } else if (res.data.success == 4) {
+            // 已达上限人数，请封管
+            that.setData({
+              isInputBoxnum:false,
+              isMaxBox: true
+            });
+          } else {
+            box.showToast(res.message);
+          }
+        } else {
+          box.showToast("网络不稳定，请重试");
+        }
+      });
+    } else {
+      box.showToast('信息码不能为空')
+    }
+  },
+  /**
+   * 单采获取人员信息渠道方法
+   */
+  getChannelList() {
+    let that = this;
+    let params = {
+      id: that.data.id
+    }
+    request.request_coyote('/info/getchannel.hn', params, function (res) {
+      if (res) {
+        if (res.data.success == 0) {
+          that.setData({
+            isInputBoxnum: false,
+            isFocus: false,
+            sourceInfoList: res.data.sourceInfoList,
+            isQudao: true
+          });
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  bindSelectQudao(e) {
     let qudaoIndex = e.currentTarget.dataset.index;
+    let paychannel = e.currentTarget.dataset.paychannel;
     this.setData({
-      qudaoIndex: qudaoIndex
+      qudaoIndex: qudaoIndex,
+      paychannel: paychannel
     });
   },
-  dialogQudaoCancel(){
+  dialogQudaoCancel() {
     this.setData({
       isQudao: false,
-      qudaoIndex: -1
+      qudaoIndex: -1,
+      paychannel: ''
     });
   },
-  dialogQudaoSure(){
-    if(this.data.qudaoIndex != -1){
-      this.setData({
-        isQudao: false
+  /**
+   * 单采获取人员信息无订单信息方法
+   */
+  dialogQudaoSure() {
+    if (this.data.qudaoIndex != -1 && this.data.paychannel) {
+
+      //单采获取人员信息无订单信息方法
+      let that = this;
+      let params = {
+        id: that.data.id,
+        codeinfo: that.data.boxCodeNumber,
+        sampleId: that.data.sampleId,
+        box_num: that.data.boxnum,
+        sampletype: that.data.specimenType,
+        paychannel: that.data.paychannel,
+        testtype: that.data.testtype
+      }
+      request.request_coyote('/info/bindsecondinfo.hn', params, function (res) {
+        if (res) {
+          if (res.data.success == 0) {
+            that.setData({
+              boxCodeNumber: "",
+              isQudao: false,
+              qudaoIndex: -1,
+              paychannel: ''
+            });
+            // that.getCustomInfo();
+            that.getClosesample();
+
+            if(res.data.isBigScreen == 0 && that.data.isScanShow == 1){
+              //  大筛 调用扫码
+              that.getScanQRCodeInfo();
+            }
+          } else {
+            box.showToast(res.message);
+          }
+        } else {
+          box.showToast("网络不稳定，请重试");
+        }
       });
-    }else{
+    } else {
       box.showToast('请选择渠道');
     }
+  },
+  /**
+   * 单采获取人员信息方法
+   */
+  getBindinfo() {
+      //单采获取人员信息无订单信息方法
+      let that = this;
+      let params = {
+        id: that.data.id,
+        codeinfo: that.data.boxCodeNumber,
+        sampleId: that.data.sampleId,
+        box_num: that.data.boxnum,
+        sampletype: that.data.specimenType,
+        testtype: that.data.testtype
+      }
+      request.request_coyote('/info/bindinfo.hn', params, function (res) {
+        if (res) {
+          if (res.data.success == 0) {
+            that.setData({
+              boxCodeNumber: "",
+              isInputBoxnum:false
+            });
+            // that.getCustomInfo();
+            that.getClosesample();
+
+            if(res.data.isBigScreen == 0 && that.data.isScanShow == 1){
+              //  大筛 调用扫码
+              that.getScanQRCodeInfo();
+            }
+          } else {
+            box.showToast(res.message);
+          }
+        } else {
+          box.showToast("网络不稳定，请重试");
+        }
+      });
+  },
+  /**
+   * 获取人员信息方法
+   */
+  getCustomInfo() {
+    //单采获取人员信息无订单信息方法
+    let that = this;
+    let params = {
+      sampleId: that.data.sampleId,
+    }
+    request.request_coyote('/info/getinfo.hn', params, function (res) {
+      if (res) {
+        if (res.data.success == 0) {
+          that.setData({
+            instrumentList: res.data.codeInfoVo
+          });
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  /**
+   * 获取未封管试管方法
+   */
+  getClosesample() {
+    let that = this;
+    let params = {
+      sampleId: that.data.sampleId
+    }
+    request.request_coyote('/info/closesample.hn', params, function (res) {
+      if (res) {
+        if (res.data.success == 0) {
+          that.setData({
+            instrumentList: res.data.infolist,
+            canuse: res.data.canuse,
+            samplesum: res.data.samplesum,
+            sampleId: res.data.sampleId
+            // sampletype: res.data.sampletype
+          });
+          
+            if(that.data.dutytypeList && that.data.dutytypeList.length > 0){
+              for(let i = 0; i < that.data.dutytypeList.length; i++){
+                if(res.data.testtype == that.data.dutytypeList[i].id){
+                  that.setData({
+                    dutytypeIndex: i,
+                    type: that.data.dutytypeList[i].type,
+                    testtype: that.data.dutytypeList[i].id,
+                    testtypeOld: that.data.dutytypeList[i].id,
+                  });
+                }
+              }
+            }
+
+            if(that.data.jobtypeList && that.data.jobtypeList.length > 0){
+              for(let i = 0; i < that.data.jobtypeList.length; i++){
+                if(res.data.sampletype == that.data.jobtypeList[i].specimenType){
+                  that.setData({
+                    jobtypeIndex: i,
+                    specimenType: that.data.jobtypeList[i].specimenType
+                  });
+                }
+              }
+            }
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  /**
+   * 封管检查方法
+   */
+  setHclosesample() {
+    let that = this;
+    let params = {
+      sampleId: that.data.sampleId
+    }
+    request.request_coyote('/info/hclosesample.hn', params, function (res) {
+      if (res) {
+        if (res.data.success == 0) {
+          box.showToast(res.message);
+          
+          that.getSampleBoxInfo();
+
+          // 清空试管和受检者信息
+          that.setData({
+            isQudao: false,
+            paychannel: '',
+            qudaoIndex: -1,
+            isMaxBox: false,
+            isSure: false,
+            isShowBox: false,
+            isBack: false,
+            isShowSuccess: false,
+            // canuse: 0,
+            samplesum: 1,
+            instrumentList: [],
+            dutytypeIndex: 0,
+            type: '单采',
+            testtype: '1',
+            jobtypeIndex: 0,
+            specimenType: '咽拭子',
+            isInputBoxnum: false,
+            boxCodeNumber: '',
+            sampleId: '',
+            isFocus: false,
+            sourceInfoList: [],
+            sampleOldId: ''
+          });
+        } else if (res.data.success == 2) {
+          that.setData({
+            isShowBox: true
+          });
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
   },
 })

@@ -198,7 +198,7 @@ color: #307FF5;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #d6afb2;
+  background: #f5e0e1;
   border-radius: 16rpx;
   font-size: 24rpx;
   padding: 4rpx 12rpx;

@@ -8,11 +8,49 @@ Page({
     data: {
         tabIndex: 0,
         id: "",
-        instrumentList: [],
+        instrumentList: [
+            // {
+            //     'box_num':'055555',
+            //     'statustitle':'即将超时送样',
+            //     'sample_num':'200',
+            //     'status':'1',
+            //     'id':'1'
+            // },
+            // {
+            //     'box_num':'023124',
+            //     'statustitle':'即将超时送样',
+            //     'sample_num':'9',
+            //     'status':'2',
+            //     'id':'2'
+            // },
+            // {
+            //     'box_num':'023125',
+            //     'statustitle':'',
+            //     'sample_num':'200',
+            //     'status':'3',
+            //     'id':'3'
+            // },
+            // {
+            //     'box_num':'023126',
+            //     'statustitle':'',
+            //     'sample_num':'200',
+            //     'status':'4',
+            //     'id':'4'
+            // },
+            // {
+            //     'box_num':'023127',
+            //     'statustitle':'即将超时收样',
+            //     'sample_num':'200',
+            //     'status':'5',
+            //     'id':'5'
+            // }
+        ],
         currentDate: time.timeFormat1(new Date()),
         maxDate: time.timeFormat1(new Date()),
-        box_sum: 0,
-        sample_sum: 0,
+        boxcount: 0,
+        personcount: 0,
+        samplecount: 0,
+
         stay_transport_sum: 0,
         transporting_sum: 0
     },
@@ -22,24 +60,25 @@ Page({
         });
     },
     onShow() {
-        this.getAlreadySmapleInfo();
+        this.getsamplinginfo();
     },
-    getAlreadySmapleInfo() {
+    getsamplinginfo() {
         let that = this;
         let params = {
             id: that.data.id,
-            create_time: that.data.currentDate,
-            status: that.data.tabIndex == 0 ? '' : that.data.tabIndex
+            date: that.data.currentDate,
+            // status: that.data.tabIndex == 0 ? '' : that.data.tabIndex
         }
-        request.request_get('/eastbox/getAlreadySmapleInfo.hn', params, function (res) {
+        request.request_coyote('/info/getsamplinginfo.hn', params, function (res) {
             if (res) {
-                if (res.success) {
+                if (res.data.success == 0) {
                     that.setData({
-                        box_sum: res.box_sum,
-                        sample_sum: res.sample_sum,
-                        instrumentList: res.result,
-                        stay_transport_sum: res.stay_transport_sum,
-                        transporting_sum: res.transporting_sum
+                        boxcount: res.data.boxcount,
+                        personcount: res.data.personcount,
+                        samplecount: res.data.samplecount,
+                        instrumentList: res.data.listinfo,
+                        // stay_transport_sum: res.stay_transport_sum,
+                        // transporting_sum: res.transporting_sum
                     });
                 } else {
                     box.showToast(res.msg);
@@ -99,14 +138,14 @@ Page({
         })
         
         this.instrumentList = [];
-        this.getAlreadySmapleInfo();
+        this.getsamplinginfo();
       },
     clickTabIndex(e) {
         let number = e.currentTarget.dataset.tabstring;
         this.setData({
             tabIndex: number
         });
-        this.getAlreadySmapleInfo();
+        this.getsamplinginfo();
     },
     /**
      * 
@@ -128,10 +167,15 @@ Page({
         let box_num = e.currentTarget.dataset.boxnum;
         let status = e.currentTarget.dataset.statusstring;
         if (box_num && status) {
-            wx.navigateTo({
-                url: `/pages/lisCoyoteDetailInfoBox/index?boxnum=${box_num}&st=${status}`,
-            });
-
+            if(status == '待封箱'){
+                wx.navigateTo({
+                    url: `/pages/lisCoyoteDetail/index?boxnum=${box_num}`,
+                });
+            }else{
+                wx.navigateTo({
+                    url: `/pages/lisCoyoteDetailInfoBox/index?boxnum=${box_num}&st=${status}`,
+                });
+            }
             // this.$router.push({
             //     path: "/lisDetailInfoBox",
             //     query: {

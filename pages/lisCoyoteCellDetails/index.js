@@ -6,13 +6,22 @@ const app = getApp()
 
 Page({
   data: {
-    sampleid:""
+    uid: "",
+    sampleId: "",
+    codeInfoVo: '',
+    cardnumber: '',
+    phone: '',
+    tubetime: ''
   },
   onLoad: function (options) {
     this.setData({
       id: app.globalData.userInfo.id,
-      sampleid: options.sampleid
+      uid: options.uid,
+      sampleId: options.sampleId
     });
+  },
+  onShow(){
+    this.getSampleinfo();
   },
   backPage() {
     wx.navigateBack({
@@ -20,44 +29,29 @@ Page({
     });
   },
   /**
-   * 删除箱码
+   * 获取单个人员信息方法
    */
-   clickDelete() {
-    this.setData({
-      isDelete: true
-    });
-  },
-  deleteCancel(){
-    this.setData({
-      isDelete: false
-     });
-  },
-  deleteSure(){
+   getSampleinfo() {
     let that = this;
     let params = {
-      box_num: that.data.boxnum
+      sampleId: that.data.sampleId,
+      id: that.data.uid
     }
-    request.request_get('/eastbox/deleteSampleBoxInfo.hn', params, function (res) {
+    request.request_coyote('/info/getsampleinfo.hn', params, function (res) {
       if (res) {
-        if (res.success) {
-          box.showToast(res.msg)
+        if (res.data.success == 0) {
           that.setData({
-            isDelete: false,
-            isShowSuccess: false
+            codeInfoVo: res.data.codeInfoVo,
+            cardnumber: res.data.cardnumber,
+            phone: res.data.phone,
+            tubetime: res.data.tubetime
           });
-
-          that.onClickLeft();
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
       }
     });
   },
-  clickUpdate(){
-    wx.navigateTo({
-      url: `/pages/lisCoyoteUpdateSubInfo/index`,
-    });
-  }
 })

@@ -136,6 +136,18 @@ flex-direction: column;
     color: #666666;
   }
 
+  .search-result-view-2 {
+    font-size: 28rpx;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #333333;
+    max-width: 200rpx;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+
   .search-result-view-3 {
     font-size: 28rpx;
     font-family: PingFangSC-Regular, PingFang SC;

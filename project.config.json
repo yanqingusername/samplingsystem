@@ -36,14 +36,14 @@
     "packNpmRelationList": [],
     "minifyWXSS": true,
     "disableUseStrict": false,
+    "minifyWXML": true,
     "showES6CompileOption": false,
     "useCompilerPlugins": false,
-    "ignoreUploadUnusedFiles": true,
-    "minifyWXML": true
+    "ignoreUploadUnusedFiles": true
   },
   "compileType": "miniprogram",
   "libVersion": "2.16.0",
-  "appid": "wx75d9f38d7fee9fea",
+  "appid": "wx42fef8fc8933dfa9",
   "projectname": "samplingsystem",
   "debugOptions": {
     "hidedInDevtools": []

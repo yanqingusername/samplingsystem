@@ -265,3 +265,14 @@ color: #999999;
   height: 24rpx;
   margin-left: 6rpx;
 }
+
+.search-result-view-5{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5e0e1;
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  color: #fc1515;
+}

@@ -46,6 +46,7 @@ Page({
       boxnum:"",
       boxnumTime:"",
       boxnumMax: 0,
+      canuse:0,
       channel_id: '',
       instrumentList: [],
       successboxnum: 0,
@@ -53,6 +54,14 @@ Page({
       // 设置开始的位置
       startX: 0,
       startY: 0,
+      isShowSample: false,
+      sampleData:{
+        title: "温馨提示",
+        titles: "还存在未封管的试管，请先封管",
+        cancel: "取消",
+        sure: "去封管"
+      },
+      sampleId:""
   },
   onLoad: function (options) {
     let boxnum = options.boxnum;
@@ -65,27 +74,29 @@ Page({
   onShow(){
     this.getSampleBoxInfo();
   },
+  /**
+   * 获取箱码信息
+   */
   getSampleBoxInfo() {
     let that = this;
     let params = {
       box_num: that.data.boxnum,
-      id: that.data.id
+      // id: that.data.id
     }
-    request.request_get('/eastbox/getSampleBoxInfo.hn', params, function (res) {
+    request.request_coyote('/info/getboxinfo.hn', params, function (res) {
       if (res) {
-        if (res.success) {
-          if(res.result && res.result.length > 0){
-            let item = res.result[0];
+        if (res.data.success == 0) {
+          
             that.setData({
-              boxnum: item.box_num,
-              boxnumTime: item.create_time,
-              boxnumMax: item.max_sum,
-              channel_id: item.channel,
+              boxnum: res.data.box_num,
+              boxnumTime: res.data.date,
+              boxnumMax: res.data.maxsum,
+              canuse: res.data.canuse,
+              // channel_id: item.channel,
             });
-          }
 
           that.setData({
-            instrumentList: res.listData
+            instrumentList: res.data.listData || []
           });
 
           if(that.data.instrumentList.length > 0){
@@ -95,90 +106,17 @@ Page({
           }
           
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
       }
-    });
-  },
-  // 扫描
-  scanQRCodeClick() {
-    wx.navigateTo({
-      url: `/pages/lisCoyoteAddTube/index?boxnum=${this.data.boxnum}`
-    });
-    // this.getScanQRCodeClick();
-    // this.checkSampleTube('22222222222227');
-  },
-  getScanQRCodeClick() {
-    // 点击的时候调起扫一扫功能呢
-    let that = this;
-    wx.scanCode({
-      scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-      success(res) {
-        console.log('---->:',res.result)
-        let boxCodeNumber = res.result;
-        if (boxCodeNumber) {
-          that.checkSampleTube(boxCodeNumber);
-        }
-      },
-      fail(res) {
-        console.log("err", res);
-      },
     });
   },
   /**
-   *
+   * 封箱按钮
    */
-  checkSampleTube(boxCodeNumber) {
-    let that = this;
-    let params = {
-      sample_id: boxCodeNumber
-    }
-    request.request_get('/eastbox/checkSampleTube.hn', params, function (res) {
-      if (res) {
-        if (res.success) {
-          that.addSampleTubeInfo(boxCodeNumber);
-        } else {
-          box.showToast(res.msg);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
-    });
-  },
-  addSampleTubeInfo(sample_id) {
-    let that = this;
-    let params = {
-      box_num: that.data.boxnum,
-      id: that.data.id,
-      sample_id: sample_id,
-      channel_id: that.data.channel_id
-    }
-    request.request_get('/eastbox/addSampleTubeInfo.hn', params, function (res) {
-      if (res) {
-        if (res.success) {
-          if(res.can_add == 0){
-            that.getSampleBoxInfo();
-          }else{
-            that.setData({
-              isMaxBox: true
-            });
-          }
-        } else {
-          box.showToast(res.msg);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
-    });
-  },
-  onClickLeft() {
-    wx.navigateBack({
-      delta: 1
-    });
-  },
-  clickDown() {
+   clickDown() {
     if(this.data.instrumentList.length > 0){
       this.setData({
         isSure: true
@@ -191,29 +129,202 @@ Page({
     let that = this;
     let params = {
       box_num: that.data.boxnum,
-      id: that.data.id
+      // id: that.data.id
     }
-    request.request_get('/eastbox/closeSampleBox.hn', params, function (res) {
+    request.request_coyote('/info/closecheck.hn', params, function (res) {
       if (res) {
-        if (res.success) {
+        if (res.data.success == 0 || res.data.success == 2) {
           that.setData({
-            isShowSuccess: false
+            isShowSuccess: false,
+            successboxnum: res.data.boxnum,
+            successnum: res.data.num,
           });
-          if(res.result && res.result.length > 0){
-            let item = res.result[0];
-            that.setData({
-              successboxnum: item.box_num,
-              successnum: item.sample_num,
-            });
-          }
+        } else if (res.data.success == 1) {
+          // 存在未封管的试管，请先封管
+          that.setData({
+            sampleData:{
+              title: "温馨提示",
+              titles: "还存在未封管的试管，请先封管后完成封箱",
+              cancel: "取消",
+              sure: "去封管"
+            },
+            isShowSample: true,
+            sampleId: res.data.sampleId
+          });
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
       }
     });
   },
+  /**
+   * 封管弹框
+   */
+  sampleCancel(){
+    this.setData({
+      isShowSample: false
+    });
+  },
+  sampleSure(){
+    this.setData({
+      isShowSample: false
+    });
+    wx.navigateTo({
+      url: `/pages/lisCoyoteAddTube/index?boxnum=${this.data.boxnum}&sampleId=${this.data.sampleId}`
+    });
+  },
+  /**
+   * 立即封箱 确认
+   */
+  sureCancel(){
+    this.setData({
+      isSure: false
+    });
+  },
+  sureSure(){
+    let that = this;
+    let params = {
+      box_num: that.data.boxnum,
+      // id: that.data.id
+    }
+    request.request_coyote('/info/closecheck.hn', params, function (res) {
+      if (res) {
+        if (res.data.success == 0 || res.data.success == 2) {
+          that.setData({
+            isSure: false,
+            isShowSuccess: false,
+            successboxnum: res.data.boxnum,
+            successnum: res.data.num,
+          });
+        } else if (res.data.success == 1) {
+          // 存在未封管的试管，请先封管
+          that.setData({
+            isSure: false,
+            isShowSample: true,
+            sampleId: res.data.sampleId,
+            sampleData:{
+              title: "温馨提示",
+              titles: "还存在未封管的试管，请先封管后完成封箱",
+              cancel: "取消",
+              sure: "去封管"
+            },
+          });
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  /**
+   * 返回
+   */
+   backPage(){
+    if(this.data.isShowSuccess){
+     this.setData({
+       isBack: true
+     });
+    }else{
+     this.onClickLeft();
+    }
+ },
+ backCancel(){
+   this.setData({
+     isBack: false
+    });
+    this.onClickLeft();
+ },
+  backSure(){
+    let that = this;
+    let params = {
+      box_num: that.data.boxnum,
+      // id: that.data.id
+    }
+    request.request_coyote('/info/closecheck.hn', params, function (res) {
+      if (res) {
+        if (res.data.success == 0 || res.data.success == 2) {
+          that.setData({
+            isSure: false,
+            isBack: false,
+            isMaxBox: false,
+            isShowSuccess: false,
+            successboxnum: res.data.boxnum,
+            successnum: res.data.num,
+          });
+        } else if (res.data.success == 1) {
+          // 存在未封管的试管，请先封管
+          that.setData({
+            isSure: false,
+            isBack: false,
+            isMaxBox: false,
+            isShowSample: true,
+            sampleId: res.data.sampleId,
+            sampleData:{
+              title: "温馨提示",
+              titles: "还存在未封管的试管，请先封管后完成封箱",
+              cancel: "取消",
+              sure: "去封管"
+            },
+          });
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  onClickLeft() {
+    wx.navigateBack({
+      delta: 1
+    });
+  },
+  // 添加试管
+  scanQRCodeClick() {
+    let that = this;
+    let params = {
+      box_num: that.data.boxnum,
+    }
+    request.request_coyote('/info/addsample.hn', params, function (res) {
+      if (res) {
+        if (res.data.success == 0 || res.data.success == 3) {
+          wx.navigateTo({
+            url: `/pages/lisCoyoteAddTube/index?boxnum=${that.data.boxnum}`
+          });
+        } else if (res.data.success == 1) {
+          // 已达最大封箱数量，请先封箱
+          that.setData({
+            isMaxBox: true,
+          });
+        } else if (res.data.success == 2) {
+          // 存在未封管试管，请先封管
+          that.setData({
+            isSure: false,
+            isBack: false,
+            isMaxBox: false,
+            isShowSample: true,
+            sampleId: res.data.sampleId,
+            sampleData:{
+              title: "温馨提示",
+              titles: "还存在未封管的试管，请先封管",
+              cancel: "取消",
+              sure: "去封管"
+            },
+          });
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  /**
+   * 扫描新箱码
+   */
   clickNewScan() {
     this.checkSampleBoxStatusIsClose();
   },
@@ -222,21 +333,22 @@ Page({
     let params = {
       id: that.data.id
     }
-    request.request_get('/eastbox/checkSampleBoxStatusIsClose.hn', params, function (res) {
+    request.request_coyote('/info/checkbox.hn', params, function (res) {
       if (res) {
-        if (res.success) {
-          if (res.is_exist == 0) {
+        // if (res.code == 200) {
+          if (res.data.success == 1) {
             that.setData({
               isShowBox: true,
-              boxnum: res.box_num,
+              box_num: res.data.nums
             });
-          } else {
+          } else if (res.data.success == 0) {
             that.getScanQRCodeClick2();
-            // that.checkSampleBoxStatus('456789');
+          } else {
+            box.showToast(res.message);
           }
-        } else {
-          box.showToast(res.msg);
-        }
+        // } else {
+        //   box.showToast(res.message);
+        // }
       } else {
         box.showToast("网络不稳定，请重试");
       }
@@ -264,31 +376,27 @@ Page({
     let params = {
       box_num: boxCodeNumber,
     }
-    request.request_get('/eastbox/checkSampleBoxStatus.hn', params, function (res) {
+    request.request_coyote('/info/opencheckbox.hn', params, function (res) {
       if (res) {
-        if (res.success) {
-          let can_use = res.can_use || false;
-          that.startScanSampleBox(boxCodeNumber,can_use);
+        if (res.data.success == 0) {
+          that.startScanSampleBox(boxCodeNumber);
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
       }
     });
   },
-  startScanSampleBox(boxCodeNumber,can_use) {
+  startScanSampleBox(boxCodeNumber) {
     let that = this;
     let params = {
       box_num: boxCodeNumber,
-      // max_sum:max_sum,
-      id: that.data.id,
-      channel_id: that.data.channel_id,
-      can_use: can_use
+      id: that.data.id
     }
-    request.request_get('/eastbox/startScanSampleBox.hn', params, function (res) {
+    request.request_coyote('/info/openbox.hn', params, function (res) {
       if (res) {
-        if (res.success) {
+        if (res.data.success == 0) {
           that.setData({
             isShowSuccess: true,
             boxnum: boxCodeNumber,
@@ -296,7 +404,7 @@ Page({
           });
           that.getSampleBoxInfo();
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
@@ -325,7 +433,7 @@ Page({
     
   },
   /**
-   * 立即封箱弹框
+   * 最大封箱数量 立即封箱弹框
    */
   maxBoxCancel(){
     this.setData({
@@ -336,112 +444,36 @@ Page({
     let that = this;
     let params = {
       box_num: that.data.boxnum,
-      id: that.data.id
+      // id: that.data.id
     }
-    request.request_get('/eastbox/closeSampleBox.hn', params, function (res) {
+    request.request_coyote('/info/closecheck.hn', params, function (res) {
       if (res) {
-        if (res.success) {
-          box.showToast(res.msg)
-          that.setData({
-            isMaxBox: false,
-            isShowSuccess: false
-          });
-
-          if(res.result && res.result.length > 0){
-            let item = res.result[0];
-            that.setData({
-              successboxnum: item.box_num,
-              successnum: item.sample_num,
-            });
-          }
-        } else {
-          box.showToast(res.msg);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
-    });
-  },
-  /**
-   * 立即封箱 确认
-   */
-   sureCancel(){
-    this.setData({
-      isSure: false
-    });
-  },
-  sureSure(){
-    let that = this;
-    let params = {
-      box_num: that.data.boxnum,
-      id: that.data.id
-    }
-    request.request_get('/eastbox/closeSampleBox.hn', params, function (res) {
-      if (res) {
-        if (res.success) {
-          box.showToast(res.msg)
+        if (res.data.success == 0 || res.data.success == 2) {
           that.setData({
             isSure: false,
-            isShowSuccess: false
-          });
-
-          if(res.result && res.result.length > 0){
-            let item = res.result[0];
-            that.setData({
-              successboxnum: item.box_num,
-              successnum: item.sample_num,
-            });
-          }
-        } else {
-          box.showToast(res.msg);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
-    });
-  },
-  /**
-   * 返回
-   */
-   backPage(){
-     if(this.data.isShowSuccess){
-      this.setData({
-        isBack: true
-      });
-     }else{
-      this.onClickLeft();
-     }
-  },
-  backCancel(){
-    this.setData({
-      isBack: false
-     });
-     this.onClickLeft();
-  },
-  backSure(){
-    let that = this;
-    let params = {
-      box_num: that.data.boxnum,
-      id: that.data.id
-    }
-    request.request_get('/eastbox/closeSampleBox.hn', params, function (res) {
-      if (res) {
-        if (res.success) {
-          box.showToast(res.msg)
-          that.setData({
             isBack: false,
-            isShowSuccess: false
+            isMaxBox: false,
+            isShowSuccess: false,
+            successboxnum: res.data.boxnum,
+            successnum: res.data.num,
           });
-
-          if(res.result && res.result.length > 0){
-            let item = res.result[0];
-            that.setData({
-              successboxnum: item.box_num,
-              successnum: item.sample_num,
-            });
-          }
+        } else if (res.data.success == 1) {
+          // 存在未封管的试管，请先封管
+          that.setData({
+            isSure: false,
+            isBack: false,
+            isMaxBox: false,
+            isShowSample: true,
+            sampleId: res.data.sampleId,
+            sampleData:{
+              title: "温馨提示",
+              titles: "还存在未封管的试管，请先封管后完成封箱",
+              cancel: "取消",
+              sure: "去封管"
+            },
+          });
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
@@ -466,10 +498,10 @@ Page({
     let params = {
       box_num: that.data.boxnum
     }
-    request.request_get('/eastbox/deleteSampleBoxInfo.hn', params, function (res) {
+    request.request_coyote('/info/deleteboxcode.hn', params, function (res) {
       if (res) {
-        if (res.success) {
-          box.showToast(res.msg)
+        if (res.data.success == 0) {
+          box.showToast(res.message)
           that.setData({
             isDelete: false,
             isShowSuccess: false
@@ -477,7 +509,7 @@ Page({
 
           that.onClickLeft();
         } else {
-          box.showToast(res.msg);
+          box.showToast(res.message);
         }
       } else {
         box.showToast("网络不稳定，请重试");
@@ -539,7 +571,7 @@ Page({
     return 360 * Math.atan(_Y / _X) / (2 * Math.PI);
   },
 
-  // 删除
+  // 删除试管
   delShop(e) {
     let that = this;
     wx.showModal({
@@ -547,19 +579,17 @@ Page({
       content: '确认删除该试管吗？',
       success: function(res) {
         if (res.confirm) {
-          let sampleid = e.currentTarget.dataset.sampleid;
+          let sampleId = e.currentTarget.dataset.sampleid;
           let params = {
-            box_num: that.data.boxnum,
-            sample_id: sampleid,
-            id: that.data.id
+            sampleId: sampleId
           }
-          request.request_get('/eastbox/deleteSampleTubeInfo.hn', params, function (res) {
+          request.request_coyote('/info/hdeletesample.hn', params, function (res) {
             if (res) {
-              if (res.success) {
-                box.showToast(res.msg)
+              if (res.data.success == 0) {
+                box.showToast(res.message)
                 that.getSampleBoxInfo();
               } else {
-                box.showToast(res.msg);
+                box.showToast(res.message);
               }
             } else {
               box.showToast("网络不稳定，请重试");

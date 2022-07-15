@@ -76,7 +76,7 @@
     
   </view>
 
-<!-- 立即封箱弹框 -->
+<!-- 最大封箱 立即封箱弹框 -->
 <dialog-cus showDialog='{{isMaxBox}}' datas="{{maxBoxData}}" catch:dialogCancel="maxBoxCancel" catch:dialogSure="maxBoxSure"/>
 
 <!-- 封箱弹框 -->
@@ -90,3 +90,6 @@
 
 <!-- 删除箱码 弹框 -->
 <dialog-cus showDialog='{{isDelete}}' datas="{{deleteData}}" catch:dialogCancel="deleteCancel" catch:dialogSure="deleteSure"/>
+
+<!-- 封管弹框 -->
+<dialog-cus showDialog='{{isShowSample}}' datas="{{sampleData}}" catch:dialogCancel="sampleCancel" catch:dialogSure="sampleSure"/>

@@ -13,9 +13,9 @@
             <view class="s_center_t_item" style="width: 26%">姓名</view>
             <view class="select-item input-item">
               <input
-                value="{{'李四'}}"
+                value="{{name}}"
                 type="text"
-                name="real_name"
+                name="name"
                 placeholder="请输入受检者姓名"
                 maxlength="30"
                 bindinput="codeInput1"
@@ -39,13 +39,13 @@
             <view class="s_center_t_item" style="width: 26%">证件号</view>
             <view class="select-item input-item">
               <input
-                value="{{'500382 19931103 2345'}}"
+                value="{{cardnumber}}"
                 type="text"
-                name="code_number"
-                placeholder="请输入受检者证据号码"
-                bindinput="codeInput3"
+                name="cardnumber"
+                placeholder="请输入受检者证件号码"
+                bindinput="codeInput2"
               />
-              <view class="clear_1" bind:tap="clearPhone" wx:if="{{sampling_member_phone}}">
+              <view class="clear_1" bind:tap="clearCodeNumber" wx:if="{{cardnumber}}">
                 <image class="icon_clear" src="../../img/icon_img_04.png" />
               </view>
             </view>
@@ -55,14 +55,14 @@
             <view class="s_center_t_item" style="width: 26%">手机号</view>
             <view class="select-item input-item">
               <input
-                value="{{'187 9879 9876'}}"
+                value="{{phone}}"
                 type="number"
-                name="real_phone"
+                name="phone"
                 placeholder="请输入受检者手机号码"
                 maxlength="11"
-                bindinput="codeInput2"
+                bindinput="codeInput3"
               />
-              <view class="clear_1" bind:tap="clearPhone" wx:if="{{sampling_member_phone}}">
+              <view class="clear_1" bind:tap="clearPhone" wx:if="{{phone}}">
                 <image class="icon_clear" src="../../img/icon_img_04.png" />
               </view>
             </view>
@@ -76,26 +76,22 @@
                   <view class="picker" style="color:#333333;">{{jobtypeList[jobtypeIndex].jobtype_name}}</view>
                   <image src="../../img/icon_arrow_gray.png" style="width:20rpx;height:34rpx;"/>
                 </view>
-              </picker> 
+              </picker>
             </view>
           </view>
-
 
           <view class="search-list-role-from-c" style="border-bottom: none;">
             <view class="s_center_t_item" style="width: 26%">年龄</view>
             <view class="select-item input-item">
               <input
-                value="{{'29'}}"
+                value="{{age}}"
                 type="number"
-                name="code_number"
+                name="age"
                 placeholder="请填写受检者年龄"
-                bindinput="codeInput3"
+                bindinput="codeInput4"
               />
-
             </view>
           </view>
-
-          
         </view>
       </view>
 

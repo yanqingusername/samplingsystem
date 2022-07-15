@@ -9,7 +9,42 @@ Page({
         boxnum: "",
         status: "",
         isShowview: false,
-        instrumentList: [],
+        instrumentList: [
+            {
+                'sample_id':'123456789012',
+                'statustitle':'即将超时送样',
+                'sample_num':'1',
+                'custom_num':'1',
+                'id':'1',
+                'testtype': '1',
+                'uid': '8602129'
+            },
+            {
+                'sample_id':'123456789013',
+                'statustitle':'',
+                'sample_num':'1',
+                'custom_num':'1',
+                'id':'2',
+                'testtype': '1',
+                'uid': '8602130'
+            },
+            {
+                'sample_id':'12345678903',
+                'statustitle':'',
+                'sample_num':'10',
+                'custom_num':'8',
+                'id':'3',
+                'testtype': '3'
+            },
+            {
+                'sample_id':'12345678903',
+                'statustitle':'即将超时送样',
+                'sample_num':'10',
+                'custom_num':'3',
+                'id':'4',
+                'testtype': '3'
+            },
+        ],
         conveyer_person_name: "", //转运人
         convey_time: "", //转运时间
         receive_person_name: "", //接收人
@@ -26,7 +61,7 @@ Page({
     },
     onShow() {
         this.getExpandSampleInfoDetail();
-        this.getSampleBoxInfoDetail();
+        // this.getSampleBoxInfoDetail();
     },
     getExpandSampleInfoDetail() {
         let that = this;
@@ -150,16 +185,17 @@ Page({
     },
     clickLisCoyoteCellDetails(e){
         let sampleid = e.currentTarget.dataset.sampleid;
-        let statusstring = e.currentTarget.dataset.statusstring;
-        console.log(statusstring)
-        if(sampleid && statusstring){
-            if(statusstring == 1){
+        let testtype = e.currentTarget.dataset.testtype;
+        let uid = e.currentTarget.dataset.uid;
+        console.log(testtype)
+        if(sampleid && testtype){
+            if(testtype == 1){
                 wx.navigateTo({
-                    url: `/pages/lisCoyoteCellDetails/index?sampleid=${sampleid}`,
+                    url: `/pages/lisCoyoteCellDetails/index?sampleId=${sampleid}&uid=${uid}`,
                 });
             }else{
                 wx.navigateTo({
-                    url: `/pages/lisCoyoteMoreCellDetails/index?sampleid=${sampleid}`,
+                    url: `/pages/lisCoyoteMoreCellDetails/index?sampleId=${sampleid}`,
                 });
             }
         }

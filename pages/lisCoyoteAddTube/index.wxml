@@ -12,11 +12,11 @@
           <view class="dis_setting_1_1">箱码</view>
         </view>
         <view class="dis_setting_1" style="align-items: center;justify-content: center;">
-          <view class="dis_setting_1_1" style="color:#E0694D;">{{boxnumMax}}</view>
+          <view class="dis_setting_1_1" style="color:#E0694D;">{{canuse}}</view>
           <view class="dis_setting_1_1">本箱剩余</view>
         </view>
         <view class="dis_setting_1" style="align-items: center;justify-content: center;">
-          <view class="dis_setting_1_1" style="color:#E0694D;">{{'1'}}</view>
+          <view class="dis_setting_1_1" style="color:#E0694D;">{{samplesum}}</view>
           <view class="dis_setting_1_1">本管剩余</view>
         </view>
       </view>
@@ -25,28 +25,27 @@
         <view class="search-list-role-1" style="border-radius: 20rpx 0rpx 0rpx 20rpx;padding: 0rpx 20rpx;">
            <view class="P5_1">混采类型</view>
             <view class="detail_center P5_2" style="align-items: center;padding: 20rpx 0rpx 20rpx 0rpx;background-color: #FFFFFF;">
-             <picker bindchange="bindSelectDutytype" value="{{dutytypeIndex}}" range-key="{{'dutytype_name'}}" range="{{dutytypeList}}" style="width:100%;">
+             <picker bindchange="bindSelectDutytype" value="{{dutytypeIndex}}" range-key="{{'type'}}" range="{{dutytypeList}}" style="width:100%;">
                 <view class="detail_center P5_2" style="align-items: center;width:100%;background-color: #FFFFFF;justify-content: flex-end;">
-                  <view class="picker" style="color:#333333;margin-right:10rpx;">{{dutytypeList[dutytypeIndex].dutytype_name}}</view>
+                  <view class="picker" style="color:#333333;margin-right:10rpx;">{{dutytypeList[dutytypeIndex].type}}</view>
                   <image src="../../img/icon_arrow_gray.png" style="width:20rpx;height:26rpx;"/>
                 </view>
               </picker>
             </view>
         </view>
-
 
         <view class="search-list-role-1" style="border-radius: 0rpx 20rpx 20rpx 0rpx;padding: 0rpx 20rpx;">
            <view class="P5_1">标本类型</view>
             <view class="detail_center P5_2" style="align-items: center;padding: 20rpx 0rpx 20rpx 0rpx;background-color: #FFFFFF;">
-             <picker bindchange="bindSelectJobtype" value="{{jobtypeIndex}}" range-key="{{'jobtype_name'}}" range="{{jobtypeList}}" style="width:100%;">
+             <picker bindchange="bindSelectJobtype" value="{{jobtypeIndex}}" range-key="{{'specimenType'}}" range="{{jobtypeList}}" style="width:100%;">
                 <view class="detail_center P5_2" style="align-items: center;width:100%;background-color: #FFFFFF;justify-content: flex-end;">
-                  <view class="picker" style="color:#333333;margin-right:10rpx;">{{jobtypeList[jobtypeIndex].jobtype_name}}</view>
+                  <view class="picker" style="color:#333333;margin-right:10rpx;">{{jobtypeList[jobtypeIndex].specimenType}}</view>
                   <image src="../../img/icon_arrow_gray.png" style="width:20rpx;height:26rpx;"/>
                 </view>
               </picker>
             </view>
         </view>
-        </view>
+      </view>
 
       <view class="search-list-role" style="margin-top:30rpx;">
         <view class="s_center_t_item" style="display: flex;align-items: center;color: #333333;">条码信息</view>
@@ -57,18 +56,17 @@
           <view class="form-item">
             <view class="select-item input-item">
               <input
-                value="{{boxCodeNumber}}"
+                value="{{sampleId}}"
                 type="number"
-                name="boxCodeNumber"
+                name="sampleId"
                 placeholder="请输入/扫试管条码"
-                auto-focus="{{true}}"
-                focus="{{isFocus}}"
-                bindinput="bindinputBoxnum"
+                bindinput="bindinputSample"
+                bindconfirm="confirmListener"
               />
               <view
                 class="clear_1"
-                catch:tap="clearboxCodeNumber"
-                wx:if="{{boxCodeNumber}}"
+                catch:tap="clearsampleCodeNumber"
+                wx:if="{{sampleId}}"
               >
                 <image class="icon_clear" src="../../img/icon_img_04.png" />
               </view>
@@ -86,15 +84,16 @@
 
       <view class="detail_center" style="margin-top: 20rpx;">
 
-        <view class="search-list-role-1" style="margin-right:20rpx;height: 76rpx;padding:0rpx;border-radius:12rpx;border: 1px solid #333333;" bind:tap="bindGetInfoCode">
+        <!-- 获取信息码 -->
+        <!-- <view class="search-list-role-1" style="margin-right:20rpx;height: 76rpx;padding:0rpx;border-radius:12rpx;border: 1px solid #333333;" bind:tap="bindGetInfoCode">
           <view class="s_center_t_item" style="display: flex;align-items: center;color:#333333;">获取信息码</view>
-        </view>
+        </view> -->
 
         <view class="search-list-role-1" style="margin-left:0rpx;height: 76rpx;padding:0rpx;border-radius:12rpx;border: 1px solid #333333;" bind:tap="bindInputBoxnum">
           <view class="s_center_t_item" style="display: flex;align-items: center;color:#333333;">手录信息码</view>
         </view>
 
-        <view class="search-list-role-1" style="margin-left:20rpx;height: 76rpx;padding:0rpx;border-radius:12rpx;border: 1px solid #307ff5;">
+        <view class="search-list-role-1" style="margin-left:20rpx;height: 76rpx;padding:0rpx;border-radius:12rpx;border: 1px solid #307ff5;" bind:tap="scanQRCodeInfo">
           <view class="s_center_t_item" style="display: flex;align-items: center;color:#307ff5;"><image src="../../img/icon_scan.png" class='detail_right_img' />扫信息码</view>
         </view>
       </view>
@@ -105,22 +104,21 @@
           wx:key="index"
           class="shopBox"
         >
-          <view class="shopCon {{item.isTouchMove?'shopCon-active':''}}" data-index="{{index}}" bindtouchstart="touchStart" bindtouchmove="touchMove">
-            <!-- <view class="search-result-view" catch:tap="clickItem"> -->
-              <view class="dis_setting" style="padding: 0px 0px 0px 0px" catch:tap="bindSubjectInfo">
+          <!-- <view class="shopCon {{item.isTouchMove?'shopCon-active':''}}" data-index="{{index}}" bindtouchstart="touchStart" bindtouchmove="touchMove"> -->
+          <view class="shopCon">
+              <view class="dis_setting" style="padding: 0px 0px 0px 0px" catch:tap="bindSubjectInfo" data-id="{{item.id}}" data-sampleid="{{item.sampleId}}">
                 <view class="s_center_t_item" style="display: flex">
                   <view class="search-result-view-1" style="margin-right:20rpx;">{{(instrumentList.length - index)}}.</view>
-                  <!-- <view class="search-result-view-1">{{'姓名 ｜证件号码'}}</view> -->
-                  <view class="search-result-view-1">{{'张三'}} ｜{{tools.centerIdCardTrim('340123123456785622')}}</view>
+                  <view class="search-result-view-1" style="display: flex;align-items: center;" wx:if="{{item.name}}"><view class="search-result-view-2">{{item.name}}</view> ｜{{tools.centerIdCardTrim(item.cardnumber)}}</view>
+                  <view class="search-result-view-1" wx:else>{{'姓名 ｜证件号码'}}</view>
                 </view>
                 <view class="search-result-view-3" style="display:flex;align-items: center;">
                   <image class="icon_arrow" src="../../img/icon_arrow_gray.png" alt="" />
                 </view>
               </view>
-            <!-- </view> -->
           </view>
 
-          <view class="shopDel {{item.isTouchMove?'shopDel-active':''}}" data-sampleid="{{item.sample_id}}" bindtap="delShop">删除</view>
+          <!-- <view class="shopDel {{item.isTouchMove?'shopDel-active':''}}" data-sampleid="{{item.sample_id}}" bindtap="delShop">删除</view> -->
         </view>
       </view>
 
@@ -130,16 +128,16 @@
         <!-- <view class="view_bottom_left" @click="onClickLeft1">
           <van-icon name="arrow-left" size="20" />返回
         </view> -->
-        <view class="view_bottom_right" bind:tap="clickDown">封管（{{instrumentList.length}}/{{boxnumMax}}）</view>
+        <view class="view_bottom_right" bind:tap="clickDown">封管（{{instrumentList.length}}/{{testtype == 2 ? '5' : testtype == 3 ? '10' : '1'}}）</view>
       </view>
     </view>
     
   </view>
 
-<!-- 立即封箱弹框 -->
+<!-- 已达上限人数，请封管 弹框 -->
 <dialog-cus showDialog='{{isMaxBox}}' datas="{{maxBoxData}}" catch:dialogCancel="maxBoxCancel" catch:dialogSure="maxBoxSure"/>
 
-<!-- 封箱弹框 -->
+<!-- 未添加任何人员信息，不允许封管 弹框 -->
 <dialog-cus showDialog='{{isShowBox}}' datas="{{boxData}}" catch:dialogCancel="boxCancel" catch:dialogSure="boxSure"/>
 
 <!-- 立即封箱 确认 弹框 -->
@@ -147,9 +145,6 @@
 
 <!-- 返回 弹框 -->
 <dialog-cus showDialog='{{isBack}}' datas="{{backData}}" catch:dialogCancel="backCancel" catch:dialogSure="backSure"/>
-
-<!-- 删除箱码 弹框 -->
-<dialog-cus showDialog='{{isDelete}}' datas="{{deleteData}}" catch:dialogCancel="deleteCancel" catch:dialogSure="deleteSure"/>
 
 <!-- 遮罩 -->
   <view wx:if="{{isInputBoxnum}}" class='cover' bind:tap="">
@@ -166,7 +161,7 @@
                 placeholder="请输入信息码"
                 auto-focus="{{true}}"
                 focus="{{isFocus}}"
-                bindinput="bindinputBoxnum"
+                bindinput="inputBoxnum"
               />
               <view
                 class="clear_1"
@@ -194,8 +189,8 @@
       <view class="dialog_item" style="width: 100%;">
         <view class="dialog_item_title">选择付款渠道</view>
         <scroll-view scroll-y="{{true}}" class="scroll-view">
-          <block wx:for="{{10}}" wx:key="index">
-            <view class="{{ qudaoIndex == index ? 'child-row-active' : 'child-row'}}" catchtap="bindSelectQudao" data-index="{{index}}">
+          <block wx:for="{{sourceInfoList}}" wx:key="index">
+            <view class="{{ qudaoIndex == index ? 'child-row-active' : 'child-row'}}" catchtap="bindSelectQudao" data-index="{{index}}" data-paychannel="{{item.paychannel}}">
               <view class="text_title">{{'北京西站'}}</view>
             </view>
           </block>
