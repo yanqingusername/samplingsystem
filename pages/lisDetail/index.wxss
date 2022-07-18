@@ -305,7 +305,7 @@ page{
 }
 
 .empty_view_1 {
-  height: 120rpx;
+  height: 100rpx;
   width: 100%;
 }
 
@@ -316,7 +316,7 @@ page{
   flex-direction: column;
   width: 100%;
   z-index: 9;
-  height: 120rpx;
+  /* height: 120rpx; */
 }
 
 .view_bottom_left_1 {
