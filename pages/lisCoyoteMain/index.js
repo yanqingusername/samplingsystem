@@ -267,12 +267,16 @@ Page({
               if (res1) {
                 if (res1.data.success == 0) {
                   that.setData({
-                    boxCodeNumber: "",
+                    // boxCodeNumber: "",
                     isInputBoxnum: false,
                     isFocus: false
                   });
                   wx.navigateTo({
                     url: `/pages/lisCoyoteDetail/index?boxnum=${that.data.boxCodeNumber}`,
+                  });
+
+                  that.setData({
+                    boxCodeNumber: "",
                   });
                 } else {
                   box.showToast(res1.message);

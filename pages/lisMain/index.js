@@ -282,12 +282,16 @@ Page({
               if (res1) {
                 if (res1.success) {
                   that.setData({
-                    boxCodeNumber: "",
+                    // boxCodeNumber: "",
                     isInputBoxnum: false,
                     isFocus: false
                   });
                   wx.navigateTo({
                     url: `/pages/lisDetail/index?boxnum=${that.data.boxCodeNumber}`,
+                  });
+
+                  that.setData({
+                    boxCodeNumber: "",
                   });
                   // that.$router.push({
                   //   path: "/lisDetail",
