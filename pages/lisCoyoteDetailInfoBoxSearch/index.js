@@ -21,10 +21,10 @@ Page({
     },
     onShow() {
         if (this.data.sampleid) {
-            this.searchSampleTubeInfo(this.data.sampleid,2);
+            this.searchSampleTubeInfo(this.data.sampleid, 2);
         }
     },
-    searchSampleTubeInfo(sampleid,typest) {
+    searchSampleTubeInfo(sampleid, typest) {
         let that = this;
         let params = {
             sampleId: sampleid,
@@ -38,12 +38,12 @@ Page({
                         instrumentList: res.data.list
                     });
 
-                    if(typest == 2){
-                        if(that.data.instrumentList.length == 0){
+                    if (typest == 2) {
+                        if (that.data.instrumentList.length == 0) {
                             that.setData({
                                 isShowEmpty: true
                             });
-                        }else{
+                        } else {
                             that.setData({
                                 isShowEmpty: false
                             });
@@ -55,12 +55,12 @@ Page({
                         instrumentList: []
                     });
 
-                    if(typest == 2){
-                        if(that.data.instrumentList.length == 0){
+                    if (typest == 2) {
+                        if (that.data.instrumentList.length == 0) {
                             that.setData({
                                 isShowEmpty: true
                             });
-                        }else{
+                        } else {
                             that.setData({
                                 isShowEmpty: false
                             });
@@ -83,9 +83,17 @@ Page({
     onSearch(e) {
         this.setData({
             value: e.detail.value
-        })
+        });
 
-        this.searchSampleTubeInfo(e.detail.value,2);
+        if (this.data.value) {
+            this.searchSampleTubeInfo(this.data.value, 2);
+        } else {
+            this.setData({
+                value: '',
+                instrumentList: [],
+                isShowEmpty: false
+            });
+        }
 
     },
 

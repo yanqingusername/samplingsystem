@@ -6,11 +6,11 @@ var request = require('../../utils/request.js')
 Page({
     data: {
         id: "",
-      sampleid: "",
-      instrumentList:[],
-      value: '',
-      boxnum: '',
-      isShowEmpty: false
+        sampleid: "",
+        instrumentList: [],
+        value: '',
+        boxnum: '',
+        isShowEmpty: false
     },
     onLoad: function (options) {
         this.setData({
@@ -20,16 +20,16 @@ Page({
         });
     },
     onShow() {
-        if(this.data.sampleid){
-            this.searchSampleTubeInfo(this.data.sampleid,2);
+        if (this.data.sampleid) {
+            this.searchSampleTubeInfo(this.data.sampleid, 2);
         }
     },
-    searchSampleTubeInfo(sampleid,typest) {
+    searchSampleTubeInfo(sampleid, typest) {
         let that = this;
         let params = {
             sample_id: sampleid,
-          id: that.data.id,
-          box_num: that.data.boxnum
+            id: that.data.id,
+            box_num: that.data.boxnum
         }
         request.request_get('/eastbox/searchSampleTubeInfo.hn', params, function (res) {
             if (res) {
@@ -38,12 +38,12 @@ Page({
                         instrumentList: res.result
                     });
 
-                    if(typest == 2){
-                        if(that.data.instrumentList.length == 0){
+                    if (typest == 2) {
+                        if (that.data.instrumentList.length == 0) {
                             that.setData({
                                 isShowEmpty: true
                             });
-                        }else{
+                        } else {
                             that.setData({
                                 isShowEmpty: false
                             });
@@ -55,12 +55,12 @@ Page({
                         instrumentList: []
                     });
 
-                    if(typest == 2){
-                        if(that.data.instrumentList.length == 0){
+                    if (typest == 2) {
+                        if (that.data.instrumentList.length == 0) {
                             that.setData({
                                 isShowEmpty: true
                             });
-                        }else{
+                        } else {
                             that.setData({
                                 isShowEmpty: false
                             });
@@ -80,22 +80,30 @@ Page({
             delta: 1
         });
     },
-    onSearch(e){
+    onSearch(e) {
         this.setData({
             value: e.detail.value
-          })
+        })
 
-          this.searchSampleTubeInfo(e.detail.value,2);
-        
-      },
-      
-      clearSearchHandle() {
+        if (this.data.value) {
+            this.searchSampleTubeInfo(this.data.value, 2);
+        } else {
+            this.setData({
+                value: '',
+                instrumentList: [],
+                isShowEmpty: false
+            });
+        }
+
+    },
+
+    clearSearchHandle() {
         this.setData({
             value: '',
             instrumentList: [],
             isShowEmpty: false
         });
         // this.searchSampleTubeInfo(this.data.value,1);
-      },
-    
+    },
+
 })

@@ -6,10 +6,10 @@ var request = require('../../utils/request.js')
 Page({
     data: {
         id: "",
-      boxnum: "",
-      instrumentList:[],
-      keyvalue: '',
-      isShowEmpty: false
+        boxnum: "",
+        instrumentList: [],
+        keyvalue: '',
+        isShowEmpty: false
     },
     onLoad: function (options) {
         this.setData({
@@ -18,15 +18,15 @@ Page({
         });
     },
     onShow() {
-        if(this.data.boxnum){
-            this.searchSampleBoxInfo(this.data.boxnum,2);
+        if (this.data.boxnum) {
+            this.searchSampleBoxInfo(this.data.boxnum, 2);
         }
     },
-    searchSampleBoxInfo(boxnum,typest) {
+    searchSampleBoxInfo(boxnum, typest) {
         let that = this;
         let params = {
-          id: that.data.id,
-          boxnum: boxnum
+            id: that.data.id,
+            boxnum: boxnum
         }
         request.request_coyote('/info/selectboxnum.hn', params, function (res) {
             if (res) {
@@ -35,12 +35,12 @@ Page({
                         instrumentList: res.data.list
                     });
 
-                    if(typest == 2){
-                        if(that.data.instrumentList.length == 0){
+                    if (typest == 2) {
+                        if (that.data.instrumentList.length == 0) {
                             that.setData({
                                 isShowEmpty: true
                             });
-                        }else{
+                        } else {
                             that.setData({
                                 isShowEmpty: false
                             });
@@ -52,12 +52,12 @@ Page({
                         instrumentList: []
                     });
 
-                    if(typest == 2){
-                        if(that.data.instrumentList.length == 0){
+                    if (typest == 2) {
+                        if (that.data.instrumentList.length == 0) {
                             that.setData({
                                 isShowEmpty: true
                             });
-                        }else{
+                        } else {
                             that.setData({
                                 isShowEmpty: false
                             });
@@ -77,24 +77,32 @@ Page({
             delta: 1
         });
     },
-    onSearch(e){
+    onSearch(e) {
         this.setData({
             keyvalue: e.detail.value
-          })
+        });
 
-          this.searchSampleBoxInfo(e.detail.value,2);
-        
-      },
-      
-      clearSearchHandle() {
+        if (this.data.keyvalue) {
+            this.searchSampleBoxInfo(this.data.keyvalue, 2);
+        } else {
+            this.setData({
+                keyvalue: '',
+                instrumentList: [],
+                isShowEmpty: false
+            });
+        }
+
+    },
+
+    clearSearchHandle() {
         this.setData({
             keyvalue: '',
             instrumentList: [],
             isShowEmpty: false
         });
         // this.searchSampleBoxInfo(this.data.keyvalue,1);
-      },
-      clickItem(e){
+    },
+    clickItem(e) {
         let box_num = e.currentTarget.dataset.boxnum;
         // let status = e.currentTarget.dataset.statusstring;
         if (box_num) {
@@ -111,6 +119,6 @@ Page({
             //     }
             // });
         }
-      },
-    
+    },
+
 })
