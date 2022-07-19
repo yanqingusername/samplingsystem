@@ -1,6 +1,6 @@
 <wxs src="../../utils/substring.wxs" module="tools" />
 
-<cu-custom isBack="{{true}}" bgColor="bg-white" catch:tap="backPage">
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
   <view slot="backText"></view>
   <view slot="content">添加试管</view>
 </cu-custom>

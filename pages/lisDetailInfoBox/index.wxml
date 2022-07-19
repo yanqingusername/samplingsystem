@@ -1,4 +1,4 @@
-<cu-custom isBack="{{true}}" bgColor="bg-white" catch:tap="backPage">
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
   <view slot="backText"></view>
   <view slot="content">{{boxnum}}箱码</view>
 </cu-custom>
@@ -39,20 +39,20 @@
       </view>
 
       <view class="dis_item_center" wx:if="{{isShowview}}">
-        <view class="dis_item_center_6" wx:if="{{receive_time}}">
-          <view class="dis_setting_1_1" style="padding-left:0px;">接收时间 {{receive_time}}</view>
-        </view>
-        <view class="dis_item_center_6" wx:if="{{receive_person_name}}">
-          <view class="dis_setting_1_1" style="padding-left:0px;">接收人 {{receive_person_name}}</view>
-        </view>
-      </view>
-
-      <view class="dis_item_center" wx:if="{{isShowview}}">
         <view class="dis_item_center_6" wx:if="{{convey_time}}">
           <view class="dis_setting_1_1" style="padding-left:0px;">转运时间 {{convey_time}}</view>
         </view>
         <view class="dis_item_center_6" wx:if="{{conveyer_person_name}}">
           <view class="dis_setting_1_1" style="padding-left:0px;">转运人 {{conveyer_person_name}}</view>
+        </view>
+      </view>
+
+      <view class="dis_item_center" wx:if="{{isShowview}}">
+        <view class="dis_item_center_6" wx:if="{{receive_time}}">
+          <view class="dis_setting_1_1" style="padding-left:0px;">接收时间 {{receive_time}}</view>
+        </view>
+        <view class="dis_item_center_6" wx:if="{{receive_person_name}}">
+          <view class="dis_setting_1_1" style="padding-left:0px;">接收人 {{receive_person_name}}</view>
         </view>
       </view>
       

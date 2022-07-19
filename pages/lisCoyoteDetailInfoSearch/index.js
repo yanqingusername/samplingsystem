@@ -8,7 +8,8 @@ Page({
         id: "",
       boxnum: "",
       instrumentList:[],
-      keyvalue: ''
+      keyvalue: '',
+      isShowEmpty: false
     },
     onLoad: function (options) {
         this.setData({
@@ -18,10 +19,10 @@ Page({
     },
     onShow() {
         if(this.data.boxnum){
-            this.searchSampleBoxInfo(this.data.boxnum);
+            this.searchSampleBoxInfo(this.data.boxnum,2);
         }
     },
-    searchSampleBoxInfo(boxnum) {
+    searchSampleBoxInfo(boxnum,typest) {
         let that = this;
         let params = {
           id: that.data.id,
@@ -33,11 +34,35 @@ Page({
                     that.setData({
                         instrumentList: res.data.list
                     });
+
+                    if(typest == 2){
+                        if(that.data.instrumentList.length == 0){
+                            that.setData({
+                                isShowEmpty: true
+                            });
+                        }else{
+                            that.setData({
+                                isShowEmpty: false
+                            });
+                        }
+                    }
                 } else {
                     box.showToast(res.message);
                     that.setData({
                         instrumentList: []
                     });
+
+                    if(typest == 2){
+                        if(that.data.instrumentList.length == 0){
+                            that.setData({
+                                isShowEmpty: true
+                            });
+                        }else{
+                            that.setData({
+                                isShowEmpty: false
+                            });
+                        }
+                    }
                 }
             } else {
                 box.showToast("网络不稳定，请重试");
@@ -57,16 +82,17 @@ Page({
             keyvalue: e.detail.value
           })
 
-          this.searchSampleBoxInfo(e.detail.value);
+          this.searchSampleBoxInfo(e.detail.value,2);
         
       },
       
       clearSearchHandle() {
         this.setData({
             keyvalue: '',
-            instrumentList: []
+            instrumentList: [],
+            isShowEmpty: false
         });
-        this.searchSampleBoxInfo(this.data.keyvalue);
+        // this.searchSampleBoxInfo(this.data.keyvalue,1);
       },
       clickItem(e){
         let box_num = e.currentTarget.dataset.boxnum;

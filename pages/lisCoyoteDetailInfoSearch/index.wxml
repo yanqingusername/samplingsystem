@@ -1,4 +1,4 @@
-<cu-custom isBack="{{true}}" bgColor="bg-white" catch:tap="backPage">
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
   <view slot="backText"></view>
   <view slot="content">搜索</view>
 </cu-custom>
@@ -31,7 +31,7 @@
             </view>
           </view>
       </view>
-      <view class="search-list-role" wx:else>
+      <view class="search-list-role" wx:if="{{isShowEmpty}}">
         <view class="s_center_t_empty">没有搜索到相关箱码</view>
       </view>
 

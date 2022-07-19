@@ -9,7 +9,8 @@ Page({
       sampleid: "",
       instrumentList:[],
       value: '',
-      boxnum: ''
+      boxnum: '',
+      isShowEmpty: false
     },
     onLoad: function (options) {
         this.setData({
@@ -20,10 +21,10 @@ Page({
     },
     onShow() {
         if(this.data.sampleid){
-            this.searchSampleTubeInfo(this.data.sampleid);
+            this.searchSampleTubeInfo(this.data.sampleid,2);
         }
     },
-    searchSampleTubeInfo(sampleid) {
+    searchSampleTubeInfo(sampleid,typest) {
         let that = this;
         let params = {
             sample_id: sampleid,
@@ -36,11 +37,35 @@ Page({
                     that.setData({
                         instrumentList: res.result
                     });
+
+                    if(typest == 2){
+                        if(that.data.instrumentList.length == 0){
+                            that.setData({
+                                isShowEmpty: true
+                            });
+                        }else{
+                            that.setData({
+                                isShowEmpty: false
+                            });
+                        }
+                    }
                 } else {
                     box.showToast(res.msg);
                     that.setData({
                         instrumentList: []
                     });
+
+                    if(typest == 2){
+                        if(that.data.instrumentList.length == 0){
+                            that.setData({
+                                isShowEmpty: true
+                            });
+                        }else{
+                            that.setData({
+                                isShowEmpty: false
+                            });
+                        }
+                    }
                 }
             } else {
                 box.showToast("网络不稳定，请重试");
@@ -60,16 +85,17 @@ Page({
             value: e.detail.value
           })
 
-          this.searchSampleTubeInfo(e.detail.value);
+          this.searchSampleTubeInfo(e.detail.value,2);
         
       },
       
       clearSearchHandle() {
         this.setData({
             value: '',
-            instrumentList: []
+            instrumentList: [],
+            isShowEmpty: false
         });
-        this.searchSampleTubeInfo(this.data.value);
+        // this.searchSampleTubeInfo(this.data.value,1);
       },
     
 })
