@@ -19,47 +19,101 @@ Page({
     channel_id: '',
     channel_name: '',
 
-    dutytypeIndex: 0,
-    dutytype_name: '',
-    dutytypeList: [{
-        dutytype_id: "0",
-        dutytype_name: '请选择职责类型'
-      },
-      {
-        dutytype_id: "1",
-        dutytype_name: '采样护士'
-      },
-      {
-        dutytype_id: "2",
-        dutytype_name: '信息登记'
-      },
-      {
-        dutytype_id: "3",
-        dutytype_name: '外围'
-      }
+    jobIndex: 0,
+    jobName: '',
+    jobList: [
+      // {
+      //   Id: "0",
+      //   jobName: '请选择职责类型'
+      // },
+      // {
+      //   Id: "1",
+      //   jobName: '采样护士'
+      // },
+      // {
+      //   Id: "2",
+      //   jobName: '信息登记'
+      // },
+      // {
+      //   Id: "3",
+      //   jobName: '外围'
+      // }
     ],
 
-    jobtypeIndex: 0,
-    jobtype_name: '',
-    jobtypeList: [{
-        jobtype_id: "0",
-        jobtype_name: '请选择岗位类型'
-      },
-      {
-        jobtype_id: "1",
-        jobtype_name: '全职'
-      },
-      {
-        jobtype_id: "2",
-        jobtype_name: '兼职'
-      },
+    dutyIndex: 0,
+    dutyName: '',
+    dutyList: [
+      // {
+      //   Id: "0",
+      //   dutyName: '请选择岗位类型'
+      // },
+      // {
+      //   Id: "1",
+      //   dutyName: '全职'
+      // },
+      // {
+      //   Id: "2",
+      //   dutyName: '兼职'
+      // }
     ],
 
   },
   onLoad: function (options) {
-    // this.setData({
-    //   id: app.globalData.userInfo.id
-    // });
+    this.setData({
+      id: app.globalData.userInfo.id
+    });
+
+    this.getSelectduty();
+    this.getSelectjob();
+  },
+  /**
+   * 职责列表方法
+   */
+  getSelectduty(){
+    let that = this;
+    let data = {}
+    request.request_coyote('/info/selectduty.hn', data, function (res) {
+      if (res) {
+        if (res.code == 200) {
+          let dutyList = res.data;
+          let dutyHead = {Id:'0',dutyName: '请选择岗位类型'};
+          dutyList.unshift(dutyHead);
+          that.setData({
+            dutyList: dutyList,
+          });
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
+  },
+  /**
+   * 岗位列表方法
+   */
+  getSelectjob(){
+    let that = this;
+    let data = {}
+    request.request_coyote('/info/selectjob.hn', data, function (res) {
+      if (res) {
+        if (res.code == 200) {
+          let jobList = res.data;
+          let jobHead = {
+            Id: "0",
+            jobName: '请选择职责类型'
+          }
+          jobList.unshift(jobHead);
+          that.setData({
+            jobList: jobList,
+          });
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
   },
   backPage() {
     wx.navigateBack({
@@ -153,12 +207,12 @@ Page({
       return;
     }
 
-    if (that.data.dutytype_name == '' || that.data.dutytype_name == '请选择职责类型') {
+    if (that.data.jobName == '' || that.data.jobName == '请选择职责类型') {
       box.showToast('请选择职责类型');
       return;
     }
 
-    if (that.data.jobtype_name == '' || that.data.jobtype_name == '请选择岗位类型') {
+    if (that.data.dutyName == '' || that.data.dutyName == '请选择岗位类型') {
       box.showToast('请选择岗位类型');
       return;
     }
@@ -168,21 +222,21 @@ Page({
       real_phone: that.data.real_phone,
       code_number: that.data.code_number,
       channel_name: that.data.channel_name,
-      dutytype_name: that.data.dutytype_name,
-      jobtype_name: that.data.jobtype_name,
+      jobName: that.data.jobName,
+      dutyName: that.data.dutyName,
       channel_id: that.data.channel_id
     }
 
     console.log('---->:',data)
 
-    // request.request_get('/eastlogin/writeSamplingRegistrantInfo.hn', data, function (res) {
+    // request.request_coyote('/eastlogin/writeSamplingRegistrantInfo.hn', data, function (res) {
     //   if (res) {
     //     if (res.success) {
     //       wx.navigateBack({
     //         delta: 1
     //       });
     //     } else {
-    //       box.showToast(res.msg);
+    //       box.showToast(res.message);
     //     }
     //   } else {
     //     box.showToast("网络不稳定，请重试");
@@ -216,23 +270,23 @@ Page({
   /**
    * 职责类型
    */
-  bindSelectDutytype: function (e) {
+   bindSelectJobtype: function (e) {
     var that = this;
     console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
-      dutytypeIndex: e.detail.value,
-      dutytype_name: that.data.dutytypeList[e.detail.value].dutytype_name
+      jobIndex: e.detail.value,
+      jobName: that.data.jobList[e.detail.value].jobName
     });
   },
   /**
    * 岗位类型
    */
-   bindSelectJobtype: function (e) {
+   bindSelectDutytype: function (e) {
     var that = this;
     console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
-      jobtypeIndex: e.detail.value,
-      jobtype_name: that.data.jobtypeList[e.detail.value].jobtype_name
+      dutyIndex: e.detail.value,
+      dutyName: that.data.dutyList[e.detail.value].dutyName
     });
   },
 })

@@ -207,3 +207,8 @@ background: #307FF5;
   font-size: 28rpx;
   text-align: left;
 }
+
+.input-placeholder{
+  color: #999999;
+  font-size: 28rpx;
+}

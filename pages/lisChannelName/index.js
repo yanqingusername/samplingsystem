@@ -6,22 +6,8 @@ var request = require('../../utils/request.js')
 Page({
     data: {
         id: "",
-        instrumentList: [{
-                channel_name: '北京西站',
-                channel_id: '1'
-            },
-            {
-                channel_name: '北京南站',
-                channel_id: '2'
-            },
-            {
-                channel_name: '北京北站',
-                channel_id: '3'
-            },
-            {
-                channel_name: '北京东站',
-                channel_id: '4'
-            }
+        instrumentList: [
+            // {channelName: "卡尤迪", channelId: "0"}
         ],
         value: '',
     },
@@ -31,30 +17,25 @@ Page({
         });
     },
     onShow() {
-        //     this.searchSampleTubeInfo(this.data.sampleid);
+            this.searchSelectchannel();
     },
-    searchSampleTubeInfo(sampleid) {
+    searchSelectchannel() {
         let that = this;
         let params = {
-            sample_id: sampleid,
-            id: that.data.id,
-            box_num: that.data.boxnum
+            name: that.data.value
         }
-        request.request_get('/eastbox/searchSampleTubeInfo.hn', params, function (res) {
+        request.request_coyote('/info/selectchannel.hn', params, function (res) {
             if (res) {
-                if (res.success) {
-                    that.setData({
-                        instrumentList: res.result
-                    });
+                if (res.code == 200) {
+                  that.setData({
+                    instrumentList: res.data
+                  });
                 } else {
-                    box.showToast(res.msg);
-                    that.setData({
-                        instrumentList: []
-                    });
+                  box.showToast(res.message);
                 }
-            } else {
+              } else {
                 box.showToast("网络不稳定，请重试");
-            }
+              }
         });
     },
     /**
@@ -70,8 +51,7 @@ Page({
             value: e.detail.value
         })
 
-        //   this.searchSampleTubeInfo(e.detail.value);
-
+        this.searchSelectchannel();
     },
 
     clearSearchHandle() {
@@ -79,7 +59,7 @@ Page({
             value: '',
             instrumentList: []
         });
-        // this.searchSampleTubeInfo(this.data.value);
+        this.searchSelectchannel();
     },
     bindSelectChannel(e) {
         let channelid = e.currentTarget.dataset.channelid;

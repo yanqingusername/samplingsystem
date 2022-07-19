@@ -19,6 +19,7 @@
                 placeholder="请输入本人真实姓名"
                 maxlength="30"
                 bindinput="codeInput1"
+                placeholder-class="input-placeholder"
               />
             </view>
           </view>
@@ -33,6 +34,7 @@
                 placeholder="请输入本人手机号"
                 maxlength="11"
                 bindinput="codeInput2"
+                placeholder-class="input-placeholder"
               />
               <!-- <view class="clear_1" bind:tap="clearPhone" wx:if="sampling_member_phone">
                 <img class="icon_clear" src="../assets/images/deleteTest.png" />
@@ -50,6 +52,7 @@
                 placeholder="请输入验证码"
                 maxlength="6"
                 bindinput="codeInput3"
+                placeholder-class="input-placeholder"
               />
 
               <!-- <view class="get_code" catch:tap="btnClick">{{ codeRestTime ? codeRestTime + 'S' : "获取验证码" }}</view> -->
@@ -71,9 +74,9 @@
           <view class="detail_center" style="padding: 10rpx 0rpx;border-bottom: 1px solid #dddddd;">
             <view class="P5_1" style="padding-left:0rpx;">职责类型</view>
             <view class="detail_center P5_2" style="align-items: center;padding: 20rpx 0rpx 20rpx 0rpx;">
-             <picker bindchange="bindSelectDutytype" value="{{dutytypeIndex}}" range-key="{{'dutytype_name'}}" range="{{dutytypeList}}" style="width:100%;">
+             <picker bindchange="bindSelectJobtype" value="{{jobIndex}}" range-key="{{'jobName'}}" range="{{jobList}}" style="width:100%;">
                 <view class="detail_center P5_2" style="align-items: center;width:100%;">
-                  <view class="picker" style="color: {{dutytypeIndex ==0 ? '#999999' : '#333333'}}">{{dutytypeList[dutytypeIndex].dutytype_name}}</view>
+                  <view class="picker" style="color: {{jobIndex ==0 ? '#999999' : '#333333'}}">{{jobList[jobIndex].jobName}}</view>
                   <image src="../../img/icon_arrow_gray.png" style="width:20rpx;height:34rpx;"/>
                 </view>
               </picker>
@@ -83,9 +86,9 @@
           <view class="detail_center" style="padding: 10rpx 0rpx;">
             <view class="P5_1" style="padding-left:0rpx;">岗位类型</view>
             <view class="detail_center P5_2" style="align-items: center;padding: 20rpx 0rpx 20rpx 0rpx;">
-             <picker bindchange="bindSelectJobtype" value="{{jobtypeIndex}}" range-key="{{'jobtype_name'}}" range="{{jobtypeList}}" style="width:100%;">
+             <picker bindchange="bindSelectDutytype" value="{{dutyIndex}}" range-key="{{'dutyName'}}" range="{{dutyList}}" style="width:100%;">
                 <view class="detail_center P5_2" style="align-items: center;width:100%;">
-                  <view class="picker" style="color: {{jobtypeIndex ==0 ? '#999999' : '#333333'}}">{{jobtypeList[jobtypeIndex].jobtype_name}}</view>
+                  <view class="picker" style="color: {{dutyIndex ==0 ? '#999999' : '#333333'}}">{{dutyList[dutyIndex].dutyName}}</view>
                   <image src="../../img/icon_arrow_gray.png" style="width:20rpx;height:34rpx;"/>
                 </view>
               </picker> 
