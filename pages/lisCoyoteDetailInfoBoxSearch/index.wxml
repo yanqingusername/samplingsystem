@@ -7,7 +7,7 @@
       <view class="dis_setting_view">
         <view class='search'>
           <input id="search_checked" type='text' placeholder='请输入试管条码' confirm-type='search' value="{{value}}" bindinput='onSearch' ></input>
-          <view class="weui-icon-clear" wx:if="{{value}}" bindtap="clearSearchHandle">
+          <view class="weui-icon-clear" wx:if="{{value}}" catch:tap="clearSearchHandle">
             <icon type="clear" size="20" />
           </view>
         </view>
