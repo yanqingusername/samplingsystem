@@ -6,8 +6,8 @@
     <view class="main">
       <view class="dis_setting_view">
         <view class='search'>
-          <input id="search_checked" type='text' placeholder='请输入箱码' confirm-type='search' value="{{value}}" bindinput='onSearch' ></input>
-          <view class="weui-icon-clear" wx:if="{{value}}" bindtap="clearSearchHandle">
+          <input id="search_checked" type='text' placeholder='请输入箱码' confirm-type='search' value="{{keyvalue}}" bindinput='onSearch' ></input>
+          <view class="weui-icon-clear" wx:if="{{keyvalue}}" bindtap="clearSearchHandle">
             <icon type="clear" size="20" />
           </view>
         </view>
@@ -17,12 +17,12 @@
       <view class="search-list-role" wx:if="{{instrumentList.length>0}}">
         <view
             wx:for="{{instrumentList}}"
-            wx:key="index" bind:tap="clickItem" data-boxnum="{{item.box_num}}" data-statusstring="{{item.status}}">
+            wx:key="index" bind:tap="clickItem" data-boxnum="{{item.boxnum}}">
             <view class="search-result-view">
               <view class="dis_setting" style="padding: 0px 0px 0px 0px;">
                 <view class="s_center_t_item" style="display:flex;">
                   <view class="search-result-view-1">{{index+1}}.</view>
-                  <view class="search-result-view-2">{{item.box_num}}</view>
+                  <view class="search-result-view-2">{{item.boxnum}}</view>
                 </view>
                 <view class="search-result-view-3" style="display:flex;">
                   <image class="icon_arrow" src="../../img/icon_arrow_gray.png" alt="" />

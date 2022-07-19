@@ -26,20 +26,21 @@
           wx:key="index"
           class="shopBox"
         >
-          <view class="shopCon {{item.isTouchMove?'shopCon-active':''}}" data-index="{{index}}" bindtouchstart="touchStart" bindtouchmove="touchMove">
+          <view class="shopCon {{item.isTouchMove?'shopCon-active':''}}" data-index="{{index}}" bindtouchstart="touchStart" bindtouchmove="touchMove" bind:tap="clickItem" data-sampleid="{{item.sampleId}}" data-statusstring="{{item.samplestatus}}" data-max="{{item.max}}" data-uid="{{item.id}}">
             <!-- <view class="search-result-view" catch:tap="clickItem"> -->
               <view class="dis_setting" style="padding: 0px 0px 0px 0px">
                 <view class="s_center_t_item" style="display: flex">
                   <view class="search-result-view-1">{{(instrumentList.length - index)}}.</view>
-                  <view class="search-result-view-2">{{ item.sample_id }}</view>
+                  <view class="search-result-view-2">{{ item.sampleId }}</view>
                 </view>
                 <view class="search-result-view-3" style="display:flex;align-items: center;">
-                  <view class="search-result-view-1">{{'8/10'}}</view>
-                  <view class="search-result-view-2" wx:if="{{item.status == 1}}" style="color: #307FF5;margin-left:14rpx;">未封管</view>
+                  <view class="search-result-view-1">{{item.use}}/{{item.max}}</view>
+                  <view class="search-result-view-2" style="color: {{item.status == '未封管' ? '#307FF5' : '#999999'}};margin-left:14rpx;">{{item.samplestatus}}</view>
+                  <!-- <view class="search-result-view-2" wx:if="{{item.status == 1}}" style="color: #307FF5;margin-left:14rpx;">未封管</view>
                   <view class="search-result-view-2" wx:if="{{item.status == 2}}" style="color: #999999;margin-left:14rpx;">已封管</view>
                   <view class="search-result-view-2" wx:if="{{item.status == 3}}" style="color: #999999;margin-left:14rpx;">待转运</view>
                   <view class="search-result-view-2" wx:if="{{item.status == 4}}" style="color: #999999;margin-left:14rpx;">转运中</view>
-                  <view class="search-result-view-2" wx:if="{{item.status == 5}}" style="color: #999999;margin-left:14rpx;">已接收</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 5}}" style="color: #999999;margin-left:14rpx;">已接收</view> -->
                   <image class="icon_arrow" src="../../img/icon_arrow_gray.png" alt="" />
                 </view>
               </view>

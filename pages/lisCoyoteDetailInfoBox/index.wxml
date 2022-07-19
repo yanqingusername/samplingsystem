@@ -15,44 +15,45 @@
      
       <view class="dis_item_center">
         <view class="dis_item_center_3">
-          <view class="dis_setting_1_1" style="padding-left:0px;">管数 {{instrumentList.length}} 人数 {{instrumentList.length}}</view>
+          <view class="dis_setting_1_1" style="padding-left:0px;">管数 {{samplecount}} 人数 {{peoplecount}}</view>
         </view>
         <view class="dis_item_center_3">
-          <view class="dis_setting_1_1" style="padding-left:0px;" wx:if="{{status==1}}">状态 未封箱</view>
+          <view class="dis_setting_1_1" style="padding-left:0px;">状态 {{status}}</view>
+          <!-- <view class="dis_setting_1_1" style="padding-left:0px;" wx:if="{{status==1}}">状态 未封箱</view>
           <view class="dis_setting_1_1" style="padding-left:0px;" wx:if="{{status==2}}">状态 已封箱</view>
           <view class="dis_setting_1_1" style="padding-left:0px;" wx:if="{{status==3}}">状态 待转运</view>
           <view class="dis_setting_1_1" style="padding-left:0px;" wx:if="{{status==4}}">状态 转运中</view>
-          <view class="dis_setting_1_1" style="padding-left:0px;" wx:if="{{status==5}}">状态 已接收</view>
+          <view class="dis_setting_1_1" style="padding-left:0px;" wx:if="{{status==5}}">状态 已接收</view> -->
         </view>
       </view>
 
-      <view class="dis_item_center" wx:if="{{create_time}}">
+      <view class="dis_item_center" wx:if="{{createdate}}">
         <view class="dis_item_center_6">
-          <view class="dis_setting_1_1" style="padding-left:0px;">开箱时间 {{create_time}}</view>
+          <view class="dis_setting_1_1" style="padding-left:0px;">开箱时间 {{createdate}}</view>
         </view>
       </view>
 
-      <view class="dis_item_center" wx:if="{{isShowview && close_time}}">
+      <view class="dis_item_center" wx:if="{{isShowview && closetime}}">
         <view class="dis_item_center_6">
-          <view class="dis_setting_1_1" style="padding-left:0px;">封箱时间 {{close_time}}</view>
+          <view class="dis_setting_1_1" style="padding-left:0px;">封箱时间 {{closetime}}</view>
         </view>
       </view>
 
       <view class="dis_item_center" wx:if="{{isShowview}}">
-        <view class="dis_item_center_6" wx:if="{{receive_time}}">
-          <view class="dis_setting_1_1" style="padding-left:0px;">接收时间 {{receive_time}}</view>
+        <view class="dis_item_center_6" wx:if="{{receiveTime}}">
+          <view class="dis_setting_1_1" style="padding-left:0px;">接收时间 {{receiveTime}}</view>
         </view>
-        <view class="dis_item_center_6" wx:if="{{receive_person_name}}">
-          <view class="dis_setting_1_1" style="padding-left:0px;">接收人 {{receive_person_name}}</view>
+        <view class="dis_item_center_6" wx:if="{{receiver}}">
+          <view class="dis_setting_1_1" style="padding-left:0px;">接收人 {{receiver}}</view>
         </view>
       </view>
 
       <view class="dis_item_center" wx:if="{{isShowview}}">
-        <view class="dis_item_center_6" wx:if="{{convey_time}}">
-          <view class="dis_setting_1_1" style="padding-left:0px;">转运时间 {{convey_time}}</view>
+        <view class="dis_item_center_6" wx:if="{{conveyTime}}">
+          <view class="dis_setting_1_1" style="padding-left:0px;">转运时间 {{conveyTime}}</view>
         </view>
-        <view class="dis_item_center_6" wx:if="{{conveyer_person_name}}">
-          <view class="dis_setting_1_1" style="padding-left:0px;">转运人 {{conveyer_person_name}}</view>
+        <view class="dis_item_center_6" wx:if="{{conveyer}}">
+          <view class="dis_setting_1_1" style="padding-left:0px;">转运人 {{conveyer}}</view>
         </view>
       </view>
       
@@ -72,19 +73,19 @@
       <view class="search-list-role" wx:if="{{instrumentList.length>0}}">
         <view
             wx:for="{{instrumentList}}"
-            wx:key="index" bind:tap="clickLisCoyoteCellDetails" data-sampleid="{{item.sample_id}}" data-testtype="{{item.testtype}}" data-uid="{{item.uid}}">
+            wx:key="index" bind:tap="clickLisCoyoteCellDetails" data-sampleid="{{item.sampleId}}" data-max="{{item.max}}" data-uid="{{item.id}}">
             <view class="search-result-view">
               <view class="dis_setting" style="padding: 0px 0px 0px 0px;">
                 <view class="s_center_t_item" style="display:flex;">
                   <view class="search-result-view-1">{{(instrumentList.length - index)}}.</view>
-                  <view class="search-result-view-2">{{item.sample_id}}</view>
+                  <view class="search-result-view-2">{{item.sampleId}}</view>
                 </view>
-                <view class="search-result-view-3" style="display:flex;align-items: center;" wx:if="{{item.statustitle}}">
-                  <view class="search-result-view-5">{{item.statustitle}}</view>
+                <view class="search-result-view-3" style="display:flex;align-items: center;" wx:if="{{item.warn}}">
+                  <view class="search-result-view-5">{{item.warn}}</view>
                 </view>
 
                 <view class="search-result-view-3" style="display:flex;align-items: center;">
-                  <view class="search-result-view-1">{{item.custom_num}}/{{item.sample_num}}</view>
+                  <view class="search-result-view-1">{{item.use}}/{{item.max}}</view>
                   <image class="icon_arrow" src="../../img/icon_arrow_gray.png" alt="" />
                 </view>
               </view>

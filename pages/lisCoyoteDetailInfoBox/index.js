@@ -5,107 +5,107 @@ var request = require('../../utils/request.js')
 
 Page({
     data: {
-        id: "322",
-        boxnum: "",
-        status: "",
         isShowview: false,
         instrumentList: [
-            {
-                'sample_id':'123456789012',
-                'statustitle':'即将超时送样',
-                'sample_num':'1',
-                'custom_num':'1',
-                'id':'1',
-                'testtype': '1',
-                'uid': '8602129'
-            },
-            {
-                'sample_id':'123456789013',
-                'statustitle':'',
-                'sample_num':'1',
-                'custom_num':'1',
-                'id':'2',
-                'testtype': '1',
-                'uid': '8602130'
-            },
-            {
-                'sample_id':'12345678903',
-                'statustitle':'',
-                'sample_num':'10',
-                'custom_num':'8',
-                'id':'3',
-                'testtype': '3'
-            },
-            {
-                'sample_id':'12345678903',
-                'statustitle':'即将超时送样',
-                'sample_num':'10',
-                'custom_num':'3',
-                'id':'4',
-                'testtype': '3'
-            },
+            // {
+            //     'sample_id':'123456789012',
+            //     'statustitle':'即将超时送样',
+            //     'sample_num':'1',
+            //     'custom_num':'1',
+            //     'id':'1',
+            //     'testtype': '1',
+            //     'uid': '8602129'
+            // },
+            // {
+            //     'sample_id':'123456789013',
+            //     'statustitle':'',
+            //     'sample_num':'1',
+            //     'custom_num':'1',
+            //     'id':'2',
+            //     'testtype': '1',
+            //     'uid': '8602130'
+            // },
+            // {
+            //     'sample_id':'12345678903',
+            //     'statustitle':'',
+            //     'sample_num':'10',
+            //     'custom_num':'8',
+            //     'id':'3',
+            //     'testtype': '3'
+            // },
+            // {
+            //     'sample_id':'12345678903',
+            //     'statustitle':'即将超时送样',
+            //     'sample_num':'10',
+            //     'custom_num':'3',
+            //     'id':'4',
+            //     'testtype': '3'
+            // },
         ],
-        conveyer_person_name: "", //转运人
-        convey_time: "", //转运时间
-        receive_person_name: "", //接收人
-        receive_time: "", //接收时间
-        close_time: "", //封箱时间
-        create_time: "", //开箱时间
+        id: "",
+        boxnum: "", // 箱码
+        canuse: "", //  可用数量
+        maxsum: "", //  最大数量
+        createdate: "", //   日期
+        peoplecount: "", //  箱子内总人数
+        samplecount: "", //  箱子内总管数
+        status: "", // 箱子状态
+        conveyTime: "", //  转运时间（有数据才会显示  无数据不显示）
+        conveyer: "", //  转运人（有数据才会显示  无数据不显示）
+        receiveTime: "", //  接收时间（有数据才会显示  无数据不显示）
+        receiver: "", //  接收人（有数据才会显示  无数据不显示）
+        closetime: '', // 封箱时间
     },
     onLoad: function (options) {
         this.setData({
-            // id: app.globalData.userInfo.id,
+            id: app.globalData.userInfo.id,
             boxnum: options.boxnum,
-            status: options.st,
         });
     },
     onShow() {
-        this.getExpandSampleInfoDetail();
-        // this.getSampleBoxInfoDetail();
+        this.getSampleBoxInfo();
     },
-    getExpandSampleInfoDetail() {
+    /**
+     * 获取箱码信息
+     */
+    getSampleBoxInfo() {
         let that = this;
         let params = {
             box_num: that.data.boxnum,
-            id: that.data.id,
-            status: that.data.status == 3 ? '' : that.data.status
+            // id: that.data.id
         }
-        request.request_get('/eastbox/getExpandSampleInfoDetail.hn', params, function (res) {
+        request.request_coyote('/info/getboxinfo.hn', params, function (res) {
             if (res) {
-                if (res.success) {
-                    if (res.result && res.result.length > 0) {
-                        that.setData({
-                            conveyer_person_name: res.conveyer_person_name,
-                            convey_time: res.convey_time,
-                            receive_person_name: res.receive_person_name,
-                            receive_time: res.receive_time,
-                            close_time: res.close_time,
-                            create_time: res.create_time
-                        });
-                    }
-                } else {
-                    box.showToast(res.msg);
-                }
-            } else {
-                box.showToast("网络不稳定，请重试");
-            }
-        });
-    },
-    getSampleBoxInfoDetail() {
-        let that = this;
-        let params = {
-            box_num: that.data.boxnum,
-            id: that.data.id,
-            status: that.data.status
-        }
-        request.request_get('/eastbox/getSampleBoxInfoDetail.hn', params, function (res) {
-            if (res) {
-                if (res.success) {
+                if (res.data.success == 0) {
+
                     that.setData({
-                        instrumentList: res.result
+                        boxnum: res.data.box_num,
+                        createdate: res.data.createdate,
+                        maxsum: res.data.maxsum,
+                        canuse: res.data.canuse,
+
+                        peoplecount: res.data.peoplecount, //  箱子内总人数
+                        samplecount: res.data.samplecount, //  箱子内总管数
+                        status: res.data.status, // 箱子状态
+                        conveyTime: res.data.conveyTime, //  转运时间（有数据才会显示  无数据不显示）
+                        conveyer: res.data.conveyer, //  转运人（有数据才会显示  无数据不显示）
+                        receiveTime: res.data.receiveTime, //  接收时间（有数据才会显示  无数据不显示）
+                        receiver: res.data.receiver, //  接收人（有数据才会显示  无数据不显示）
+                        closetime: res.data.closetime, // 封箱时间
                     });
+
+                    that.setData({
+                        instrumentList: res.data.samplelist || []
+                    });
+
+                    if (that.data.instrumentList.length > 0) {
+                        for (let i = 0; i < that.data.instrumentList.length; i++) {
+                            that.data.instrumentList[i].isTouchMove = false;
+                        }
+                    }
+
                 } else {
-                    box.showToast(res.msg);
+                    box.showToast(res.message);
                 }
             } else {
                 box.showToast("网络不稳定，请重试");
@@ -183,21 +183,23 @@ Page({
             });
         }
     },
-    clickLisCoyoteCellDetails(e){
+    clickLisCoyoteCellDetails(e) {
         let sampleid = e.currentTarget.dataset.sampleid;
-        let testtype = e.currentTarget.dataset.testtype;
+        let max = e.currentTarget.dataset.max;
         let uid = e.currentTarget.dataset.uid;
-        console.log(testtype)
-        if(sampleid && testtype){
-            if(testtype == 1){
-                wx.navigateTo({
-                    url: `/pages/lisCoyoteCellDetails/index?sampleId=${sampleid}&uid=${uid}`,
-                });
-            }else{
+        if (sampleid && max) {
+            if (max == 1) {
+                if (uid) {
+                    wx.navigateTo({
+                        url: `/pages/lisCoyoteCellDetails/index?sampleId=${sampleid}&uid=${uid}`,
+                    });
+                }
+            } else {
                 wx.navigateTo({
                     url: `/pages/lisCoyoteMoreCellDetails/index?sampleId=${sampleid}`,
                 });
             }
+
         }
     }
 

@@ -8,7 +8,7 @@ Page({
         id: "",
       boxnum: "",
       instrumentList:[],
-      value: ''
+      keyvalue: ''
     },
     onLoad: function (options) {
         this.setData({
@@ -25,16 +25,16 @@ Page({
         let that = this;
         let params = {
           id: that.data.id,
-          box_num: boxnum
+          boxnum: boxnum
         }
-        request.request_get('/eastbox/searchSampleBoxInfo.hn', params, function (res) {
+        request.request_coyote('/info/selectboxnum.hn', params, function (res) {
             if (res) {
-                if (res.success) {
+                if (res.data.success == 0) {
                     that.setData({
-                        instrumentList: res.result
+                        instrumentList: res.data.list
                     });
                 } else {
-                    box.showToast(res.msg);
+                    box.showToast(res.message);
                     that.setData({
                         instrumentList: []
                     });
@@ -54,7 +54,7 @@ Page({
     },
     onSearch(e){
         this.setData({
-            value: e.detail.value
+            keyvalue: e.detail.value
           })
 
           this.searchSampleBoxInfo(e.detail.value);
@@ -63,17 +63,17 @@ Page({
       
       clearSearchHandle() {
         this.setData({
-            value: '',
+            keyvalue: '',
             instrumentList: []
         });
-        this.searchSampleBoxInfo(this.data.value);
+        this.searchSampleBoxInfo(this.data.keyvalue);
       },
       clickItem(e){
         let box_num = e.currentTarget.dataset.boxnum;
-        let status = e.currentTarget.dataset.statusstring;
-        if (box_num && status) {
+        // let status = e.currentTarget.dataset.statusstring;
+        if (box_num) {
             wx.redirectTo({
-                url: `/pages/lisCoyoteDetailInfoBox/index?boxnum=${box_num}&st=${status}`,
+                url: `/pages/lisCoyoteDetailInfoBox/index?boxnum=${box_num}`,
             });
 
             // this.$router.push({

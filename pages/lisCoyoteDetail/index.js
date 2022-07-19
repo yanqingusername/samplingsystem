@@ -89,14 +89,14 @@ Page({
           
             that.setData({
               boxnum: res.data.box_num,
-              boxnumTime: res.data.date,
+              boxnumTime: res.data.createdate,
               boxnumMax: res.data.maxsum,
               canuse: res.data.canuse,
               // channel_id: item.channel,
             });
 
           that.setData({
-            instrumentList: res.data.listData || []
+            instrumentList: res.data.samplelist || []
           });
 
           if(that.data.instrumentList.length > 0){
@@ -429,8 +429,31 @@ Page({
 
     this.getSampleBoxInfo();
   },
-  clickItem() {
-    
+  clickItem(e) {
+    let sampleid = e.currentTarget.dataset.sampleid;
+    let status = e.currentTarget.dataset.statusstring;
+    let max = e.currentTarget.dataset.max;
+    let uid = e.currentTarget.dataset.uid;
+         
+        if (sampleid && status && max) {
+            if(status == '未封管'){
+                wx.navigateTo({
+                  url: `/pages/lisCoyoteAddTube/index?boxnum=${this.data.boxnum}&sampleId=${sampleid}`
+                });
+            }else{
+                if(max == 1){
+                  if(uid){
+                    wx.navigateTo({
+                      url: `/pages/lisCoyoteCellDetails/index?sampleId=${sampleid}&uid=${uid}`,
+                    });
+                  }
+                }else{
+                    wx.navigateTo({
+                        url: `/pages/lisCoyoteMoreCellDetails/index?sampleId=${sampleid}`,
+                    });
+                }
+            }
+        }
   },
   /**
    * 最大封箱数量 立即封箱弹框

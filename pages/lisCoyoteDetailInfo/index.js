@@ -10,49 +10,51 @@ Page({
         id: "",
         instrumentList: [
             // {
-            //     'box_num':'055555',
-            //     'statustitle':'即将超时送样',
-            //     'sample_num':'200',
+            //     'boxnum':'055555',
+            //     'warn':'即将超时送样',
+            //     'countboxnum':'200',
             //     'status':'1',
             //     'id':'1'
             // },
             // {
-            //     'box_num':'023124',
-            //     'statustitle':'即将超时送样',
-            //     'sample_num':'9',
+            //     'boxnum':'023124',
+            //     'warn':'即将超时送样',
+            //     'countboxnum':'9',
             //     'status':'2',
             //     'id':'2'
             // },
             // {
-            //     'box_num':'023125',
-            //     'statustitle':'',
-            //     'sample_num':'200',
+            //     'boxnum':'023125',
+            //     'warn':'',
+            //     'countboxnum':'200',
             //     'status':'3',
             //     'id':'3'
             // },
             // {
-            //     'box_num':'023126',
-            //     'statustitle':'',
-            //     'sample_num':'200',
+            //     'boxnum':'023126',
+            //     'warn':'',
+            //     'countboxnum':'200',
             //     'status':'4',
             //     'id':'4'
             // },
             // {
-            //     'box_num':'023127',
-            //     'statustitle':'即将超时收样',
-            //     'sample_num':'200',
+            //     'boxnum':'023127',
+            //     'warn':'即将超时收样',
+            //     'countboxnum':'200',
             //     'status':'5',
             //     'id':'5'
             // }
         ],
         currentDate: time.timeFormat1(new Date()),
         maxDate: time.timeFormat1(new Date()),
-        boxcount: 0,
-        personcount: 0,
-        samplecount: 0,
+        boxcount: 0, //箱数
+        personcount: 0, //采样总人数
+        samplecount: 0, //采样管数
 
-        stay_transport_sum: 0,
-        transporting_sum: 0
+        waitconvery: 0, //待转运数量
+        converying: 0, // 转运中数量
+
+        taglist: []
     },
     onLoad: function (options) {
         this.setData({
@@ -60,6 +62,7 @@ Page({
         });
     },
     onShow() {
+        this.getjudgetype();
         this.getsamplinginfo();
     },
     getsamplinginfo() {
@@ -67,7 +70,7 @@ Page({
         let params = {
             id: that.data.id,
             date: that.data.currentDate,
-            // status: that.data.tabIndex == 0 ? '' : that.data.tabIndex
+            status: that.data.tabIndex
         }
         request.request_coyote('/info/getsamplinginfo.hn', params, function (res) {
             if (res) {
@@ -77,8 +80,8 @@ Page({
                         personcount: res.data.personcount,
                         samplecount: res.data.samplecount,
                         instrumentList: res.data.listinfo,
-                        // stay_transport_sum: res.stay_transport_sum,
-                        // transporting_sum: res.transporting_sum
+                        waitconvery: res.data.waitconvery,
+                        converying: res.data.converying
                     });
                 } else {
                     box.showToast(res.msg);
@@ -173,7 +176,7 @@ Page({
                 });
             }else{
                 wx.navigateTo({
-                    url: `/pages/lisCoyoteDetailInfoBox/index?boxnum=${box_num}&st=${status}`,
+                    url: `/pages/lisCoyoteDetailInfoBox/index?boxnum=${box_num}`,
                 });
             }
             // this.$router.push({
@@ -186,5 +189,26 @@ Page({
             // });
         }
     },
-    
+    /**
+     * 判断是否管理员方法
+     */
+    getjudgetype() {
+        let that = this;
+        let params = {
+            id: that.data.id
+        }
+        request.request_coyote('/info/judgetype.hn', params, function (res) {
+            if (res) {
+                if (res.data.success == 0) {
+                    that.setData({
+                        taglist: res.data.list
+                    });
+                } else {
+                    box.showToast(res.msg);
+                }
+            } else {
+                box.showToast("网络不稳定，请重试");
+            }
+        });
+    },
 })
