@@ -584,9 +584,15 @@ Page({
     request.request_coyote('/info/checkinfo.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
+          that.setData({
+            boxCodeNumber: codeinfo
+          });
           //调用bindinfo（有订单信息的接口
           that.getBindinfo();
         } else if (res.data.success == 2) {
+          that.setData({
+            boxCodeNumber: codeinfo
+          });
           //调用bindsecondinfo（调用无订单信息接口，需要绑定渠道）
           that.getChannelList();
         } else if (res.data.success == 4) {

@@ -8,13 +8,15 @@
       <view class="empty_view"></view>
       
       <view class="view_bottom">
-        <view class="view_bottom_left" bind:tap="clickCoyote">卡尤迪样本进入lis系统</view>
+        <!-- <view class="view_bottom_left" bind:tap="clickCoyote">卡尤迪样本进入lis系统</view> -->
+        <view class="view_bottom_left" bind:tap="clickCoyote">卡尤迪自营</view>
       </view>
       
       <view class="empty_view_1"></view>
 
       <view class="view_bottom">
-        <view class="view_bottom_left" bind:tap="clickDongruan">东软样本进入lis系统</view>
+        <!-- <view class="view_bottom_left" bind:tap="clickDongruan">东软样本进入lis系统</view> -->
+        <view class="view_bottom_left" bind:tap="clickDongruan">常态化核酸检测</view>
       </view>
       
     </view>
