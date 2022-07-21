@@ -155,17 +155,17 @@ Page({
               }, 1000);
               
               // 服务器发送验证码***********************
-              // request.request_get('/support/Verification.hn', { phone: phone }, function (res) {
-              //     console.info('回调', res)
-              //     if(res){
-              //         if(res.success){
-              //             console.log('验证码发送成功，获取的验证码' + res.code);
-              //             that.setData({ phoneCode: [phone, res.code] });
-              //         }else{
-              //             box.showToast("验证码发送失败");
-              //         }
-              //     }
-              // })
+              request.request_coyote('/info/sendcode.hn', { phone: phone }, function (res) {
+                  console.info('回调', res)
+                  if(res){
+                      if(res.data.success == 0){
+                          console.log('验证码发送成功，获取的验证码' + res.code);
+                          // that.setData({ phoneCode: [phone, res.code] });
+                      }else{
+                          box.showToast(res.message);
+                      }
+                  }
+              })
           }
       }
   },
@@ -218,30 +218,30 @@ Page({
     }
 
     let data = {
-      real_name: that.data.real_name,
-      real_phone: that.data.real_phone,
-      code_number: that.data.code_number,
-      channel_name: that.data.channel_name,
-      jobName: that.data.jobName,
-      dutyName: that.data.dutyName,
-      channel_id: that.data.channel_id
+      name: that.data.real_name,
+      phone: that.data.real_phone,
+      code: that.data.code_number,
+      channel: that.data.channel_id,
+      jobtype: that.data.jobName,
+      dutytype: that.data.dutyName,
+      // channel_id: that.data.channel_id
     }
 
-    console.log('---->:',data)
+    // console.log('---->:',data)
 
-    // request.request_coyote('/eastlogin/writeSamplingRegistrantInfo.hn', data, function (res) {
-    //   if (res) {
-    //     if (res.success) {
-    //       wx.navigateBack({
-    //         delta: 1
-    //       });
-    //     } else {
-    //       box.showToast(res.message);
-    //     }
-    //   } else {
-    //     box.showToast("网络不稳定，请重试");
-    //   }
-    // });
+    request.request_coyote('/info/Loginregistration.hn', data, function (res) {
+      if (res) {
+        if (res.data.success == 0) {
+          wx.navigateBack({
+            delta: 1
+          });
+        } else {
+          box.showToast(res.message);
+        }
+      } else {
+        box.showToast("网络不稳定，请重试");
+      }
+    });
   }, 2000),
 
   codeInput1: function (e) {
