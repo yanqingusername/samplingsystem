@@ -232,9 +232,12 @@ Page({
     request.request_coyote('/info/Loginregistration.hn', data, function (res) {
       if (res) {
         if (res.data.success == 0) {
-          wx.navigateBack({
-            delta: 1
-          });
+          box.showToast(res.message,'',1000);
+          setTimeout(()=>{
+            wx.navigateBack({
+              delta: 1
+            });
+          },1200);
         } else {
           box.showToast(res.message);
         }
