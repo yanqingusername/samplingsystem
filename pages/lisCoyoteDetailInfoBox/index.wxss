@@ -36,7 +36,7 @@ font-family: PingFangSC-Regular, PingFang SC;
 font-weight: 400;
 color: #333333;
 margin-left: 10rpx;
-
+width: 200rpx;
 }
 
 .search-result-view-3{
