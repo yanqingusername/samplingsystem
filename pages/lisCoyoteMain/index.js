@@ -142,7 +142,7 @@ Page({
       if (res) {
         if (res.data.success == 0) {
           wx.navigateTo({
-            url: `/pages/lisCoyoteDetail/index?boxnum=${boxCodeNumber}`,
+            url: `/pages/lisCoyoteDetail/index?boxnum=${boxCodeNumber}&isnumber=1`,
           });
         } else {
           box.showToast(res.message);
@@ -170,7 +170,7 @@ Page({
       isShowBox: false
     });
     wx.navigateTo({
-      url: `/pages/lisCoyoteDetail/index?boxnum=${this.data.box_num}`,
+      url: `/pages/lisCoyoteDetail/index?boxnum=${this.data.box_num}&isnumber=1`,
     });
   },
   /**
@@ -272,7 +272,7 @@ Page({
                     isFocus: false
                   });
                   wx.navigateTo({
-                    url: `/pages/lisCoyoteDetail/index?boxnum=${that.data.boxCodeNumber}`,
+                    url: `/pages/lisCoyoteDetail/index?boxnum=${that.data.boxCodeNumber}&isnumber=1`,
                   });
 
                   that.setData({

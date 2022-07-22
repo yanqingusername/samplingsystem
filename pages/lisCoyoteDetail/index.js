@@ -61,14 +61,16 @@ Page({
         cancel: "取消",
         sure: "去封管"
       },
-      sampleId:""
+      sampleId:"",
+      isnumber: 1
   },
   onLoad: function (options) {
     let boxnum = options.boxnum;
 
     this.setData({
       id: app.globalData.userInfo.id,
-      boxnum: boxnum
+      boxnum: boxnum,
+      isnumber: options.isnumber
     });
   },
   onShow(){
@@ -281,6 +283,17 @@ Page({
     wx.navigateBack({
       delta: 1
     });
+  },
+  onClickBackHome() {
+    if(this.data.isnumber == 2){
+      wx.navigateBack({
+        delta: 2
+      });
+    }else{
+      wx.navigateBack({
+        delta: 1
+      });
+    }
   },
   // 添加试管
   scanQRCodeClick() {

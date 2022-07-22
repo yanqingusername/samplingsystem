@@ -193,7 +193,7 @@ Page({
   /**
    * 封管
    */
-  clickDown() {
+  clickDown: utils.throttle(function (e) {
     let that = this;
     let params = {
       sampleId: that.data.sampleId
@@ -220,7 +220,7 @@ Page({
         box.showToast("网络不稳定，请重试");
       }
     });
-  },
+  }, 2000),
   /**
    * 立即封箱 确认
    */
@@ -229,9 +229,9 @@ Page({
       isSure: false
     });
   },
-  sureSure() {
+  sureSure: utils.throttle(function (e) {
     this.setHclosesample();
-  },
+  }, 2000),
   /**
    * 扫试管码
    */
@@ -616,7 +616,8 @@ Page({
     this.setData({
       isScanShow: 2,
       isInputBoxnum: true,
-      isFocus: true
+      isFocus: true,
+      boxCodeNumber: ''
     });
   },
   inputBoxnum(e) {
@@ -640,7 +641,7 @@ Page({
   /**
    * 判断单采扫描信息码调用接口
    */
-  dialogBoxnumSure() {
+  dialogBoxnumSure: utils.throttle(function (e) {
     let that = this;
     if (that.data.boxCodeNumber) {
       let params = {
@@ -673,7 +674,7 @@ Page({
     } else {
       box.showToast('信息码不能为空')
     }
-  },
+  }, 2000),
   /**
    * 单采获取人员信息渠道方法
    */
@@ -717,7 +718,7 @@ Page({
   /**
    * 单采获取人员信息无订单信息方法
    */
-  dialogQudaoSure() {
+  dialogQudaoSure: utils.throttle(function (e) {
     if (this.data.qudaoIndex != -1 && this.data.paychannel) {
 
       //单采获取人员信息无订单信息方法
@@ -757,7 +758,7 @@ Page({
     } else {
       box.showToast('请选择渠道');
     }
-  },
+  }, 2000),
   /**
    * 单采获取人员信息方法
    */

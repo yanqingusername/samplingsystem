@@ -172,7 +172,7 @@ Page({
         if (box_num && status) {
             if(status == '待封箱'){
                 wx.navigateTo({
-                    url: `/pages/lisCoyoteDetail/index?boxnum=${box_num}`,
+                    url: `/pages/lisCoyoteDetail/index?boxnum=${box_num}&isnumber=2`,
                 });
             }else{
                 wx.navigateTo({

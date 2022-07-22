@@ -71,7 +71,7 @@
 
       <view class="view_bottom_1">
         <view class="view_bottom_left_1" bind:tap="clickNewScan">扫描新箱码</view>
-        <view class="view_bottom_left_2" bind:tap="onClickLeft">返回首页</view>
+        <view class="view_bottom_left_2" bind:tap="onClickBackHome">返回首页</view>
       </view>
     </view>
     
