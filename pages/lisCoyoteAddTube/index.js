@@ -824,7 +824,8 @@ Page({
   getClosesample() {
     let that = this;
     let params = {
-      sampleId: that.data.sampleId
+      sampleId: that.data.sampleId,
+      box_num: that.data.boxnum,
     }
     request.request_coyote('/info/closesample.hn', params, function (res) {
       if (res) {
