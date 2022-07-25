@@ -258,7 +258,8 @@ Page({
   checkSampleStatus(sampleId) {
     let that = this;
     let params = {
-      sampleId: sampleId
+      sampleId: sampleId,
+      testtype: that.data.testtype,
     }
     request.request_coyote('/info/checksample.hn', params, function (res) {
       if (res) {
