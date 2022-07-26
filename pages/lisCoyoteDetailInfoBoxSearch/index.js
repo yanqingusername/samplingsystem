@@ -29,7 +29,7 @@ Page({
         let params = {
             sampleId: sampleid,
             id: that.data.id,
-            //   box_num: that.data.boxnum
+            box_num: that.data.boxnum
         }
         request.request_coyote('/info/selectsample.hn', params, function (res) {
             if (res) {

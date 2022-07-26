@@ -26,7 +26,7 @@ Page({
         let that = this;
         let params = {
             id: that.data.id,
-            boxnum: boxnum
+            box_num: boxnum
         }
         request.request_coyote('/info/selectboxnum.hn', params, function (res) {
             if (res) {
