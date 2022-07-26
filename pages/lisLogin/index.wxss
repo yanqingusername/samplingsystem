@@ -129,4 +129,16 @@ page{
       position: absolute;
       bottom: 50rpx;
     }
+
+    .new_account_application{
+      display: flex;
+    align-items: center;
+    border-radius: 16rpx;
+    color: #307FF5;
+    font-size: 32rpx;
+    margin-top: 60rpx;
+    /* justify-content: center; */
+    width: 100%;
+    margin-left: 80rpx;
+    }
   

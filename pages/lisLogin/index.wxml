@@ -40,8 +40,11 @@
         </view>
 
          <view class="submit_view" bind:tap="commit">登录</view>
+
+         <view class="new_account_application" bind:tap="bindAccountApplication"><div>账号申请</div></view>
       </view>
     </view>
-    <view class="account_application" bind:tap="bindAccountApplication">账号申请</view>
+    <!-- always-embed="true" -->
+    <!-- <view class="account_application" bind:tap="bindAccountApplication">账号申请</view> -->
   </view>
 </view>
