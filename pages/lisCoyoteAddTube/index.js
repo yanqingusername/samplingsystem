@@ -4,6 +4,7 @@ const request = require('../../utils/request.js')
 const utils = require('../../utils/utils.js')
 const app = getApp()
 
+var isRepeat = true;  //手录信息码 判断重复提交
 
 Page({
   data: {
@@ -614,6 +615,8 @@ Page({
    * 手录信息码
    */
   bindInputBoxnum() {
+    isRepeat = true;
+
     this.setData({
       isScanShow: 2,
       isInputBoxnum: true,
@@ -642,40 +645,48 @@ Page({
   /**
    * 判断单采扫描信息码调用接口
    */
-  dialogBoxnumSure: utils.throttle(function (e) {
+  dialogBoxnumSure() {
     let that = this;
     if (that.data.boxCodeNumber) {
-      let params = {
-        codeinfo: that.data.boxCodeNumber,
-        sampleId: that.data.sampleId,
-        testtype: that.data.testtype,
-        sampletype: that.data.specimenType,
-      }
-      request.request_coyote('/info/checkinfo.hn', params, function (res) {
-        if (res) {
-          if (res.data.success == 0) {
-            //调用bindinfo（有订单信息的接口
-            that.getBindinfo();
-          } else if (res.data.success == 2) {
-            //调用bindsecondinfo（调用无订单信息接口，需要绑定渠道）
-            that.getChannelList();
-          } else if (res.data.success == 4) {
-            // 已达上限人数，请封管
-            that.setData({
-              isInputBoxnum:false,
-              isMaxBox: true
-            });
-          } else {
-            box.showToast(res.message);
-          }
-        } else {
-          box.showToast("网络不稳定，请重试");
+      if(isRepeat){
+        isRepeat = false;
+        let params = {
+          codeinfo: that.data.boxCodeNumber,
+          sampleId: that.data.sampleId,
+          testtype: that.data.testtype,
+          sampletype: that.data.specimenType,
         }
-      });
+        request.request_coyote('/info/checkinfo.hn', params, function (res) {
+          if (res) {
+            if (res.data.success == 0) {
+              //调用bindinfo（有订单信息的接口
+              that.getBindinfo();
+            } else if (res.data.success == 2) {
+              //调用bindsecondinfo（调用无订单信息接口，需要绑定渠道）
+              that.getChannelList();
+            } else if (res.data.success == 4) {
+              // 已达上限人数，请封管
+              that.setData({
+                isInputBoxnum:false,
+                isMaxBox: true
+              });
+              isRepeat = true;
+            } else {
+              box.showToast(res.message);
+              isRepeat = true;
+            }
+          } else {
+            isRepeat = true;
+            box.showToast("网络不稳定，请重试");
+          }
+        });
+      } else {
+        box.showToast('已提交信息,请稍等~')
+      }
     } else {
       box.showToast('信息码不能为空')
     }
-  }, 2000),
+  },
   /**
    * 单采获取人员信息渠道方法
    */
@@ -685,6 +696,7 @@ Page({
       id: that.data.id
     }
     request.request_coyote('/info/getchannel.hn', params, function (res) {
+      isRepeat = true;
       if (res) {
         if (res.data.success == 0) {
           that.setData({
@@ -775,6 +787,8 @@ Page({
         testtype: that.data.testtype
       }
       request.request_coyote('/info/bindinfo.hn', params, function (res) {
+        isRepeat = true;
+
         if (res) {
           if (res.data.success == 0) {
             that.setData({
@@ -885,6 +899,8 @@ Page({
           
           that.getSampleBoxInfo();
 
+          that.scanQRCodeClick();
+
           // 清空试管和受检者信息
           that.setData({
             isQudao: false,
@@ -922,4 +938,56 @@ Page({
       }
     });
   },
+    // 添加试管
+    scanQRCodeClick() {
+      let that = this;
+      let params = {
+        box_num: that.data.boxnum,
+      }
+      request.request_coyote('/info/addsample.hn', params, function (res) {
+        if (res) {
+          if (res.data.success == 0 || res.data.success == 3) {
+            // 清空试管和受检者信息
+            // that.setData({
+            //   isQudao: false,
+            //   paychannel: '',
+            //   qudaoIndex: -1,
+            //   isMaxBox: false,
+            //   isSure: false,
+            //   isShowBox: false,
+            //   isBack: false,
+            //   isShowSuccess: false,
+            //   // canuse: 0,
+            //   samplesum: 1,
+            //   instrumentList: [],
+            //   dutytypeIndex: 0,
+            //   type: '单采',
+            //   testtype: '1',
+            //   jobtypeIndex: 0,
+            //   specimenType: '咽拭子',
+            //   isInputBoxnum: false,
+            //   boxCodeNumber: '',
+            //   sampleId: '',
+            //   isFocus: false,
+            //   sourceInfoList: [],
+            //   sampleOldId: ''
+            // });
+          } else if (res.data.success == 1) {
+            // 已达最大封箱数量，请先封箱
+            wx.navigateBack({
+              delta: 1
+            });
+          } else if (res.data.success == 2) {
+            // 存在未封管试管，请先封管
+            wx.navigateBack({
+              delta: 1
+            });
+          } else {
+            box.showToast(res.message);
+          }
+        } else {
+          box.showToast("网络不稳定，请重试");
+        }
+      });
+    },
 })
