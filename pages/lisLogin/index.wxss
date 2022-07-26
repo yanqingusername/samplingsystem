@@ -19,6 +19,7 @@ page{
       align-items: center;
       width: 100%;
       height: 360rpx;
+      background: #107AFF;
     }
   
     .icon_logo {

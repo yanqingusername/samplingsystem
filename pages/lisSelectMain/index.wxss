@@ -15,7 +15,7 @@ page {
 }
 
 .empty_view {
-  height: 180rpx;
+  height: 70rpx;
   width: 100%;
 }
 

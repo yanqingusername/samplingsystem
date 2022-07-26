@@ -12,7 +12,7 @@
             <view class="main_item_text">账号</view>
             <view class="form-item">
               <input
-                type="text"
+                type="number"
                 name="phone"
                 placeholder="请输入账号"
                 maxlength="11"
