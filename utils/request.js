@@ -25,7 +25,7 @@ function request_get(controller, data, cb) {
 }
 
 // 参数配置
-var apicoyote = 'http://182.92.117.128:8885/admin'    //卡尤迪信息采集  服务器
+var apicoyote = 'http://prod.coyotebio-lab.com:8885/admin'    //卡尤迪信息采集  服务器
 function request_coyote(controller, data, cb) {
     var url = apicoyote + controller;
     wx.request({

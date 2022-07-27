@@ -86,7 +86,15 @@ Page({
           });
 
           setTimeout(()=>{
-            that.backPage();
+            let pages = getCurrentPages();
+            let prevPage = pages[pages.length - 2]; //获取上个页面栈                          
+            prevPage.setData({
+              isShowDetail: 2
+            })
+            
+            wx.navigateBack({
+                delta: 1,
+            })
           },1200);
         } else {
           box.showToast(res.message);

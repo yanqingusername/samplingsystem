@@ -239,7 +239,15 @@ Page({
         if (res.data.success == 0) {
           box.showToast(res.message,'',1000);
           setTimeout(() => {
-            that.backPage();
+            let pages = getCurrentPages();
+            let prevPage = pages[pages.length - 3]; //获取上个页面栈                          
+            prevPage.setData({
+              isShowDetail: 2
+            })
+            
+            wx.navigateBack({
+                delta: 1,
+            });
           }, 1200);
         } else {
           box.showToast(res.message);

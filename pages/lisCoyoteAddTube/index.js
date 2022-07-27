@@ -76,6 +76,8 @@ Page({
 
     isScanShow: 1, // 1--扫码  2--手录
 
+    isShowDetail: 1
+
   },
   onLoad: function (options) {
     let boxnum = options.boxnum;
@@ -92,16 +94,16 @@ Page({
     this.gettype();
     this.getstype();
 
-    // if(this.data.sampleId){
-    //   this.getClosesample();
-    //   // this.getCustomInfo();
-    // }
+    if(this.data.sampleId){
+      this.getClosesample();
+      // this.getCustomInfo();
+    }
   },
   onShow() {
     // this.getSampleBoxInfo();
     // this.gettype();
     // this.getstype();
-    if(this.data.sampleId){
+    if(this.data.isShowDetail == 2){
       this.getClosesample();
       // this.getCustomInfo();
     }
@@ -514,6 +516,11 @@ Page({
     this.setData({
       sampleId: e.detail.value
     });
+    if(e.detail.value.length >= 11){
+      if (this.data.sampleId) {
+        this.checkSampleStatus(this.data.sampleId);
+      }
+    }
   },
   // 输入完成事件
   confirmListener (event) {

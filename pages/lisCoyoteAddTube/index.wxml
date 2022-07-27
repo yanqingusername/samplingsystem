@@ -59,10 +59,11 @@
                 value="{{sampleId}}"
                 type="number"
                 name="sampleId"
+                maxlength="12"
                 placeholder="请输入/扫试管条码"
                 bindinput="bindinputSample"
-                bindconfirm="confirmListener"
               />
+              <!-- bindconfirm="confirmListener" -->
               <view
                 class="clear_1"
                 catch:tap="clearsampleCodeNumber"
