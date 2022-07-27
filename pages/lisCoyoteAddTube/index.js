@@ -869,6 +869,7 @@ Page({
             // sampletype: res.data.sampletype
           });
           
+          if(res.data.testtype){
             if(that.data.dutytypeList && that.data.dutytypeList.length > 0){
               for(let i = 0; i < that.data.dutytypeList.length; i++){
                 if(res.data.testtype == that.data.dutytypeList[i].id){
@@ -881,7 +882,9 @@ Page({
                 }
               }
             }
+          }
 
+          if(res.data.sampletype){
             if(that.data.jobtypeList && that.data.jobtypeList.length > 0){
               for(let i = 0; i < that.data.jobtypeList.length; i++){
                 if(res.data.sampletype == that.data.jobtypeList[i].specimenType){
@@ -892,6 +895,7 @@ Page({
                 }
               }
             }
+          }
         } else {
           box.showToast(res.message);
         }
