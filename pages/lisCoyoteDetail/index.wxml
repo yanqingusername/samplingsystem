@@ -47,7 +47,7 @@
             <!-- </view> -->
           </view>
 
-          <view class="shopDel {{item.isTouchMove?'shopDel-active':''}}" data-sampleid="{{item.sample_id}}" bindtap="delShop">删除</view>
+          <view class="shopDel {{item.isTouchMove?'shopDel-active':''}}" data-sampleid="{{item.sampleId}}" bindtap="delShop">删除</view>
         </view>
       </view>
 

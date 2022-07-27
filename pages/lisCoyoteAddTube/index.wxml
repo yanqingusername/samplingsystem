@@ -190,8 +190,8 @@
         <view class="dialog_item_title">选择付款渠道</view>
         <scroll-view scroll-y="{{true}}" class="scroll-view">
           <block wx:for="{{sourceInfoList}}" wx:key="index">
-            <view class="{{ qudaoIndex == index ? 'child-row-active' : 'child-row'}}" catchtap="bindSelectQudao" data-index="{{index}}" data-paychannel="{{item.paychannel}}">
-              <view class="text_title">{{'北京西站'}}</view>
+            <view class="{{ qudaoIndex == index ? 'child-row-active' : 'child-row'}}" catchtap="bindSelectQudao" data-index="{{index}}" data-paychannel="{{item}}">
+              <view class="text_title">{{item}}</view>
             </view>
           </block>
         </scroll-view>

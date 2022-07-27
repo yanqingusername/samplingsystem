@@ -67,7 +67,7 @@ Page({
     this.getSelectjob();
   },
   /**
-   * 职责列表方法
+   * 岗位列表方法
    */
   getSelectduty(){
     let that = this;
@@ -90,7 +90,7 @@ Page({
     });
   },
   /**
-   * 岗位列表方法
+   * 职责列表方法
    */
   getSelectjob(){
     let that = this;

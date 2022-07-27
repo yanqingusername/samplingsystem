@@ -577,39 +577,39 @@ Page({
    */
   setCheckinfo(codeinfo) {
     let that = this;
-    let params = {
-      codeinfo: codeinfo,
-      sampleId: that.data.sampleId,
-      testtype: that.data.testtype,
-      sampletype: that.data.specimenType,
-    }
-    request.request_coyote('/info/checkinfo.hn', params, function (res) {
-      if (res) {
-        if (res.data.success == 0) {
+    // let params = {
+    //   codeinfo: codeinfo,
+    //   sampleId: that.data.sampleId,
+    //   testtype: that.data.testtype,
+    //   sampletype: that.data.specimenType,
+    // }
+    // request.request_coyote('/info/checkinfo.hn', params, function (res) {
+    //   if (res) {
+    //     if (res.data.success == 0) {
           that.setData({
             boxCodeNumber: codeinfo
           });
           //调用bindinfo（有订单信息的接口
           that.getBindinfo();
-        } else if (res.data.success == 2) {
-          that.setData({
-            boxCodeNumber: codeinfo
-          });
-          //调用bindsecondinfo（调用无订单信息接口，需要绑定渠道）
-          that.getChannelList();
-        } else if (res.data.success == 4) {
-          // 已达上限人数，请封管
-          that.setData({
-            isInputBoxnum: false,
-            isMaxBox: true
-          });
-        } else {
-          box.showToast(res.message);
-        }
-      } else {
-        box.showToast("网络不稳定，请重试");
-      }
-    });
+    //     } else if (res.data.success == 2) {
+    //       that.setData({
+    //         boxCodeNumber: codeinfo
+    //       });
+    //       //调用bindsecondinfo（调用无订单信息接口，需要绑定渠道）
+    //       that.getChannelList();
+    //     } else if (res.data.success == 4) {
+    //       // 已达上限人数，请封管
+    //       that.setData({
+    //         isInputBoxnum: false,
+    //         isMaxBox: true
+    //       });
+    //     } else {
+    //       box.showToast(res.message);
+    //     }
+    //   } else {
+    //     box.showToast("网络不稳定，请重试");
+    //   }
+    // });
   },
   /**
    * 手录信息码
@@ -650,36 +650,36 @@ Page({
     if (that.data.boxCodeNumber) {
       if(isRepeat){
         isRepeat = false;
-        let params = {
-          codeinfo: that.data.boxCodeNumber,
-          sampleId: that.data.sampleId,
-          testtype: that.data.testtype,
-          sampletype: that.data.specimenType,
-        }
-        request.request_coyote('/info/checkinfo.hn', params, function (res) {
-          if (res) {
-            if (res.data.success == 0) {
+        // let params = {
+        //   codeinfo: that.data.boxCodeNumber,
+        //   sampleId: that.data.sampleId,
+        //   testtype: that.data.testtype,
+        //   sampletype: that.data.specimenType,
+        // }
+        // request.request_coyote('/info/checkinfo.hn', params, function (res) {
+        //   if (res) {
+        //     if (res.data.success == 0) {
               //调用bindinfo（有订单信息的接口
               that.getBindinfo();
-            } else if (res.data.success == 2) {
-              //调用bindsecondinfo（调用无订单信息接口，需要绑定渠道）
-              that.getChannelList();
-            } else if (res.data.success == 4) {
-              // 已达上限人数，请封管
-              that.setData({
-                isInputBoxnum:false,
-                isMaxBox: true
-              });
-              isRepeat = true;
-            } else {
-              box.showToast(res.message);
-              isRepeat = true;
-            }
-          } else {
-            isRepeat = true;
-            box.showToast("网络不稳定，请重试");
-          }
-        });
+        //     } else if (res.data.success == 2) {
+        //       //调用bindsecondinfo（调用无订单信息接口，需要绑定渠道）
+        //       that.getChannelList();
+        //     } else if (res.data.success == 4) {
+        //       // 已达上限人数，请封管
+        //       that.setData({
+        //         isInputBoxnum:false,
+        //         isMaxBox: true
+        //       });
+        //       isRepeat = true;
+        //     } else {
+        //       box.showToast(res.message);
+        //       isRepeat = true;
+        //     }
+        //   } else {
+        //     isRepeat = true;
+        //     box.showToast("网络不稳定，请重试");
+        //   }
+        // });
       } else {
         box.showToast('已提交信息,请稍等~')
       }
@@ -802,6 +802,15 @@ Page({
               //  大筛 调用扫码
               that.getScanQRCodeInfo();
             }
+          } else if (res.data.success == 1) {
+            //调用bindsecondinfo（调用无订单信息接口，需要绑定渠道）
+            that.getChannelList();
+          } else if (res.data.success == 9) {
+            // 已达上限人数，请封管
+            that.setData({
+              isInputBoxnum: false,
+              isMaxBox: true
+            });
           } else {
             box.showToast(res.message);
           }
@@ -890,7 +899,9 @@ Page({
   setHclosesample() {
     let that = this;
     let params = {
-      sampleId: that.data.sampleId
+      sampleId: that.data.sampleId,
+      sampleType: that.data.specimenType,
+      testtype: that.data.testtype
     }
     request.request_coyote('/info/hclosesample.hn', params, function (res) {
       if (res) {
@@ -900,6 +911,38 @@ Page({
           that.getSampleBoxInfo();
 
           that.scanQRCodeClick();
+
+          if(res.data.testtype){
+            if(that.data.dutytypeList && that.data.dutytypeList.length > 0){
+              for(let i = 0; i < that.data.dutytypeList.length; i++){
+                if(res.data.testtype == that.data.dutytypeList[i].id){
+                  that.setData({
+                    dutytypeIndex: i,
+                    type: that.data.dutytypeList[i].type,
+                    testtype: that.data.dutytypeList[i].id,
+                  });
+                }
+              }
+            }
+          }
+
+          if(res.data.sampleType){
+            if(that.data.jobtypeList && that.data.jobtypeList.length > 0){
+              for(let i = 0; i < that.data.jobtypeList.length; i++){
+                if(res.data.sampleType == that.data.jobtypeList[i].specimenType){
+                  that.setData({
+                    jobtypeIndex: i,
+                    specimenType: that.data.jobtypeList[i].specimenType
+                  });
+                }
+              }
+            }
+          }
+
+          that.setData({
+            samplesum: res.data.samplesum
+          });
+          
 
           // 清空试管和受检者信息
           that.setData({
@@ -912,13 +955,13 @@ Page({
             isBack: false,
             isShowSuccess: false,
             // canuse: 0,
-            samplesum: 1,
+            // samplesum: 1,
             instrumentList: [],
-            dutytypeIndex: 0,
-            type: '单采',
-            testtype: '1',
-            jobtypeIndex: 0,
-            specimenType: '咽拭子',
+            // dutytypeIndex: 0,
+            // type: '单采',
+            // testtype: '1',
+            // jobtypeIndex: 0,
+            // specimenType: '咽拭子',
             isInputBoxnum: false,
             boxCodeNumber: '',
             sampleId: '',
