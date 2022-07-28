@@ -228,7 +228,7 @@ Page({
       gender: that.data.jobtype_name,
       age: that.data.age,
       phone: that.data.phone,
-      cardtype: that.data.dutytype_name,
+      cardtype: that.data.dutytypeIndex,
       cardnumber: that.data.cardnumber,
     }
 
