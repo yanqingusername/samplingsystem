@@ -239,6 +239,9 @@ Page({
    * 扫试管码
    */
   clickNewScan() {
+    this.setData({
+      isShowDetail: 1
+    });
     this.getScanQRCodeClick();
   },
   getScanQRCodeClick() {
@@ -514,7 +517,8 @@ Page({
    */
   bindinputSample(e) {
     this.setData({
-      sampleId: e.detail.value
+      sampleId: e.detail.value,
+      isShowDetail: 1
     });
     if(e.detail.value.length >= 11){
       if (this.data.sampleId) {
@@ -558,7 +562,8 @@ Page({
    */
   scanQRCodeInfo() {
     this.setData({
-      isScanShow: 1
+      isScanShow: 1,
+      isShowDetail: 1
     });
     this.getScanQRCodeInfo();
   },
@@ -625,6 +630,7 @@ Page({
     isRepeat = true;
 
     this.setData({
+      isShowDetail: 1,
       isScanShow: 2,
       isInputBoxnum: true,
       isFocus: true,
