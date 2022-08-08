@@ -45,19 +45,19 @@ Page({
                 //倒计时,不管验证码发送成功与否，都进入倒计时，防止多次点击造成验证码发送失败**************************
                 that.setData({
                     codeBtState: true
-                })
+                });
                 var interval = setInterval(function () {
                     currentTime--;
                     that.setData({
                         codeBtText: currentTime + 's'
-                    })
+                    });
                     if (currentTime <= 0) {
                         clearInterval(interval)
                         that.setData({
                             codeBtText: '重新发送',
                             currentTime: 60,
                             codeBtState: false,
-                        })
+                        });
                     }
                 }, 1000);
                 
@@ -100,8 +100,11 @@ Page({
                                 app.globalData.userInfo = userInfo;
                                 wx.setStorageSync('lisPhone',that.data.phone);
                                 wx.setStorageSync('lisPassword',that.data.code)
+                                // wx.navigateTo({
+                                //     url: '/pages/lisCustominfo/index',
+                                // });
                                 wx.navigateTo({
-                                    url: '/pages/lisCustominfo/index',
+                                    url: '/pages/lisTJMain/index',
                                 });
                             }
                         }else{

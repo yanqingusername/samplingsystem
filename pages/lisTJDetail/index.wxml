@@ -1,0 +1,78 @@
+<!-- pages/addCustodian/addCustodian.wxml -->
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
+  <view slot="backText"></view>
+  <view slot="content">试管列表</view>
+</cu-custom>
+<view class="child-section">
+    <view class="main">
+      <!-- <view class="dis_setting">
+        <view class="dis_setting_1">
+          <view class="dis_setting_1_1">箱码：{{boxnum}}<image wx:if="{{instrumentList.length <=0}}" bind:tap="clickDelete" class="icon_delete" src="../../img/icon_img_05.png" alt=""/>
+          </view>
+          <view class="dis_setting_1_2">开箱时间：{{boxnumTime}}</view>
+        </view>
+        <view class="dis_setting_2">{{instrumentList.length}}/{{boxnumMax}}</view>
+      </view> -->
+
+      <view class="search-list-role" bind:tap="scanQRCodeClick" style="margin-top: 20rpx;">
+        <view class="search-list-role-1">
+          <view class="s_center_t_item" style="display: flex;align-items: center;"><image src="../../img/icon_detail_add.png" class='detail_right_img' /> 添加试管</view>
+        </view>
+      </view>
+
+      <view class="search-list-role" wx:if="{{instrumentList.length > 0}}">
+        <view
+          wx:for="{{instrumentList}}"
+          wx:key="index"
+          class="shopBox"
+        >
+          <view class="shopCon {{item.isTouchMove?'shopCon-active':''}}" data-index="{{index}}" bindtouchstart="touchStart" bindtouchmove="touchMove" bind:tap="clickItem" data-sampleid="{{item.sampleId}}" data-statusstring="{{item.samplestatus}}" data-max="{{item.max}}" data-uid="{{item.id}}">
+            <!-- <view class="search-result-view" catch:tap="clickItem"> -->
+              <view class="dis_setting" style="padding: 0px 0px 0px 0px">
+                <view class="s_center_t_item" style="display: flex">
+                  <view class="search-result-view-1">{{(instrumentList.length - index)}}.</view>
+                  <view class="search-result-view-2">{{ item.sampleId }}</view>
+                </view>
+                <view class="search-result-view-3" style="display:flex;align-items: center;">
+                  <view class="search-result-view-1">{{item.use}}/{{item.max}}</view>
+                  <view class="search-result-view-2" style="color: {{item.samplestatus == '未封管' ? '#307FF5' : '#999999'}};margin-left:14rpx;">{{item.samplestatus}}</view>
+                  <!-- <view class="search-result-view-2" wx:if="{{item.status == 1}}" style="color: #307FF5;margin-left:14rpx;">未封管</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 2}}" style="color: #999999;margin-left:14rpx;">已封管</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 3}}" style="color: #999999;margin-left:14rpx;">待转运</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 4}}" style="color: #999999;margin-left:14rpx;">转运中</view>
+                  <view class="search-result-view-2" wx:if="{{item.status == 5}}" style="color: #999999;margin-left:14rpx;">已接收</view> -->
+                  <image class="icon_arrow" src="../../img/icon_arrow_gray.png" alt="" />
+                </view>
+              </view>
+            <!-- </view> -->
+          </view>
+
+          <view class="shopDel {{item.isTouchMove?'shopDel-active':''}}" data-sampleid="{{item.sampleId}}" bindtap="delShop">删除</view>
+        </view>
+      </view>
+
+      <view class="empty_view3"></view>
+
+      <!-- <view class="view_bottom">
+        <view class="view_bottom_right" bind:tap="clickDown">封箱（{{instrumentList.length}}/{{boxnumMax}}）</view>
+      </view> -->
+    </view>
+  </view>
+
+<!-- 最大封箱 立即封箱弹框 -->
+<dialog-cus showDialog='{{isMaxBox}}' datas="{{maxBoxData}}" catch:dialogCancel="maxBoxCancel" catch:dialogSure="maxBoxSure"/>
+
+<!-- 封箱弹框 -->
+<dialog-cus showDialog='{{isShowBox}}' datas="{{boxData}}" catch:dialogCancel="boxCancel" catch:dialogSure="boxSure"/>
+
+<!-- 立即封箱 确认 弹框 -->
+<dialog-cus showDialog='{{isSure}}' datas="{{sureData}}" catch:dialogCancel="sureCancel" catch:dialogSure="sureSure"/>
+
+<!-- 返回 弹框 -->
+<dialog-cus showDialog='{{isBack}}' datas="{{backData}}" catch:dialogCancel="backCancel" catch:dialogSure="backSure"/>
+
+<!-- 删除箱码 弹框 -->
+<dialog-cus showDialog='{{isDelete}}' datas="{{deleteData}}" catch:dialogCancel="deleteCancel" catch:dialogSure="deleteSure"/>
+
+<!-- 封管弹框 -->
+<dialog-cus showDialog='{{isShowSample}}' datas="{{sampleData}}" catch:dialogCancel="sampleCancel" catch:dialogSure="sampleSure"/>

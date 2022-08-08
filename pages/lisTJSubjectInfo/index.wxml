@@ -1,0 +1,180 @@
+<wxs src="../../utils/substring.wxs" module="tools" />
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
+  <view slot="backText"></view>
+  <view slot="content">受检人信息</view>
+</cu-custom>
+
+  <view class="child-section">
+    
+    <view class="main">
+      <view class="search-list-role-from">
+        <view class="search-list-role-from-a">
+          <view class="search-list-role-from-c">
+            <view class="s_center_t_item" style="width: 26%">信息码</view>
+            <view class="select-item input-item">
+              <input
+                value="{{codeInfoVo.orderNumber}}"
+                type="text"
+                name="codenumber"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c" style="border-bottom: none;">
+            <view class="s_center_t_item" style="width: 26%">条形码</view>
+            <view class="select-item input-item">
+              <input
+                value="{{codeInfoVo.sampleId}}"
+                type="text"
+                name="sampleId"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="search-list-role-from">
+        <view class="search-list-role-from-a">
+          <view class="search-list-role-from-c">
+            <view class="s_center_t_item" style="width: 26%">姓名</view>
+            <view class="select-item input-item">
+              <input
+                value="{{codeInfoVo.name}}"
+                type="text"
+                name="name"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c">
+            <view class="s_center_t_item" style="width: 26%">证件类型</view>
+            <view class="select-item input-item">
+              <input
+                value="{{codeInfoVo.cardtype == 2 ? '港澳台通行证': codeInfoVo.cardtype == 1 ? '护照': '二代身份证'}}"
+                type="text"
+                name="cardtype"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c">
+            <view class="s_center_t_item" style="width: 26%">证件号</view>
+            <view class="select-item input-item">
+              <input
+                value="{{tools.centerIdCardTrim(cardnumber)}}"
+                type="text"
+                name="cardnumber"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c">
+            <view class="s_center_t_item" style="width: 26%">手机号</view>
+            <view class="select-item input-item">
+              <input
+                value="{{tools.centerPhoneTrim(phone)}}"
+                type="text"
+                name="phone"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c">
+            <view class="s_center_t_item" style="width: 26%">性别</view>
+            <view class="select-item input-item">
+              <input
+                value="{{codeInfoVo.sex}}"
+                type="text"
+                name="sex"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c" style="border-bottom: none;">
+            <view class="s_center_t_item" style="width: 26%">年龄</view>
+            <view class="select-item input-item">
+              <input
+                value="{{codeInfoVo.age}}"
+                type="text"
+                name="age"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+        </view>
+      </view>
+
+      <view class="search-list-role-from">
+        <view class="search-list-role-from-a">
+          <view class="search-list-role-from-c">
+            <view class="s_center_t_item" style="width: 26%">客户来源</view>
+            <view class="select-item input-item">
+              <input
+                value="{{codeInfoVo.sourceinfo}}"
+                type="text"
+                name="sourceinfo"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c" >
+            <view class="s_center_t_item" style="width: 26%">付款方式</view>
+            <view class="select-item input-item">
+              <input
+                value="{{codeInfoVo.payment}}"
+                type="text"
+                name="payment"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c" >
+            <view class="s_center_t_item" style="width: 26%">检测类型</view>
+            <view class="select-item input-item">
+              <input
+                value="{{codeInfoVo.testType}}"
+                type="text"
+                name="testTypeTitle"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c" style="border-bottom: none;">
+            <view class="s_center_t_item" style="width: 26%">实收金额</view>
+            <view class="select-item input-item">
+              <input
+                value="¥{{codeInfoVo.amount ? codeInfoVo.amount : '0'}}"
+                type="text"
+                name="amount"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+        </view>
+      </view>
+
+      <view class="empty_view"></view>
+
+      <view class="view_bottom">
+        <view class="view_bottom_left" bind:tap="clickUpdate" data-uid="{{uid}}" data-sampleid="{{codeInfoVo.sampleId}}"><image src="../../img/icon_detail_edit_gray.png" class='detail_right_img'/>修改</view>
+        <view class="view_bottom_left" bind:tap="clickDelete"><image src="../../img/icon_img_05.png" class='icon_delete'/>删除</view>
+        <view class="view_bottom_right" catch:tap="backPage">确认</view>
+      </view>
+    </view>
+
+</view>
+
+<!-- 删除箱码 弹框 -->
+<dialog-cus showDialog='{{isDelete}}' datas="{{deleteData}}" catch:dialogCancel="deleteCancel" catch:dialogSure="deleteSure"/>

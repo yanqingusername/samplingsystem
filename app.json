@@ -24,7 +24,14 @@
     "pages/lisCoyoteMoreCellDetails/index",
     "pages/lisCoyoteDetailInfoSearch/index",
     "pages/lisCoyoteDetailInfoBoxSearch/index",
-    "pages/timePicker/timePicker"
+    "pages/timePicker/timePicker",
+    "pages/lisTJAddTube/index",
+    "pages/lisTJCellDetails/index",
+    "pages/lisTJDetail/index",
+    "pages/lisTJMain/index",
+    "pages/lisTJMoreCellDetails/index",
+    "pages/lisTJSubjectInfo/index",
+    "pages/lisTJUpdateSubInfo/index"
   ],
   "window": {
     "navigationBarTitleText": "Color UI",

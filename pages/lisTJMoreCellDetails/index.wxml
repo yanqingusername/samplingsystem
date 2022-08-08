@@ -1,0 +1,65 @@
+<wxs src="../../utils/substring.wxs" module="tools" />
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
+  <view slot="backText"></view>
+  <view slot="content">{{sampleId}}详情</view>
+</cu-custom>
+
+  <view class="child-section">
+    
+    <view class="main">
+      <view class="search-list-role-from">
+        <view class="search-list-role-from-a">
+          <view class="search-list-role-from-c">
+            <view class="s_center_t_item" style="width: 26%">条形码</view>
+            <view class="select-item input-item">
+              <input
+                value="{{sampleId}}"
+                type="text"
+                name="sampleId"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+
+          <view class="search-list-role-from-c" style="border-bottom: none;">
+            <view class="s_center_t_item" style="width: 26%">封管时间</view>
+            <view class="select-item input-item">
+              <input
+                value="{{tubetime}}"
+                type="text"
+                name="tubetime"
+                disabled="{{true}}"
+              />
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="search-list-role">
+        <view
+          wx:for="{{instrumentList}}"
+          wx:key="index"
+        >
+            <view class="search-result-view" catch:tap="clickItem" data-sampleid="{{item.sampleId}}" data-id="{{item.id}}">
+              <view class="dis_setting" style="padding: 0px 0px 0px 0px">
+                <view class="s_center_t_item" style="display: flex">
+                  <view class="search-result-view-1" style="margin-right:20rpx;">{{(instrumentList.length - index)}}.</view>
+                  <view class="search-result-view-1" style="display: flex;align-items: center;" wx:if="{{item.name}}"><view class="search-result-view-2">{{item.name}}</view> ｜{{tools.centerIdCardTrim(item.cardnumber)}}</view>
+                  <view class="search-result-view-1" wx:else>{{'姓名 ｜证件号码'}}</view>
+                </view>
+                <view class="search-result-view-3" style="display:flex;align-items: center;">
+                  <image class="icon_arrow" src="../../img/icon_arrow_gray.png" alt="" />
+                </view>
+              </view>
+            </view>
+          </view>
+
+      </view>
+      
+
+      <view class="empty_view"></view>
+
+    </view>
+
+</view>
+

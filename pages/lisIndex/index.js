@@ -36,8 +36,11 @@ Page({
                         if(res.allow_auto_login == 0){
                             let userInfo = res.result[0];
                             app.globalData.userInfo = userInfo;
+                            // wx.navigateTo({
+                            //     url: '/pages/lisCustominfo/index',
+                            // });
                             wx.navigateTo({
-                                url: '/pages/lisCustominfo/index',
+                                url: '/pages/lisTJMain/index',
                             });
                         }
                     }else{

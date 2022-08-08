@@ -1,0 +1,99 @@
+<!-- pages/addCustodian/addCustodian.wxml -->
+<cu-custom isBack="{{true}}" bgColor="bg-white" catch:backPage="backPage">
+  <view slot="backText"></view>
+  <view slot="content">宜兴信息采集</view>
+</cu-custom>
+<view class="child-section">
+    <view class="main">
+      <!-- <view class="dis_setting">
+        <view class="dis_setting_1">{{ channel_name }}</view>
+        <view class="dis_setting_2" bind:tap="clickOut">退出登录</view>
+      </view> -->
+
+      <view class="search-list-role" style="margin-top:30rpx;">
+        <view class="search-list-role-1">
+          <view class="dis_setting" style="padding: 0rpx 10rpx;">
+            <view class="s_center_t_item">今日采样数据</view>
+            <!-- <view class="dis_setting_2" bind:tap="clickOut">退出登录</view> -->
+          </view>
+
+          <view class="dis_setting_i">
+            <view class="dis_setting_i_left">
+              <view class="dis_setting_i_left_1">{{ perple_count }}</view>
+              <view class="dis_setting_i_left_2">录入总人数</view>
+            </view>
+            <view class="dis_setting_i_left">
+              <view class="dis_setting_i_left_1">{{ tube_count }}</view>
+              <view class="dis_setting_i_left_2">录入总管数</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- <view class="search-list-role">
+        <view class="search-list-role-2">
+          <view class="search-list-role-3" bind:tap="scanQRCodeClick">
+            <image class="icon_logo" src="../../img/icon_img_02.png" alt="" />
+            <view class="search-list-role-3-1">扫描箱码</view>
+            <view class="search-list-role-3-2">扫箱码后再绑试管</view>
+          </view>
+        </view>
+      </view> -->
+
+      <view class="empty_view"></view>
+
+      <view class="view_bottom">
+        <view class="search-list-role-1" style="align-items: center;color:#307ff5;" bind:tap="handleClick">试管列表</view>
+      </view>
+
+      <view class="empty_view"></view>
+
+      <view class="view_bottom">
+        <view class="search-list-role-1" style="align-items: center;color:#307ff5;" bind:tap="clickOut">退出登录</view>
+      </view>
+
+      <!-- <view class="view_bottom">
+        <view class="view_bottom_1" bind:tap="inputClick">无法识别箱码，<text style="color: #307ff5">手动输入</text></view>
+      </view> -->
+    </view>
+
+  </view>
+
+<!-- 退出系统弹框 -->
+<dialog-cus showDialog='{{isBackout}}' datas="{{backoutData}}" catch:dialogCancel="backoutCancel" catch:dialogSure="backoutSure"/>
+
+<!-- 遮罩 -->
+  <view wx:if="{{isInputBoxnum}}" class='cover' bind:tap="">
+    <view class='concent'>
+      <view class="dialog_item">
+        <view class="dialog_item_title">手动输入箱码</view>
+        <view class="bind_main_item">
+          <view class="form-item">
+            <view class="select-item input-item">
+              <input
+                value="{{boxCodeNumber}}"
+                type="number"
+                name="boxCodeNumber"
+                placeholder="请输入箱码"
+                auto-focus="{{true}}"
+                focus="{{isFocus}}"
+                bindinput="bindinputBoxnum"
+              />
+              <view
+                class="clear_1"
+                catch:tap="clearboxCodeNumber"
+                wx:if="{{boxCodeNumber}}"
+              >
+                <image class="icon_clear" src="../../img/icon_img_04.png" />
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="details">
+        <view class="cancel" catchtap="dialogBoxnumCancel">{{"取消"}}</view>
+        <view class="sure" catchtap="dialogBoxnumSure">{{"确认开箱"}}</view>
+      </view>
+    </view>
+    <!-- <view catchtap="hideCover" wx:if="{{isShow}}" class='bg'></view> -->
+  </view>
