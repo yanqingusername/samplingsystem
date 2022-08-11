@@ -1,7 +1,7 @@
 // 参数配置
-// var apiurl = 'https://store.coyotebio-lab.com/lis_appointment'    //东软信息采集  服务器
+var apiurl = 'https://store.coyotebio-lab.com/lis_appointment'    //东软信息采集  服务器
 
-var apiurl = 'http://xmr.coyotebio-lab.com:8080/lis_appointment'    //东软信息采集  服务器
+// var apiurl = 'http://xmr.coyotebio-lab.com:8080/lis_appointment'    //东软信息采集  服务器
 
 // 常用request get封装
 function request_get(controller, data, cb) {

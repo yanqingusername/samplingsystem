@@ -6,18 +6,22 @@ const app = getApp()
 
 Page({
   data: {
-    sampleId:"",
-    tubetime: '',
-    instrumentList: []
+    uid: "",
+    sampleId: "",
+    codeInfoVo: '',
+    cardnumber: '',
+    phone: '',
+    tubetime: ''
   },
   onLoad: function (options) {
     this.setData({
       id: app.globalData.userInfo.id,
+      uid: options.uid,
       sampleId: options.sampleId
     });
   },
   onShow(){
-    this.getCustomInfo();
+    this.getSampleinfo();
   },
   backPage() {
     wx.navigateBack({
@@ -25,18 +29,21 @@ Page({
     });
   },
   /**
-   * 获取人员信息方法
+   * 获取单个人员信息方法
    */
-   getCustomInfo() {
+   getSampleinfo() {
     let that = this;
     let params = {
       sampleId: that.data.sampleId,
+      id: that.data.uid
     }
-    request.request_coyote('/info/getinfo.hn', params, function (res) {
+    request.request_coyote('/yxinfo/getsampleinfo.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           that.setData({
-            instrumentList: res.data.codeInfoVo,
+            codeInfoVo: res.data.codeInfoVo,
+            cardnumber: res.data.cardnumber,
+            phone: res.data.phone,
             tubetime: res.data.tubetime
           });
         } else {
@@ -47,13 +54,4 @@ Page({
       }
     });
   },
-  clickItem(e){
-    let sampleid = e.currentTarget.dataset.sampleid;
-    let uid = e.currentTarget.dataset.id;
-    if(sampleid && uid){
-      wx.navigateTo({
-        url: `/pages/lisTJCellDetails/index?sampleId=${sampleid}&uid=${uid}`
-      });
-    }
-  }
 })

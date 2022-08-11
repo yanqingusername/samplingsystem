@@ -41,7 +41,7 @@ Page({
     let params = {
       id: that.data.id
     }
-    request.request_coyote('/info/getChannelInfo.hn', params, function (res) {
+    request.request_coyote('/yxinfo/getChannelInfo.hn', params, function (res) {
       if (res) {
         if (res.code == 200) {
           that.setData({
@@ -133,7 +133,7 @@ Page({
       if (res) {
         if (res.data.success == 0) {
           wx.navigateTo({
-            url: `/pages/lisTJDetail/index?boxnum=${boxCodeNumber}&isnumber=1`,
+            url: `/pages/lisYXDetail/index?boxnum=${boxCodeNumber}&isnumber=1`,
           });
         } else {
           box.showToast(res.message);
@@ -188,7 +188,7 @@ Page({
   handleClick(){
     // boxnum=088889&isnumber=1
     wx.navigateTo({
-      url: `/pages/lisTJDetail/index?boxnum=088889`,
+      url: `/pages/lisYXDetail/index?boxnum=088889`,
     });
   },
   /**
@@ -250,7 +250,7 @@ Page({
                     isFocus: false
                   });
                   wx.navigateTo({
-                    url: `/pages/lisTJDetail/index?boxnum=${that.data.boxCodeNumber}&isnumber=1`,
+                    url: `/pages/lisYXDetail/index?boxnum=${that.data.boxCodeNumber}&isnumber=1`,
                   });
 
                   that.setData({

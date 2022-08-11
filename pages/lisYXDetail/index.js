@@ -62,36 +62,36 @@ Page({
         sure: "去封管"
       },
       sampleId:"",
-      isnumber: 1
+      name: ''
   },
   onLoad: function (options) {
     let boxnum = options.boxnum;
 
     this.setData({
       id: app.globalData.userInfo.id,
+      name: app.globalData.userInfo.person_name,
       boxnum: boxnum,
-      isnumber: options.isnumber
     });
   },
   onShow(){
     this.getSampleBoxInfo();
   },
   /**
-   * 获取箱码信息
+   * 获取试管列表详情方法
    */
   getSampleBoxInfo() {
     let that = this;
     let params = {
-      box_num: that.data.boxnum,
+      name: that.data.name,
       // id: that.data.id
     }
-    request.request_coyote('/info/getboxinfo.hn', params, function (res) {
+    request.request_coyote('/yxinfo/sampleinfo.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           
             that.setData({
-              boxnum: res.data.box_num,
-              boxnumTime: res.data.createdate,
+              // boxnum: res.data.box_num,
+              // boxnumTime: res.data.createdate,
               boxnumMax: res.data.maxsum,
               canuse: res.data.canuse,
               // channel_id: item.channel,
@@ -174,7 +174,7 @@ Page({
       isShowSample: false
     });
     wx.navigateTo({
-      url: `/pages/lisTJAddTube/index?boxnum=${this.data.boxnum}&sampleId=${this.data.sampleId}`
+      url: `/pages/lisYXAddTube/index?boxnum=${this.data.boxnum}&sampleId=${this.data.sampleId}`
     });
   },
   /**
@@ -285,33 +285,28 @@ Page({
     });
   },
   onClickBackHome() {
-    if(this.data.isnumber == 2){
-      wx.navigateBack({
-        delta: 2
-      });
-    }else{
       wx.navigateBack({
         delta: 1
       });
-    }
   },
   // 添加试管
   scanQRCodeClick() {
     let that = this;
     let params = {
-      box_num: that.data.boxnum,
+      // box_num: that.data.boxnum,
+      name: that.data.name,
     }
-    request.request_coyote('/info/addsample.hn', params, function (res) {
+    request.request_coyote('/yxinfo/addsample.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0 || res.data.success == 3) {
           wx.navigateTo({
-            url: `/pages/lisTJAddTube/index?boxnum=${that.data.boxnum}`
+            url: `/pages/lisYXAddTube/index?boxnum=${that.data.boxnum}`
           });
         } else if (res.data.success == 1) {
           // 已达最大封箱数量，请先封箱
-          that.setData({
-            isMaxBox: true,
-          });
+          // that.setData({
+          //   isMaxBox: true,
+          // });
         } else if (res.data.success == 2) {
           // 存在未封管试管，请先封管
           that.setData({
@@ -451,18 +446,18 @@ Page({
         if (sampleid && status && max) {
             if(status == '未封管'){
                 wx.navigateTo({
-                  url: `/pages/lisTJAddTube/index?boxnum=${this.data.boxnum}&sampleId=${sampleid}`
+                  url: `/pages/lisYXAddTube/index?boxnum=${this.data.boxnum}&sampleId=${sampleid}`
                 });
             }else{
                 if(max == 1){
                   if(uid){
                     wx.navigateTo({
-                      url: `/pages/lisTJCellDetails/index?sampleId=${sampleid}&uid=${uid}`,
+                      url: `/pages/lisYXCellDetails/index?sampleId=${sampleid}&uid=${uid}`,
                     });
                   }
                 }else{
                     wx.navigateTo({
-                        url: `/pages/lisTJMoreCellDetails/index?sampleId=${sampleid}`,
+                        url: `/pages/lisYXMoreCellDetails/index?sampleId=${sampleid}`,
                     });
                 }
             }
@@ -619,7 +614,7 @@ Page({
           let params = {
             sampleId: sampleId
           }
-          request.request_coyote('/info/hdeletesample.hn', params, function (res) {
+          request.request_coyote('/yxinfo/hdeletesample.hn', params, function (res) {
             if (res) {
               if (res.data.success == 0) {
                 box.showToast(res.message)

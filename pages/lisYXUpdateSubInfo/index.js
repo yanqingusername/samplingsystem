@@ -66,7 +66,7 @@ Page({
       sampleId: that.data.sampleId,
       id: that.data.uid
     }
-    request.request_coyote('/info/getsampleinfo.hn', params, function (res) {
+    request.request_coyote('/yxinfo/getsampleinfo.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           let codeInfoVo = res.data.codeInfoVo;
@@ -234,7 +234,7 @@ Page({
 
     console.log('---->:',params)
 
-    request.request_coyote('/info/updateinfo.hn', params, function (res) {
+    request.request_coyote('/yxinfo/updateinfo.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           box.showToast(res.message,'',1000);

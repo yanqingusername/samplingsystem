@@ -103,9 +103,16 @@ Page({
                                 // wx.navigateTo({
                                 //     url: '/pages/lisCustominfo/index',
                                 // });
-                                wx.navigateTo({
-                                    url: '/pages/lisTJMain/index',
-                                });
+                                
+                                if(userInfo.city == 1){
+                                    wx.navigateTo({
+                                        url: '/pages/lisYXMain/index',
+                                    });
+                                } else {
+                                    wx.navigateTo({
+                                        url: '/pages/lisCustominfo/index',
+                                    });
+                                }
                             }
                         }else{
                             box.showToast(res.msg);

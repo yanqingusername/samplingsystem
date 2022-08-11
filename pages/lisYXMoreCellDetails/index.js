@@ -6,22 +6,18 @@ const app = getApp()
 
 Page({
   data: {
-    uid: "",
-    sampleId: "",
-    codeInfoVo: '',
-    cardnumber: '',
-    phone: '',
-    tubetime: ''
+    sampleId:"",
+    tubetime: '',
+    instrumentList: []
   },
   onLoad: function (options) {
     this.setData({
       id: app.globalData.userInfo.id,
-      uid: options.uid,
       sampleId: options.sampleId
     });
   },
   onShow(){
-    this.getSampleinfo();
+    this.getCustomInfo();
   },
   backPage() {
     wx.navigateBack({
@@ -29,21 +25,18 @@ Page({
     });
   },
   /**
-   * 获取单个人员信息方法
+   * 获取人员信息方法
    */
-   getSampleinfo() {
+   getCustomInfo() {
     let that = this;
     let params = {
       sampleId: that.data.sampleId,
-      id: that.data.uid
     }
-    request.request_coyote('/info/getsampleinfo.hn', params, function (res) {
+    request.request_coyote('/yxinfo/getinfo.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           that.setData({
-            codeInfoVo: res.data.codeInfoVo,
-            cardnumber: res.data.cardnumber,
-            phone: res.data.phone,
+            instrumentList: res.data.codeInfoVo,
             tubetime: res.data.tubetime
           });
         } else {
@@ -54,4 +47,13 @@ Page({
       }
     });
   },
+  clickItem(e){
+    let sampleid = e.currentTarget.dataset.sampleid;
+    let uid = e.currentTarget.dataset.id;
+    if(sampleid && uid){
+      wx.navigateTo({
+        url: `/pages/lisYXCellDetails/index?sampleId=${sampleid}&uid=${uid}`
+      });
+    }
+  }
 })

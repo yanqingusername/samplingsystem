@@ -36,12 +36,15 @@ Page({
                         if(res.allow_auto_login == 0){
                             let userInfo = res.result[0];
                             app.globalData.userInfo = userInfo;
-                            // wx.navigateTo({
-                            //     url: '/pages/lisCustominfo/index',
-                            // });
-                            wx.navigateTo({
-                                url: '/pages/lisTJMain/index',
-                            });
+                            if(userInfo.city == 1){
+                                wx.navigateTo({
+                                    url: '/pages/lisYXMain/index',
+                                });
+                            } else {
+                                wx.navigateTo({
+                                    url: '/pages/lisCustominfo/index',
+                                });
+                            }
                         }
                     }else{
                         box.showToast(res.msg);

@@ -76,7 +76,8 @@ Page({
 
     isScanShow: 1, // 1--扫码  2--手录
 
-    isShowDetail: 1
+    isShowDetail: 1,
+    name: ''
 
   },
   onLoad: function (options) {
@@ -85,12 +86,13 @@ Page({
 
     this.setData({
       id: app.globalData.userInfo.id || 322,
+      name: app.globalData.userInfo.person_name,
       boxnum: boxnum,
       sampleOldId: sampleId,
       sampleId: sampleId
     });
 
-    this.getSampleBoxInfo();
+    // this.getSampleBoxInfo();
     this.gettype();
     this.getstype();
 
@@ -116,7 +118,7 @@ Page({
     let params = {
 
     }
-    request.request_coyote('/info/gettype.hn', params, function (res) {
+    request.request_coyote('/yxinfo/gettype.hn', params, function (res) {
       if (res) {
         if (res.code == 200) {
           that.setData({
@@ -145,7 +147,7 @@ Page({
     let params = {
 
     }
-    request.request_coyote('/info/getstype.hn', params, function (res) {
+    request.request_coyote('/yxinfo/getstype.hn', params, function (res) {
       if (res) {
         if (res.code == 200) {
           that.setData({
@@ -201,7 +203,7 @@ Page({
     let params = {
       sampleId: that.data.sampleId
     }
-    request.request_coyote('/info/closechecksample.hn', params, function (res) {
+    request.request_coyote('/yxinfo/closechecksample.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           //可以封管
@@ -267,7 +269,7 @@ Page({
       sampleId: sampleId,
       testtype: that.data.testtype,
     }
-    request.request_coyote('/info/checksample.hn', params, function (res) {
+    request.request_coyote('/yxinfo/checksample.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           that.setData({
@@ -386,7 +388,7 @@ Page({
     let params = {
       sampleId: that.data.sampleId
     }
-    request.request_coyote('/info/closechecksample.hn', params, function (res) {
+    request.request_coyote('/yxinfo/closechecksample.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           //可以封管
@@ -443,7 +445,7 @@ Page({
         });
 
         this.getClosesample();
-        this.getSampleBoxInfo();
+        // this.getSampleBoxInfo();
 
           // 清空试管和受检者信息
           this.setData({
@@ -474,7 +476,7 @@ Page({
       this.setData({
         samplesum: this.data.testtype == 3 ? 10 : this.data.testtype == 2 ? 5 : 1
       })
-      this.getSampleBoxInfo();
+      // this.getSampleBoxInfo();
       // 清空试管和受检者信息
       this.setData({
         isQudao: false,
@@ -542,7 +544,7 @@ Page({
    */
   bindGetInfoCode() {
     wx.navigateTo({
-      url: '/pages/lisTJGetInfoCode/index'
+      url: '/pages/lisYXGetInfoCode/index'
     });
   },
   /**
@@ -553,7 +555,7 @@ Page({
     let sampleId = e.currentTarget.dataset.sampleid;
     if(uid && sampleId){
       wx.navigateTo({
-        url: `/pages/lisTJSubjectInfo/index?uid=${uid}&sampleId=${sampleId}`
+        url: `/pages/lisYXSubjectInfo/index?uid=${uid}&sampleId=${sampleId}`
       });
     }
   },
@@ -795,11 +797,11 @@ Page({
         id: that.data.id,
         codeinfo: that.data.boxCodeNumber,
         sampleId: that.data.sampleId,
-        box_num: that.data.boxnum,
+        // box_num: that.data.boxnum,
         sampletype: that.data.specimenType,
         testtype: that.data.testtype
       }
-      request.request_coyote('/info/bindinfo.hn', params, function (res) {
+      request.request_coyote('/yxinfo/bindsecondinfo.hn', params, function (res) {
         isRepeat = true;
 
         if (res) {
@@ -815,9 +817,9 @@ Page({
               //  大筛 调用扫码
               that.getScanQRCodeInfo();
             }
-          } else if (res.data.success == 1) {
+          // } else if (res.data.success == 1) {
             //调用bindsecondinfo（调用无订单信息接口，需要绑定渠道）
-            that.getChannelList();
+            // that.getChannelList();
           } else if (res.data.success == 9) {
             // 已达上限人数，请封管
             that.setData({
@@ -841,7 +843,7 @@ Page({
     let params = {
       sampleId: that.data.sampleId,
     }
-    request.request_coyote('/info/getinfo.hn', params, function (res) {
+    request.request_coyote('/yxinfo/getinfo.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           that.setData({
@@ -862,10 +864,10 @@ Page({
     let that = this;
     let params = {
       sampleId: that.data.sampleId,
-      box_num: that.data.boxnum,
+      // box_num: that.data.boxnum,
       testtype: that.data.testtype
     }
-    request.request_coyote('/info/closesample.hn', params, function (res) {
+    request.request_coyote('/yxinfo/closesample.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           that.setData({
@@ -921,12 +923,12 @@ Page({
       sampleType: that.data.specimenType,
       testtype: that.data.testtype
     }
-    request.request_coyote('/info/hclosesample.hn', params, function (res) {
+    request.request_coyote('/yxinfo/hclosesample.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           box.showToast(res.message);
           
-          that.getSampleBoxInfo();
+          // that.getSampleBoxInfo();
 
           that.scanQRCodeClick();
 
@@ -1003,9 +1005,10 @@ Page({
     scanQRCodeClick() {
       let that = this;
       let params = {
-        box_num: that.data.boxnum,
+        // box_num: that.data.boxnum,
+        name: that.data.name,
       }
-      request.request_coyote('/info/addsample.hn', params, function (res) {
+      request.request_coyote('/yxinfo/addsample.hn', params, function (res) {
         if (res) {
           if (res.data.success == 0 || res.data.success == 3) {
             // 清空试管和受检者信息

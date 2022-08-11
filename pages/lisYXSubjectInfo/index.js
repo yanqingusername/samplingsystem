@@ -42,7 +42,7 @@ Page({
       sampleId: that.data.sampleId,
       id: that.data.uid
     }
-    request.request_coyote('/info/getsampleinfo.hn', params, function (res) {
+    request.request_coyote('/yxinfo/getsampleinfo.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           that.setData({
@@ -77,7 +77,7 @@ Page({
       sampleId: that.data.sampleId,
       id: that.data.uid
     }
-    request.request_coyote('/info/deleteperoson.hn', params, function (res) {
+    request.request_coyote('/yxinfo/deleteperoson.hn', params, function (res) {
       if (res) {
         if (res.data.success == 0) {
           box.showToast(res.message,'',1000)
@@ -109,7 +109,7 @@ Page({
     let sampleId = e.currentTarget.dataset.sampleid;
     if(uid && sampleId){
       wx.navigateTo({
-        url: `/pages/lisTJUpdateSubInfo/index?uid=${uid}&sampleId=${sampleId}`
+        url: `/pages/lisYXUpdateSubInfo/index?uid=${uid}&sampleId=${sampleId}`
       });
     }
   }

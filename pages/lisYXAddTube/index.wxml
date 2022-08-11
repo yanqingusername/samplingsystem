@@ -7,14 +7,14 @@
 <view class="child-section">
     <view class="main">
       <view class="dis_setting">
-        <view class="dis_setting_1" style="align-items: center;justify-content: center;">
+        <!-- <view class="dis_setting_1" style="align-items: center;justify-content: center;">
           <view class="dis_setting_1_1" style="color:#E0694D;">{{boxnum}}</view>
           <view class="dis_setting_1_1">箱码</view>
         </view>
         <view class="dis_setting_1" style="align-items: center;justify-content: center;">
           <view class="dis_setting_1_1" style="color:#E0694D;">{{canuse}}</view>
           <view class="dis_setting_1_1">本箱剩余</view>
-        </view>
+        </view> -->
         <view class="dis_setting_1" style="align-items: center;justify-content: center;">
           <view class="dis_setting_1_1" style="color:#E0694D;">{{samplesum}}</view>
           <view class="dis_setting_1_1">本管剩余</view>
