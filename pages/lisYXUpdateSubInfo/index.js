@@ -175,11 +175,13 @@ Page({
     var phoneReg = /^1\d{10}$/;
     if (phone.length != 11) {
       return false;
-    } else if (!phoneReg.test(phone)) {
-      return false;
     } else {
       return true;
     }
+
+    // else if (!phoneReg.test(phone)) {
+    //   return false;
+    // }
   },
   /**
    * 修改人员信息方法
